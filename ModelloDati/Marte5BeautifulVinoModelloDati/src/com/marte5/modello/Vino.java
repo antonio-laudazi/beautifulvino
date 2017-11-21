@@ -1,0 +1,245 @@
+package com.marte5.modello;
+
+import java.util.Date;
+import java.util.List;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
+/***
+ * 
+ * @author paolosalvadori
+ *
+ */
+@DynamoDBTable(tableName="BV_Vino")
+public class Vino {
+
+	private int idVino;
+	private String nomeVino;
+	private Date dataVino;
+	private String luogoVino;
+	private String inBreveVino;
+	private String infoVino;
+	private String urlLogoVino;
+	private String statoVino;
+	private Azienda aziendaVino;
+	private List<Evento> eventiVino;
+	private List<Utente> utentiVino;
+	private AziendaVino aziendaVinoInt;
+	private List<EventoVino> eventiVinoInt;
+	private List<UtenteVino> utentiVinoInt;
+	
+	/**
+	 * @return the idVino
+	 */
+	@DynamoDBHashKey(attributeName="idVino")
+	public int getIdVino() {
+		return idVino;
+	}
+	/**
+	 * @param idVino the idVino to set
+	 */
+	public void setIdVino(int idVino) {
+		this.idVino = idVino;
+	}
+	/**
+	 * @return the nomeVino
+	 */
+	@DynamoDBAttribute(attributeName="nomeVino")
+	public String getNomeVino() {
+		return nomeVino;
+	}
+	/**
+	 * @param nomeVino the nomeVino to set
+	 */
+	public void setNomeVino(String nomeVino) {
+		this.nomeVino = nomeVino;
+	}
+	/**
+	 * @return the dataVino
+	 */
+	@DynamoDBAttribute(attributeName="dataVino")
+	public Date getDataVino() {
+		return dataVino;
+	}
+	/**
+	 * @param dataVino the dataVino to set
+	 */
+	public void setDataVino(Date dataVino) {
+		this.dataVino = dataVino;
+	}
+	/**
+	 * @return the luogoVino
+	 */
+	@DynamoDBAttribute(attributeName="luogoVino")
+	public String getLuogoVino() {
+		return luogoVino;
+	}
+	/**
+	 * @param luogoVino the luogoVino to set
+	 */
+	public void setLuogoVino(String luogoVino) {
+		this.luogoVino = luogoVino;
+	}
+	/**
+	 * @return the inBreveVino
+	 */
+	@DynamoDBAttribute(attributeName="inBreveVino")
+	public String getInBreveVino() {
+		return inBreveVino;
+	}
+	/**
+	 * @param inBreveVino the inBreveVino to set
+	 */
+	public void setInBreveVino(String inBreveVino) {
+		this.inBreveVino = inBreveVino;
+	}
+	/**
+	 * @return the infoVino
+	 */
+	@DynamoDBAttribute(attributeName="infoVino")
+	public String getInfoVino() {
+		return infoVino;
+	}
+	/**
+	 * @param infoVino the infoVino to set
+	 */
+	public void setInfoVino(String infoVino) {
+		this.infoVino = infoVino;
+	}
+	/**
+	 * @return the urlLogoVino
+	 */
+	@DynamoDBAttribute(attributeName="urlLogoVino")
+	public String getUrlLogoVino() {
+		return urlLogoVino;
+	}
+	/**
+	 * @param urlLogoVino the urlLogoVino to set
+	 */
+	public void setUrlLogoVino(String urlLogoVino) {
+		this.urlLogoVino = urlLogoVino;
+	}
+	/**
+	 * @return the statoVino
+	 */
+	@DynamoDBAttribute(attributeName="statoVino")
+	public String getStatoVino() {
+		return statoVino;
+	}
+	/**
+	 * @param statoVino the statoVino to set
+	 */
+	public void setStatoVino(String statoVino) {
+		this.statoVino = statoVino;
+	}
+	/**
+	 * @return the aziendaVino
+	 */
+	@DynamoDBIgnore
+	public Azienda getAziendaVino() {
+		return aziendaVino;
+	}
+	/**
+	 * @param aziendaVino the aziendaVino to set
+	 */
+	public void setAziendaVino(Azienda aziendaVino) {
+		this.aziendaVino = aziendaVino;
+	}
+	/**
+	 * @return the eventoVino
+	 */
+	@DynamoDBIgnore
+	public List<Evento> getEventiVino() {
+		return eventiVino;
+	}
+	/**
+	 * @param eventoVino the eventoVino to set
+	 */
+	public void setEventiVino(List<Evento> eventoVino) {
+		this.eventiVino = eventoVino;
+	}
+	/**
+	 * @return the utentiVino
+	 */
+	@DynamoDBIgnore
+	public List<Utente> getUtentiVino() {
+		return utentiVino;
+	}
+	/**
+	 * @param utentiVino the utentiVino to set
+	 */
+	public void setUtentiVino(List<Utente> utentiVino) {
+		this.utentiVino = utentiVino;
+	}
+	
+	@DynamoDBAttribute(attributeName="aziendaVino")
+	public AziendaVino getAziendaVinoInt() {
+		return aziendaVinoInt;
+	}
+	public void setAziendaVinoInt(AziendaVino aziendaVinoInt) {
+		this.aziendaVinoInt = aziendaVinoInt;
+	}
+	@DynamoDBAttribute(attributeName="eventiVino")
+	public List<EventoVino> getEventiVinoInt() {
+		return eventiVinoInt;
+	}
+	public void setEventiVinoInt(List<EventoVino> eventiVinoInt) {
+		this.eventiVinoInt = eventiVinoInt;
+	}
+	@DynamoDBAttribute(attributeName="utentiVino")
+	public List<UtenteVino> getUtentiVinoInt() {
+		return utentiVinoInt;
+	}
+	public void setUtentiVinoInt(List<UtenteVino> utentiVinoInt) {
+		this.utentiVinoInt = utentiVinoInt;
+	}
+	
+	@DynamoDBDocument
+	public static class AziendaVino{
+		private long idAzienda;
+
+		@DynamoDBAttribute(attributeName="idAzienda")
+		public long getIdAzienda() {
+			return idAzienda;
+		}
+
+		public void setIdAzienda(long idAzienda) {
+			this.idAzienda = idAzienda;
+		}
+	}
+	
+	@DynamoDBDocument
+	public static class EventoVino{
+		private long idEvento;
+
+		@DynamoDBAttribute(attributeName="idEvento")
+		public long getIdEvento() {
+			return idEvento;
+		}
+
+		public void setIdEvento(long idEvento) {
+			this.idEvento = idEvento;
+		}
+	}
+	
+	@DynamoDBDocument
+	public static class UtenteVino{
+		private long idUtente;
+
+		@DynamoDBAttribute(attributeName="idUtente")
+		public long getIdUtente() {
+			return idUtente;
+		}
+
+		public void setIdUtente(long idUtente) {
+			this.idUtente = idUtente;
+		}
+	}
+
+	
+	
+}
