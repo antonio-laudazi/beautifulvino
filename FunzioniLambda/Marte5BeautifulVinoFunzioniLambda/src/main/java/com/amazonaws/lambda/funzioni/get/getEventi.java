@@ -55,8 +55,8 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
+			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi ");
 			esito.setTrace(e1.getMessage());
 		}
 		if(client != null) {
@@ -67,10 +67,11 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 			
 			//ottengo il numero totale di elementi, esclusa la paginazione
 			scannedCount = mapper.count(Evento.class, expr);
+			expr.withLimit(5);
 			
 			if(idUltimoEvento != 0 && dataUltimoEvento != 0) {
 				//configuro la paginazione
-				expr.withLimit(4);
+				
 				
 				Map<String, AttributeValue> exclusiveStartKey = new HashMap<>();
 				AttributeValue av1 = new AttributeValue();

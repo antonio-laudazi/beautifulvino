@@ -11,33 +11,31 @@ import com.marte5.modello.richieste.Richiesta;
  */
 public class RichiestaGetEvento extends Richiesta {
 
-	private int idEvento;
-	private int idUtente;
+	private long idEvento;
+	private long idUtente;
 	
 	/**
 	 * @return the idEvento
 	 */
-	public int getIdEvento() {
+	public long getIdEvento() {
 		return idEvento;
 	}
 	/**
 	 * @param idEvento the idEvento to set
 	 */
-	public void setIdEvento(int idEvento) {
+	public void setIdEvento(long idEvento) {
 		this.idEvento = idEvento;
 	}
 	/**
 	 * @return the idUtente
 	 */
-	public int getIdUtente() {
+	public long getIdUtente() {
 		return idUtente;
 	}
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(int idUtente) {
+	public void setIdUtente(long idUtente) {
 		this.idUtente = idUtente;
 	}
-	
-	
 }

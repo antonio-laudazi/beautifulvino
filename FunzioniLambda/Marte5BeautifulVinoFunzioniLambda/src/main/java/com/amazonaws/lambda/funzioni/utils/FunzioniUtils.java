@@ -9,6 +9,10 @@ public class FunzioniUtils {
 	public static final String DATE_FORMAT = "dd MMM yyyy";
 	public static final Locale FUNCTIONS_LOCALE = Locale.ITALY;
 	
+	public static final String EVENTO_STATO_NEUTRO = "N";
+	public static final String EVENTO_STATO_ACQUISTATO = "A";
+	public static final String EVENTO_STATO_PREFERITO = "P";
+	
 	public static String getStringVersion(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, FUNCTIONS_LOCALE);
 		return sdf.format(date);
