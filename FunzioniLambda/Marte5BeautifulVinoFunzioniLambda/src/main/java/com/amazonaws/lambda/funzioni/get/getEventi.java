@@ -7,7 +7,9 @@ import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.datamodeling.ScanResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -62,12 +64,14 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
+			//DynamoDBQueryExpression qexpr = new DynamoDBQueryExpression();
 			
 			//mettere i parametri di ricerca qui !!!!
 			
 			//ottengo il numero totale di elementi, esclusa la paginazione
 			scannedCount = mapper.count(Evento.class, expr);
 			expr.withLimit(5);
+			//qexpr.withLimit(5);
 			
 			if(idUltimoEvento != 0 && dataUltimoEvento != 0) {
 				//configuro la paginazione
@@ -82,8 +86,10 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 				exclusiveStartKey.put("dataEvento", av2);
 				
 				expr.setExclusiveStartKey(exclusiveStartKey);
+				//qexpr.setExclusiveStartKey(exclusiveStartKey);
 			}
 			//ottengo la 'pagina'
+			//QueryResultPage<Evento> qpage = mapper.queryPage(Evento.class, qexpr);
 			ScanResultPage<Evento> page = mapper.scanPage(Evento.class, expr);
 			risposta.setEventi(page.getResults());
 		}	
