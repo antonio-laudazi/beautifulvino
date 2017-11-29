@@ -3,8 +3,6 @@
  */
 package com.marte5.modello;
 
-import java.util.List;
-
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -23,13 +21,18 @@ public class Feed {
 	private int tipoFeed;
 	private long dataFeed;
 	private String urlImmagineFeed;
+	private String urlVideoFeed;
 	private String titoloFeed;
 	private String testoLabelFeed;
+	private long idEntitaHeaderFeed;
+	private String tipoEntitaHeaderFeed;
 	private String urlImmagineHeaderFeed;
 	private String headerFeed;
 	private String sottoHeaderFeed;
-	private List<VinoFeed> viniFeed;
+	private VinoFeed vinoFeed;
+	private EventoFeed eventoFeed;
 	private String testoFeed;
+	private String visualizzaButtonFeed;
 	
 	/**
 	 * @return the idFeed
@@ -167,14 +170,14 @@ public class Feed {
 	 * @return the viniFeed
 	 */
 	@DynamoDBAttribute(attributeName="viniFeed")
-	public List<VinoFeed> getViniFeed() {
-		return viniFeed;
+	public VinoFeed getVinoFeed() {
+		return vinoFeed;
 	}
 	/**
 	 * @param viniFeed the viniFeed to set
 	 */
-	public void setViniFeed(List<VinoFeed> viniFeed) {
-		this.viniFeed = viniFeed;
+	public void setVinoFeed(VinoFeed vinoFeed) {
+		this.vinoFeed = vinoFeed;
 	}
 	/**
 	 * @return the testoFeed
@@ -285,6 +288,127 @@ public class Feed {
 			
 		}
 		
+	}
+	
+	@DynamoDBDocument
+	public class EventoFeed{
+		private long idEvento;
+		private String titoloEvento;
+		private String temaEvento;
+		private String urlFotoEvento;
+		/**
+		 * @return the idEvento
+		 */
+		@DynamoDBAttribute(attributeName="idEvento")
+		public long getIdEvento() {
+			return idEvento;
+		}
+		/**
+		 * @param idEvento the idEvento to set
+		 */
+		public void setIdEvento(long idEvento) {
+			this.idEvento = idEvento;
+		}
+		/**
+		 * @return the titoloEvento
+		 */
+		@DynamoDBAttribute(attributeName="titoloEvento")
+		public String getTitoloEvento() {
+			return titoloEvento;
+		}
+		/**
+		 * @param titoloEvento the titoloEvento to set
+		 */
+		public void setTitoloEvento(String titoloEvento) {
+			this.titoloEvento = titoloEvento;
+		}
+		/**
+		 * @return the temaEvento
+		 */
+		@DynamoDBAttribute(attributeName="temaEvento")
+		public String getTemaEvento() {
+			return temaEvento;
+		}
+		/**
+		 * @param temaEvento the temaEvento to set
+		 */
+		public void setTemaEvento(String temaEvento) {
+			this.temaEvento = temaEvento;
+		}
+		/**
+		 * @return the urlFotoEvento
+		 */
+		@DynamoDBAttribute(attributeName="urlFotoEvento")
+		public String getUrlFotoEvento() {
+			return urlFotoEvento;
+		}
+		/**
+		 * @param urlFotoEvento the urlFotoEvento to set
+		 */
+		public void setUrlFotoEvento(String urlFotoEvento) {
+			this.urlFotoEvento = urlFotoEvento;
+		}
+	}
+
+	/**
+	 * @return the urlVideoFeed
+	 */
+	public String getUrlVideoFeed() {
+		return urlVideoFeed;
+	}
+	/**
+	 * @param urlVideoFeed the urlVideoFeed to set
+	 */
+	public void setUrlVideoFeed(String urlVideoFeed) {
+		this.urlVideoFeed = urlVideoFeed;
+	}
+	/**
+	 * @return the idEntitaHeaderFeed
+	 */
+	public long getIdEntitaHeaderFeed() {
+		return idEntitaHeaderFeed;
+	}
+	/**
+	 * @param idEntitaHeaderFeed the idEntitaHeaderFeed to set
+	 */
+	public void setIdEntitaHeaderFeed(long idEntitaHeaderFeed) {
+		this.idEntitaHeaderFeed = idEntitaHeaderFeed;
+	}
+	/**
+	 * @return the tipoEntitaHeaderFeed
+	 */
+	public String getTipoEntitaHeaderFeed() {
+		return tipoEntitaHeaderFeed;
+	}
+	/**
+	 * @param tipoEntitaHeaderFeed the tipoEntitaHeaderFeed to set
+	 */
+	public void setTipoEntitaHeaderFeed(String tipoEntitaHeaderFeed) {
+		this.tipoEntitaHeaderFeed = tipoEntitaHeaderFeed;
+	}
+	/**
+	 * @return the eventoFeed
+	 */
+	public EventoFeed getEventoFeed() {
+		return eventoFeed;
+	}
+	/**
+	 * @param eventoFeed the eventoFeed to set
+	 */
+	public void setEventoFeed(EventoFeed eventoFeed) {
+		this.eventoFeed = eventoFeed;
+	}
+	/**
+	 * @return the visualizzaButtonFeed
+	 */
+	public String getVisualizzaButtonFeed() {
+		return visualizzaButtonFeed;
+	}
+	/**
+	 * @param visualizzaButtonFeed the visualizzaButtonFeed to set
+	 */
+	public void setVisualizzaButtonFeed(String visualizzaButtonFeed) {
+		this.visualizzaButtonFeed = visualizzaButtonFeed;
 	}
 	
 }

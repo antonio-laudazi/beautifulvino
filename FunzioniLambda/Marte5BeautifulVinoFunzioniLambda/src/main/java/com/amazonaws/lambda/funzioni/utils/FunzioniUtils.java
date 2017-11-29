@@ -12,6 +12,7 @@ public class FunzioniUtils {
 	public static final String EVENTO_STATO_NEUTRO = "N";
 	public static final String EVENTO_STATO_ACQUISTATO = "A";
 	public static final String EVENTO_STATO_PREFERITO = "P";
+	public static final String EVENTO_STATO_CANCELLATO = "D";
 	
 	public static String getStringVersion(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, FUNCTIONS_LOCALE);

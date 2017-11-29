@@ -11,34 +11,34 @@ import com.marte5.modello.richieste.Richiesta;
  */
 public class RichiestaGetAzienda extends Richiesta {
 
-	private int idAzienda;
-	private int idUtente;
+	private long idAzienda;
+	private long idUtente;
 
 	/**
 	 * @return the idAzienda
 	 */
-	public int getIdAzienda() {
+	public long getIdAzienda() {
 		return idAzienda;
 	}
 
 	/**
 	 * @param idAzienda the idAzienda to set
 	 */
-	public void setIdAzienda(int idAzienda) {
+	public void setIdAzienda(long idAzienda) {
 		this.idAzienda = idAzienda;
 	}
 
 	/**
 	 * @return the idUtente
 	 */
-	public int getIdUtente() {
+	public long getIdUtente() {
 		return idUtente;
 	}
 
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(int idUtente) {
+	public void setIdUtente(long idUtente) {
 		this.idUtente = idUtente;
 	}
 	

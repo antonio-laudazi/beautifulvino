@@ -18,7 +18,6 @@ import com.marte5.modello.Evento;
 import com.marte5.modello.Utente;
 import com.marte5.modello.Vino;
 import com.marte5.modello.richieste.get.RichiestaGetEvento;
-import com.marte5.modello.risposte.get.RispostaGetEventi;
 import com.marte5.modello.risposte.get.RispostaGetEvento;
 
 public class getEvento implements RequestHandler<RichiestaGetEvento, RispostaGetEvento> {

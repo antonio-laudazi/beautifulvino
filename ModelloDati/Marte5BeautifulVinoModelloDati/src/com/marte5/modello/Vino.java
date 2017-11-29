@@ -17,7 +17,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName="BV_Vino")
 public class Vino {
 
-	private int idVino;
+	private long idVino;
 	private String nomeVino;
 	private Date dataVino;
 	private String luogoVino;
@@ -36,13 +36,13 @@ public class Vino {
 	 * @return the idVino
 	 */
 	@DynamoDBHashKey(attributeName="idVino")
-	public int getIdVino() {
+	public long getIdVino() {
 		return idVino;
 	}
 	/**
 	 * @param idVino the idVino to set
 	 */
-	public void setIdVino(int idVino) {
+	public void setIdVino(long idVino) {
 		this.idVino = idVino;
 	}
 	/**

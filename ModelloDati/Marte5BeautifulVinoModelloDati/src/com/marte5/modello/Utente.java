@@ -56,7 +56,7 @@ public class Utente {
 	/**
 	 * @return the nomeUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="nomeUtente")
 	public String getNomeUtente() {
 		return nomeUtente;
 	}
@@ -69,7 +69,7 @@ public class Utente {
 	/**
 	 * @return the cognomeUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="cognomeUtente")
 	public String getCognomeUtente() {
 		return cognomeUtente;
 	}
@@ -82,7 +82,7 @@ public class Utente {
 	/**
 	 * @return the creditiUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="creditiUtente")
 	public int getCreditiUtente() {
 		return creditiUtente;
 	}
@@ -95,7 +95,7 @@ public class Utente {
 	/**
 	 * @return the esperienzaUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="esperienzaUtente")
 	public int getEsperienzaUtente() {
 		return esperienzaUtente;
 	}
@@ -108,7 +108,7 @@ public class Utente {
 	/**
 	 * @return the livelloUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="livelloUtente")
 	public String getLivelloUtente() {
 		return livelloUtente;
 	}
@@ -121,7 +121,7 @@ public class Utente {
 	/**
 	 * @return the biografiaUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="biografiaUtente")
 	public String getBiografiaUtente() {
 		return biografiaUtente;
 	}
@@ -134,7 +134,7 @@ public class Utente {
 	/**
 	 * @return the urlFotoUtente
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="urlFotoUtente")
 	public String getUrlFotoUtente() {
 		return urlFotoUtente;
 	}
@@ -186,7 +186,7 @@ public class Utente {
 	/**
 	 * @return the numTotaleBadge
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="numTotBadge")
 	public int getNumTotBadge() {
 		return numTotBadge;
 	}
@@ -199,7 +199,7 @@ public class Utente {
 	/**
 	 * @return the numTotaleEventi
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="numTotEventi")
 	public int getNumTotEventi() {
 		return numTotEventi;
 	}
@@ -212,7 +212,7 @@ public class Utente {
 	/**
 	 * @return the numTotaleAziende
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="numTotAziende")
 	public int getNumTotAziende() {
 		return numTotAziende;
 	}
@@ -225,7 +225,7 @@ public class Utente {
 	/**
 	 * @return the condivisioneBadge
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="condivisioneBadge")
 	public String getCondivisioneBadge() {
 		return condivisioneBadge;
 	}
@@ -238,7 +238,7 @@ public class Utente {
 	/**
 	 * @return the condivisioneEventi
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="condivisioneEventi")
 	public String getCondivisioneEventi() {
 		return condivisioneEventi;
 	}
@@ -251,7 +251,7 @@ public class Utente {
 	/**
 	 * @return the condivisioneVini
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="condivisioneVini")
 	public String getCondivisioneVini() {
 		return condivisioneVini;
 	}
@@ -294,6 +294,7 @@ public class Utente {
 	@DynamoDBDocument
 	public static class EventoUtente{
 		private long idEvento;
+		private String statoEvento;
 
 		@DynamoDBAttribute(attributeName="idEvento")
 		public long getIdEvento() {
@@ -302,6 +303,21 @@ public class Utente {
 
 		public void setIdEvento(long idEvento) {
 			this.idEvento = idEvento;
+		}
+
+		/**
+		 * @return the statoUtente
+		 */
+		@DynamoDBAttribute(attributeName="statoEvento")
+		public String getStatoEvento() {
+			return statoEvento;
+		}
+
+		/**
+		 * @param statoUtente the statoUtente to set
+		 */
+		public void setStatoEvento(String statoUtente) {
+			this.statoEvento = statoUtente;
 		}
 	}
 	

@@ -61,12 +61,10 @@ public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPut
 					esito.setTrace(e.getMessage());
 				}
 	        }
+			risposta.setIdUtente(idUtente);
 		}
 		
 		risposta.setEsito(esito);
-		risposta.setIdUtente(idUtente);
-		
 		return risposta;
     }
-
 }

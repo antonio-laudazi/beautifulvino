@@ -2,9 +2,14 @@ package com.amazonaws.lambda.funzioni.get;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Azienda;
@@ -21,7 +26,77 @@ public class getUtente implements RequestHandler<RichiestaGetUtente, RispostaGet
     @Override
     public RispostaGetUtente handleRequest(RichiestaGetUtente input, Context context) {
         context.getLogger().log("Input: " + input);
-        RispostaGetUtente risposta = new RispostaGetUtente();
+        
+        RispostaGetUtente risposta = getRispostaDiTest(input);
+        
+        return risposta;
+    }
+    
+    private RispostaGetUtente getRisposta(RichiestaGetUtente input) {
+    		RispostaGetUtente risposta = new RispostaGetUtente();
+    		
+    		long idUtente = input.getIdUtente();
+        Utente utente = new Utente();
+    		
+        Esito esito = new Esito();
+        esito.setCodice(100);
+        esito.setMessage("Esito corretto della getUtente");
+        
+        //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
+        AmazonDynamoDB client = null;
+		try {
+			client = AmazonDynamoDBClientBuilder.standard().build();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
+			esito.setTrace(e1.getMessage());
+		}
+		if(client != null) {
+			DynamoDBMapper mapper = new DynamoDBMapper(client);
+			
+			if(idUtente == 0) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idUtente nullo, non posso procedere");
+		        risposta.setEsito(esito);
+		        return risposta;
+			}
+			utente = mapper.load(Utente.class, idUtente);
+			
+			//gestione e recupero eventi associati all'utente
+			List<Evento> eventiUtente = utente.getEventiUtente();
+			List<Evento> eventiCompletiUtente = new ArrayList<>();
+			for (Iterator<Evento> iterator = eventiUtente.iterator(); iterator.hasNext();) {
+				Evento evento = iterator.next();
+				Evento eventoCompleto = mapper.load(Evento.class, evento.getIdEvento());
+				eventoCompleto.setStatoEvento(evento.getStatoEvento());
+				
+				eventiCompletiUtente.add(eventoCompleto);
+			}
+			utente.setEventiUtente(eventiCompletiUtente);
+			
+			//gestione e recupero badge associati all'utente
+			List<Badge> badges = utente.getBadgeUtente();
+			List<Badge> badgesCompleti = new ArrayList<>();
+			for (Iterator<Badge> iterator = badges.iterator(); iterator.hasNext();) {
+				Badge badge = iterator.next();
+				Badge badgeCompleto = mapper.load(Badge.class, badge.getIdBadge());
+				
+				badgesCompleti.add(badgeCompleto);
+			}
+			utente.setBadgeUtente(badgesCompleti);
+			
+			//badge e aziende (vini) sono già nel profilo utente per comodità, e ce li metto quando faccio le nuove associazioni
+		}
+        
+        risposta.setEsito(esito);
+        risposta.setUtente(utente);
+        return risposta;
+    }
+    
+    private RispostaGetUtente getRispostaDiTest(RichiestaGetUtente input) {
+    		RispostaGetUtente risposta = new RispostaGetUtente();
         
         Esito esito = new Esito();
         esito.setCodice(100);
@@ -112,5 +187,4 @@ public class getUtente implements RequestHandler<RichiestaGetUtente, RispostaGet
         // TODO: implement your handler
         return risposta;
     }
-
 }
