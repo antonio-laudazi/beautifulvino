@@ -37,5 +37,6 @@
 	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-core-2.8.2.jar"/>
 	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-databind-2.8.2.jar"/>
 	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jjwt-0.7.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dynamodb-transactions"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

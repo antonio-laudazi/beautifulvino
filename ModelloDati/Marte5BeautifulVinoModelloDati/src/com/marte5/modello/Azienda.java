@@ -18,7 +18,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName="BV_Azienda")
 public class Azienda {
 
-	private int idAzienda;
+	private long idAzienda;
 	private String zonaAzienda;
 	private String nomeAzienda;
 	private String infoAzienda;
@@ -39,19 +39,19 @@ public class Azienda {
 	 * @return the idAzienda
 	 */
 	@DynamoDBHashKey(attributeName="idAzienda")
-	public int getIdAzienda() {
+	public long getIdAzienda() {
 		return idAzienda;
 	}
 	/**
 	 * @param idAzienda the idAzienda to set
 	 */
-	public void setIdAzienda(int idAzienda) {
+	public void setIdAzienda(long idAzienda) {
 		this.idAzienda = idAzienda;
 	}
 	/**
 	 * @return the zonaAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="zonaAzienda")
 	public String getZonaAzienda() {
 		return zonaAzienda;
 	}
@@ -64,7 +64,7 @@ public class Azienda {
 	/**
 	 * @return the nomeAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="nomeAzienda")
 	public String getNomeAzienda() {
 		return nomeAzienda;
 	}
@@ -77,7 +77,7 @@ public class Azienda {
 	/**
 	 * @return the infoAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="infoAzienda")
 	public String getInfoAzienda() {
 		return infoAzienda;
 	}
@@ -90,7 +90,7 @@ public class Azienda {
 	/**
 	 * @return the luogoAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="luogoAzienda")
 	public String getLuogoAzienda() {
 		return luogoAzienda;
 	}
@@ -103,7 +103,7 @@ public class Azienda {
 	/**
 	 * @return the latitudineAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="latitudineAzienda")
 	public double getLatitudineAzienda() {
 		return latitudineAzienda;
 	}
@@ -116,7 +116,7 @@ public class Azienda {
 	/**
 	 * @return the longitudineAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="longitudineAzienda")
 	public double getLongitudineAzienda() {
 		return longitudineAzienda;
 	}
@@ -129,7 +129,7 @@ public class Azienda {
 	/**
 	 * @return the urlLogoAzienda
 	 */
-	@DynamoDBAttribute(attributeName="")
+	@DynamoDBAttribute(attributeName="urlLogoAzienda")
 	public String getUrlLogoAzienda() {
 		return urlLogoAzienda;
 	}

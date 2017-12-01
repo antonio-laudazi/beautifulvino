@@ -14,7 +14,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName="BV_Badge")
 public class Badge {
 
-	private int idBadge;
+	private long idBadge;
 	private String nomeBadge;
 	private String infoBadge;	
 	private String urlLogoBadge;
@@ -24,13 +24,13 @@ public class Badge {
 	 * @return the idBadge
 	 */
 	@DynamoDBHashKey(attributeName="idBadge")
-	public int getIdBadge() {
+	public long getIdBadge() {
 		return idBadge;
 	}
 	/**
 	 * @param idBadge the idBadge to set
 	 */
-	public void setIdBadge(int idBadge) {
+	public void setIdBadge(long idBadge) {
 		this.idBadge = idBadge;
 	}
 	/**
