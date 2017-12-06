@@ -38,9 +38,7 @@ public class getUtente implements RequestHandler<RichiestaGetUtente, RispostaGet
     		long idUtente = input.getIdUtente();
         Utente utente = new Utente();
     		
-        Esito esito = new Esito();
-        esito.setCodice(100);
-        esito.setMessage("Esito corretto della getUtente");
+        Esito esito = FunzioniUtils.getEsitoPositivo();
         
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;

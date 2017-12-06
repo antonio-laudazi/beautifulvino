@@ -3,6 +3,7 @@ package com.amazonaws.lambda.funzioni.put;
 import java.util.Date;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
+import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -20,20 +21,13 @@ public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaP
         context.getLogger().log("Input: " + input);
         RispostaPutAzienda risposta = new RispostaPutAzienda();
         
-        Date actualDate = new Date();
-        long idAzienda = actualDate.getTime();
-        
-        //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
-        Esito esito = new Esito();
-        esito.setCodice(EsitoHelper.ESITO_OK_CODICE);
-        esito.setMessage(EsitoHelper.ESITO_OK_MESSAGGIO);
+        long idAzienda = FunzioniUtils.getEntitaId();
+        Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putAzienda ");
 			esito.setTrace(e1.getMessage());

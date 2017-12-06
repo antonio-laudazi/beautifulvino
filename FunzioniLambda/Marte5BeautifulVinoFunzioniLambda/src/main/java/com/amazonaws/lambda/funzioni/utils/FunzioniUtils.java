@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.marte5.modello.Esito;
+
 public class FunzioniUtils {
 	
 	public static final String DATE_FORMAT = "dd MMM yyyy";
@@ -27,5 +29,17 @@ public class FunzioniUtils {
 		
 		
 		return false;
+	}
+	
+	public static long getEntitaId() {
+		Date actualDate = new Date();
+        return actualDate.getTime();
+	}
+	
+	public static Esito getEsitoPositivo() {
+		Esito esito = new Esito();
+        esito.setCodice(EsitoHelper.ESITO_OK_CODICE);
+        esito.setMessage(EsitoHelper.ESITO_OK_MESSAGGIO);
+        return esito;
 	}
 }

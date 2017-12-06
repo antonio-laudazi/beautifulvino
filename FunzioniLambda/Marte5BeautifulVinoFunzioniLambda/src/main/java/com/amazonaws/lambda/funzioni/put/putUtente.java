@@ -1,8 +1,7 @@
 package com.amazonaws.lambda.funzioni.put;
 
-import java.util.Date;
-
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
+import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -18,26 +17,20 @@ public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPut
     @Override
     public RispostaPutUtente handleRequest(RichiestaPutUtente input, Context context) {
     		
-    		context.getLogger().log("Input: " + input);
     		RispostaPutUtente risposta = new RispostaPutUtente();
         
-        Date actualDate = new Date();
-        long idUtente = actualDate.getTime();
-        
-        //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
-        Esito esito = new Esito();
-        esito.setCodice(EsitoHelper.ESITO_OK_CODICE);
-        esito.setMessage(EsitoHelper.ESITO_OK_MESSAGGIO);
+    		long idUtenteRisposta = 0;
+        Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putUtente ");
 			esito.setTrace(e1.getMessage());
+			risposta.setEsito(esito);
+			return risposta;
 		}
 		if(client != null) {
 			
@@ -48,7 +41,16 @@ public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPut
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Utente NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Utente NULL");
+				risposta.setEsito(esito);
+				return risposta;
 	        } else {
+	        		long idUtente = utente.getIdUtente();
+	        	
+		        	if(idUtente == 0) {
+	        			//insert
+		        		idUtente = FunzioniUtils.getEntitaId();
+		        } 
+		        	idUtenteRisposta = idUtente;
 	        		utente.setIdUtente(idUtente);
 		        
 		        try {
@@ -59,9 +61,11 @@ public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPut
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Utente " + input.getUtente().getIdUtente());
 					esito.setTrace(e.getMessage());
+					risposta.setEsito(esito);
+					return risposta;
 				}
 	        }
-			risposta.setIdUtente(idUtente);
+			risposta.setIdUtente(idUtenteRisposta);
 		}
 		
 		risposta.setEsito(esito);
