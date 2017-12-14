@@ -9,19 +9,19 @@ import com.marte5.modello.richieste.Richiesta;
  */
 public class RichiestaGetUtente extends Richiesta {
 
-	private int idUtente;
+	private long idUtente;
 
 	/**
 	 * @return the idUtente
 	 */
-	public int getIdUtente() {
+	public long getIdUtente() {
 		return idUtente;
 	}
 
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(int idUtente) {
+	public void setIdUtente(long idUtente) {
 		this.idUtente = idUtente;
 	}
 	

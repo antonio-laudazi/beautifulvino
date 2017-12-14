@@ -1,21 +1,22 @@
 package com.amazonaws.lambda.funzioni.get;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
+import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.datamodeling.ScanResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.Evento;
+import com.marte5.modello.Utente;
 import com.marte5.modello.richieste.get.RichiestaGetEventi;
 import com.marte5.modello.risposte.get.RispostaGetEventi;
 
@@ -25,29 +26,19 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
     public RispostaGetEventi handleRequest(RichiestaGetEventi input, Context context) {
         context.getLogger().log("Input: " + input);
         
-//        try {
-//			Thread.sleep(4000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        
         RispostaGetEventi risposta = getRisposta(input);
-        //RispostaGetEventi risposta = getRispostaDiTest(input);
-        return risposta;
+       return risposta;
     }
     
     private RispostaGetEventi getRisposta(RichiestaGetEventi input) {
     	
     		//controllo del token
-    	
     		RispostaGetEventi risposta = new RispostaGetEventi();
     		long idUltimoEvento = input.getIdUltimoEvento();
     		long dataUltimoEvento = input.getDataUltimoEvento();
+    		long idUtente = input.getIdUtente();
     		
-    		Esito esito = new Esito();
-        esito.setCodice(100);
-        esito.setMessage("Esito corretto per la richiesta getEventi");
+    		Esito esito = FunzioniUtils.getEsitoPositivo();
         
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
@@ -55,27 +46,23 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi ");
 			esito.setTrace(e1.getMessage());
+			risposta.setEsito(esito);
+			return risposta;
 		}
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
-			//DynamoDBQueryExpression qexpr = new DynamoDBQueryExpression();
-			
-			//mettere i parametri di ricerca qui !!!!
-			
+
 			//ottengo il numero totale di elementi, esclusa la paginazione
 			scannedCount = mapper.count(Evento.class, expr);
-			expr.withLimit(5);
+			expr.withLimit(12);
 			//qexpr.withLimit(5);
 			
 			if(idUltimoEvento != 0 && dataUltimoEvento != 0) {
 				//configuro la paginazione
-				
 				
 				Map<String, AttributeValue> exclusiveStartKey = new HashMap<>();
 				AttributeValue av1 = new AttributeValue();
@@ -91,6 +78,25 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 			//ottengo la 'pagina'
 			//QueryResultPage<Evento> qpage = mapper.queryPage(Evento.class, qexpr);
 			ScanResultPage<Evento> page = mapper.scanPage(Evento.class, expr);
+			
+			List<Evento> eventi = page.getResults();
+			Utente utente = mapper.load(Utente.class, idUtente);
+			if(utente != null) {
+				for (Evento evento : eventi) {
+					String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
+					try {
+						statoEvento = FunzioniUtils.getStatoEvento(utente, evento.getIdEvento(), evento.getDataEvento(), mapper);
+					} catch (Exception e) {
+						esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+						esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi: errore nell'estrazione delle associazioni degli eventi preferiti");
+						esito.setTrace(e.getMessage());
+						risposta.setEsito(esito);
+						return risposta;
+					}
+					evento.setStatoEvento(statoEvento);
+				}
+			}
+			
 			risposta.setEventi(page.getResults());
 		}	
             
@@ -98,46 +104,4 @@ public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGet
 		risposta.setEsito(esito);
     		return risposta;
     }
-//    
-//    private RispostaGetEventi getRispostaDiTest(RichiestaGetEventi input) {
-//    	
-//    		RispostaGetEventi risposta = new RispostaGetEventi();
-//
-//        Esito esito = new Esito();
-//        esito.setCodice(100);
-//        esito.setMessage("Esito corretto per la richiesta getEventi");
-//        
-//        List<Evento> eventi = new ArrayList<>();
-//		for(int i = 0; i < 7; i++) {
-//			Evento evento = new Evento();
-//			
-//			evento.setIdEvento((new Date()).getTime());
-//			evento.setTitoloEvento("Titolo Evento " + (i+1));
-//			evento.setTestoEvento("Questo è il testo per l'evento " + (i+1) + " che descrive quello che troverete durante l'evento.");
-//			evento.setTemaEvento("Tema evento " + (i+1));
-//			evento.setIndirizzoEvento("Via Dell'evento " + (i+1) + ", Citta, Provincia, CAP" );
-//			evento.setLuogoEvento("Luogo dell'evento");
-//			evento.setDataEvento((new Date()).getTime());
-//			evento.setDataEventoStringa(FunzioniUtils.getStringVersion(new Date()));
-//			evento.setUrlFotoEvento("");
-//			evento.setStatoEvento("N");
-//			evento.setLatitudineEvento(43.313333);
-//			evento.setLongitudineEvento(10.518434);
-//			evento.setNumMaxPartecipantiEvento(20);
-//			evento.setNumPostiDisponibiliEvento(7);
-//			
-//			eventi.add(evento);
-//			
-//		}
-//        
-//        int eventiSize = eventi.size();
-//        
-//        risposta.setEsito(esito);
-//        risposta.setEventi(eventi);
-//        risposta.setNumTotEventi(eventiSize);
-//        
-//        // TODO: implement your handler
-//        return risposta;
-//    }
-
 }

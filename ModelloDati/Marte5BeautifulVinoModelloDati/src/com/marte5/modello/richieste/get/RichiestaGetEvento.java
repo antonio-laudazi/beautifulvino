@@ -13,6 +13,7 @@ public class RichiestaGetEvento extends Richiesta {
 
 	private long idEvento;
 	private long idUtente;
+	private long dataEvento;
 	
 	/**
 	 * @return the idEvento
@@ -37,5 +38,17 @@ public class RichiestaGetEvento extends Richiesta {
 	 */
 	public void setIdUtente(long idUtente) {
 		this.idUtente = idUtente;
+	}
+	/**
+	 * @return the dataEvento
+	 */
+	public long getDataEvento() {
+		return dataEvento;
+	}
+	/**
+	 * @param dataEvento the dataEvento to set
+	 */
+	public void setDataEvento(long dataEvento) {
+		this.dataEvento = dataEvento;
 	}
 }
