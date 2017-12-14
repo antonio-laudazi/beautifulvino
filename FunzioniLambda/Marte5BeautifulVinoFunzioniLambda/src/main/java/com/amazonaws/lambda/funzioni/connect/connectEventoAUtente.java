@@ -101,6 +101,8 @@ public class connectEventoAUtente implements RequestHandler<RichiestaConnectEven
     						eventoGiaAssociato = true;
     					}
     				}
+    			} else {
+    				eventiUtente = new ArrayList<EventoUtente>();
     			}
     			
     			if(eventoGiaAssociato) {

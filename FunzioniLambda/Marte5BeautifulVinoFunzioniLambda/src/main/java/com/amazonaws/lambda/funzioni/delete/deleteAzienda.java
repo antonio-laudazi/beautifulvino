@@ -7,19 +7,19 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.marte5.modello.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
-import com.marte5.modello.richieste.delete.RichiestaDeleteUtente;
-import com.marte5.modello.risposte.delete.RispostaDeleteUtente;
+import com.marte5.modello.richieste.delete.RichiestaDeleteAzienda;
+import com.marte5.modello.risposte.delete.RispostaDeleteAzienda;
 
-public class deleteUtente implements RequestHandler<RichiestaDeleteUtente, RispostaDeleteUtente> {
+public class deleteAzienda implements RequestHandler<RichiestaDeleteAzienda, RispostaDeleteAzienda> {
 
     @Override
-    public RispostaDeleteUtente handleRequest(RichiestaDeleteUtente input, Context context) {
+    public RispostaDeleteAzienda handleRequest(RichiestaDeleteAzienda input, Context context) {
     		context.getLogger().log("Input: " + input);
-    		RispostaDeleteUtente risposta = new RispostaDeleteUtente();
+    		RispostaDeleteAzienda risposta = new RispostaDeleteAzienda();
 
-        long idUtente = input.getIdUtente();
+        long idAzienda = input.getIdAzienda();
         
         Esito esito = FunzioniUtils.getEsitoPositivo();
         
@@ -38,25 +38,25 @@ public class deleteUtente implements RequestHandler<RichiestaDeleteUtente, Rispo
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idUtente == 0) {
+			if(idAzienda == 0) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdUtente NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdUtente NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " idAzienda NULL");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " idAzienda NULL");
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-	        		Utente utenteDaCancellare = mapper.load(Utente.class, idUtente);
-	        		if(utenteDaCancellare == null) {
+	        		Azienda aziendaDaCancellare = mapper.load(Azienda.class, idAzienda);
+	        		if(aziendaDaCancellare == null) {
 	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Utente con id: " + idUtente + " non trovato sul database");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Utente con id: " + idUtente + " non trovato sul database");
+	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Azienda con id: " + idAzienda + " non trovato sul database");
+	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Azienda con id: " + idAzienda + " non trovato sul database");
 	    				risposta.setEsito(esito);
 	    				return risposta;
 	        		} else {
 	        			//caricato l'evento, lo vado a cancellare
 	        			
 	        			try {
-						mapper.delete(utenteDaCancellare);
+						mapper.delete(aziendaDaCancellare);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -71,8 +71,6 @@ public class deleteUtente implements RequestHandler<RichiestaDeleteUtente, Rispo
 		}
         
 		risposta.setEsito(esito);
-        // TODO: implement your handler
         return risposta;
     }
-
 }

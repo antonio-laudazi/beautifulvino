@@ -20,10 +20,14 @@ public class Vino {
 	private long idVino;
 	private String nomeVino;
 	private Date dataVino;
+	private int annoVino;
 	private String luogoVino;
 	private String inBreveVino;
+	private String descrizioneVino;
+	private String uvaggioVino;
 	private String infoVino;
 	private String urlLogoVino;
+	private String urlImmagineVino;
 	private String statoVino;
 	private Azienda aziendaVino;
 	private List<Evento> eventiVino;
@@ -137,6 +141,58 @@ public class Vino {
 		this.statoVino = statoVino;
 	}
 	/**
+	 * @return the descrizioneVino
+	 */
+	@DynamoDBAttribute(attributeName="descrizioneVino")
+	public String getDescrizioneVino() {
+		return descrizioneVino;
+	}
+	/**
+	 * @param descrizioneVino the descrizioneVino to set
+	 */
+	public void setDescrizioneVino(String descrizioneVino) {
+		this.descrizioneVino = descrizioneVino;
+	}
+	/**
+	 * @return the uvaggioVino
+	 */
+	@DynamoDBAttribute(attributeName="uvaggioVino")
+	public String getUvaggioVino() {
+		return uvaggioVino;
+	}
+	/**
+	 * @param uvaggioVino the uvaggioVino to set
+	 */
+	public void setUvaggioVino(String uvaggioVino) {
+		this.uvaggioVino = uvaggioVino;
+	}
+	/**
+	 * @return the urlImmagineVino
+	 */
+	@DynamoDBAttribute(attributeName="urlImmagineVino")
+	public String getUrlImmagineVino() {
+		return urlImmagineVino;
+	}
+	/**
+	 * @param urlImmagineVino the urlImmagineVino to set
+	 */
+	public void setUrlImmagineVino(String urlImmagineVino) {
+		this.urlImmagineVino = urlImmagineVino;
+	}
+	/**
+	 * @return the annoVino
+	 */
+	@DynamoDBAttribute(attributeName="annoVino")
+	public int getAnnoVino() {
+		return annoVino;
+	}
+	/**
+	 * @param annoVino the annoVino to set
+	 */
+	public void setAnnoVino(int annoVino) {
+		this.annoVino = annoVino;
+	}
+	/**
 	 * @return the aziendaVino
 	 */
 	@DynamoDBIgnore
@@ -149,6 +205,7 @@ public class Vino {
 	public void setAziendaVino(Azienda aziendaVino) {
 		this.aziendaVino = aziendaVino;
 	}
+	
 	/**
 	 * @return the eventoVino
 	 */
@@ -240,6 +297,4 @@ public class Vino {
 		}
 	}
 
-	
-	
 }

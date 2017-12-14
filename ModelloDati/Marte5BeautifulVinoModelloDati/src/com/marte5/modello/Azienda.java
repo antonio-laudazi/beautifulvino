@@ -26,6 +26,7 @@ public class Azienda {
 	private double latitudineAzienda;
 	private double longitudineAzienda;
 	private String urlLogoAzienda;
+	private String urlImmagineAzienda;
 	private List<Evento> eventiAzienda;
 	private List<Vino> viniAzienda;
 	private List<EventoAzienda> eventiAziendaInt;
@@ -139,6 +140,21 @@ public class Azienda {
 	public void setUrlLogoAzienda(String urlLogoAzienda) {
 		this.urlLogoAzienda = urlLogoAzienda;
 	}
+	
+	/**
+	 * @return the urlImmagineAzienda
+	 */
+	@DynamoDBAttribute(attributeName="urlImmagineAzienda")
+	public String getUrlImmagineAzienda() {
+		return urlImmagineAzienda;
+	}
+	/**
+	 * @param urlImmagineAzienda the urlImmagineAzienda to set
+	 */
+	public void setUrlImmagineAzienda(String urlImmagineAzienda) {
+		this.urlImmagineAzienda = urlImmagineAzienda;
+	}
+	
 	/**
 	 * @return the eventiAzienda
 	 */
@@ -222,6 +238,8 @@ public class Azienda {
 	@DynamoDBDocument
 	public static class VinoAzienda{
 		private long idVino;
+		private String nomeVino;
+		private int annoVino;
 		
 		@DynamoDBAttribute(attributeName="idVino")
 		public long getIdVino() {
@@ -229,6 +247,26 @@ public class Azienda {
 		}
 		public void setIdVino(long idVino) {
 			this.idVino = idVino;
+		}
+		@DynamoDBAttribute(attributeName="nomeVino")
+		public String getNomeVino() {
+			return nomeVino;
+		}
+		public void setNomeVino(String nomeVino) {
+			this.nomeVino = nomeVino;
+		}
+		/**
+		 * @return the annoVino
+		 */
+		@DynamoDBAttribute(attributeName="annoVino")
+		public int getAnnoVino() {
+			return annoVino;
+		}
+		/**
+		 * @param annoVino the annoVino to set
+		 */
+		public void setAnnoVino(int annoVino) {
+			this.annoVino = annoVino;
 		}
 	}
 	
@@ -244,6 +282,4 @@ public class Azienda {
 			this.idEvento = idEvento;
 		}
 	}
-
-	
 }

@@ -1,7 +1,5 @@
 package com.amazonaws.lambda.funzioni.put;
 
-import java.util.Date;
-
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -21,7 +19,6 @@ public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaP
         context.getLogger().log("Input: " + input);
         RispostaPutAzienda risposta = new RispostaPutAzienda();
         
-        long idAzienda = FunzioniUtils.getEntitaId();
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -46,6 +43,13 @@ public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaP
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
+	        	
+		        	long idAzienda = azienda.getIdAzienda();
+		        	
+		        	if(idAzienda == 0) {
+	        			//insert
+		        		idAzienda = FunzioniUtils.getEntitaId();
+		        } 
 	        		azienda.setIdAzienda(idAzienda);
 		        
 		        try {
@@ -59,10 +63,11 @@ public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaP
 					risposta.setEsito(esito);
 					return risposta;
 				}
+		        risposta.setIdAzienda(idAzienda);
 	        }
 		}	
         risposta.setEsito(esito);
-        risposta.setIdAzienda(idAzienda);
+        
         return risposta;
     }
 }

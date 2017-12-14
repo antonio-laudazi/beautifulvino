@@ -16,6 +16,8 @@ public class FunzioniUtils {
 	public static final String EVENTO_STATO_PREFERITO = "P";
 	public static final String EVENTO_STATO_CANCELLATO = "D";
 	
+	public static final String AMAZON_S3_BASE_URL = "https://s3.eu-central-1.amazonaws.com/";
+	
 	public static String getStringVersion(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, FUNCTIONS_LOCALE);
 		return sdf.format(date);

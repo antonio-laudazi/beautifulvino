@@ -1,13 +1,11 @@
 package com.amazonaws.lambda.funzioni.put;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -122,6 +120,8 @@ public class putVino implements RequestHandler<RichiestaPutVino, RispostaPutVino
 		        // a questo punto dovrei inserire il vino tra quelli della lista dell'azienda
 		        VinoAzienda vinoPerAzienda = new VinoAzienda();
 		        	vinoPerAzienda.setIdVino(vino.getIdVino());
+		        	vinoPerAzienda.setNomeVino(vino.getNomeVino());
+		        	vinoPerAzienda.setAnnoVino(vino.getAnnoVino());
 		        	if(azienda.getViniAziendaInt() == null) {
 		        		azienda.setViniAziendaInt(new ArrayList<VinoAzienda>());
 		        	}

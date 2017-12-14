@@ -7,19 +7,16 @@ import java.util.List;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Azienda;
+import com.marte5.modello.Azienda.VinoAzienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
 import com.marte5.modello.Vino;
 import com.marte5.modello.richieste.connect.RichiestaConnectViniAAzienda;
-import com.marte5.modello.richieste.connect.RichiestaConnectViniAUtente;
 import com.marte5.modello.risposte.connect.RispostaConnectViniAAzienda;
-import com.marte5.modello.risposte.connect.RispostaConnectViniAUtente;
 
 public class connectViniAAzienda implements RequestHandler<RichiestaConnectViniAAzienda, RispostaConnectViniAAzienda> {
 
@@ -105,9 +102,21 @@ public class connectViniAAzienda implements RequestHandler<RichiestaConnectViniA
 						viniNuovi.add(vinoDaAssociare);
 					}
 				}
-				
 			}
 			azienda.setViniAzienda(viniNuovi);
+			
+			List<VinoAzienda> viniAziendaInt = new ArrayList<>();
+			for(Iterator<Vino> iterator = viniNuovi.iterator(); iterator.hasNext();) {
+				Vino vinoNuovo = iterator.next();
+				VinoAzienda vinoAzienda = new VinoAzienda();
+				vinoAzienda.setIdVino(vinoNuovo.getIdVino());
+				vinoAzienda.setNomeVino(vinoNuovo.getNomeVino());
+				vinoAzienda.setAnnoVino(vinoNuovo.getAnnoVino());
+				viniAziendaInt.add(vinoAzienda);
+			}
+			azienda.setViniAziendaInt(viniAziendaInt);
+			
+			
 			try {
 				transaction.save(azienda);
 			} catch (Exception e) {
