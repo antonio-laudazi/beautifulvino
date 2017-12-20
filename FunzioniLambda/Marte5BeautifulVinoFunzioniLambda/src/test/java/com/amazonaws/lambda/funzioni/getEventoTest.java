@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.get.getEvento;
+import com.amazonaws.lambda.funzioni.get.backup.getEvento;
 import com.amazonaws.services.lambda.runtime.Context;
 
 /**

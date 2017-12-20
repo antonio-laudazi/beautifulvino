@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.get;
+package com.amazonaws.lambda.funzioni.get.backup;
 
 import java.util.List;
 
@@ -11,33 +11,31 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
-import com.marte5.modello.richieste.get.RichiestaGetUtenti;
-import com.marte5.modello.risposte.get.RispostaGetUtenti;
+import com.marte5.modello.Vino;
+import com.marte5.modello.richieste.get.RichiestaGetVini;
+import com.marte5.modello.risposte.get.RispostaGetVini;
 
-public class getUtenti implements RequestHandler<RichiestaGetUtenti, RispostaGetUtenti> {
+public class getVini implements RequestHandler<RichiestaGetVini, RispostaGetVini> {
 
     @Override
-    public RispostaGetUtenti handleRequest(RichiestaGetUtenti input, Context context) {
-        context.getLogger().log("Input: " + input);
+    public RispostaGetVini handleRequest(RichiestaGetVini input, Context context) {
         
-        RispostaGetUtenti risposta = getRisposta(input);
-        return risposta;
+    	RispostaGetVini risposta = getRisposta(input);
+    		return risposta;
     }
     
-    private RispostaGetUtenti getRisposta(RichiestaGetUtenti input) {
-    	
-    		//controllo del token
-    	
-    		RispostaGetUtenti risposta = new RispostaGetUtenti();
-    		Esito esito = FunzioniUtils.getEsitoPositivo();
-        
-        AmazonDynamoDB client = null;
+    private RispostaGetVini getRisposta(RichiestaGetVini input) {
+    		RispostaGetVini risposta = new RispostaGetVini();
+
+		Esito esito = FunzioniUtils.getEsitoPositivo();
+		
+		//scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
+		AmazonDynamoDB client = null;
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtenti ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getVini ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -45,17 +43,17 @@ public class getUtenti implements RequestHandler<RichiestaGetUtenti, RispostaGet
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
-			List<Utente> utenti;
+			List<Vino> vini;
 			try {
-				utenti = mapper.scan(Utente.class, expr);
+				vini = mapper.scan(Vino.class, expr);
 			} catch (Exception e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtenti ");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getVini ");
 				esito.setTrace(e.getMessage());
 				risposta.setEsito(esito);
 				return risposta;
 			}
-			risposta.setUtenti(utenti);
+			risposta.setVini(vini);
 		}	
 		
 		risposta.setEsito(esito);

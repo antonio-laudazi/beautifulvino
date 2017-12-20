@@ -7,19 +7,18 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.marte5.modello.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
-import com.marte5.modello.richieste.put.RichiestaPutUtente;
-import com.marte5.modello.risposte.put.RispostaPutUtente;
+import com.marte5.modello.richieste.put.RichiestaPutGenerica;
+import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
-public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPutUtente> {
-
+public class putAziendaGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
+	
     @Override
-    public RispostaPutUtente handleRequest(RichiestaPutUtente input, Context context) {
-    		
-    		RispostaPutUtente risposta = new RispostaPutUtente();
+    public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
+        context.getLogger().log("Input: " + input);
+        RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-    		long idUtenteRisposta = 0;
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -27,7 +26,7 @@ public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPut
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putUtente ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putAzienda ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -35,40 +34,40 @@ public class putUtente implements RequestHandler<RichiestaPutUtente, RispostaPut
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			
-			Utente utente = input.getUtente();
-			if(utente == null) {
+
+	        Azienda azienda = input.getAzienda();
+	        if(azienda == null) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Utente NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Utente NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Azienda NULL");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Azienda NULL");
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-	        		long idUtente = utente.getIdUtente();
 	        	
-		        	if(idUtente == 0) {
+		        	long idAzienda = azienda.getIdAzienda();
+		        	
+		        	if(idAzienda == 0) {
 	        			//insert
-		        		idUtente = FunzioniUtils.getEntitaId();
+		        		idAzienda = FunzioniUtils.getEntitaId();
 		        } 
-		        	idUtenteRisposta = idUtente;
-	        		utente.setIdUtente(idUtente);
+	        		azienda.setIdAzienda(idAzienda);
 		        
 		        try {
-					mapper.save(utente);
+					mapper.save(azienda);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Utente " + input.getUtente().getIdUtente());
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getAzienda().getIdAzienda());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;
 				}
+		        risposta.setIdAzienda(idAzienda);
 	        }
-			risposta.setIdUtente(idUtenteRisposta);
-		}
-		
-		risposta.setEsito(esito);
-		return risposta;
+		}	
+        risposta.setEsito(esito);
+        
+        return risposta;
     }
 }

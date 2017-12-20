@@ -12,6 +12,7 @@ import com.marte5.modello.Token;
 public class Richiesta {
 
 	private Token token;
+	private String functionName;
 
 	/**
 	 * @return the token
@@ -25,6 +26,20 @@ public class Richiesta {
 	 */
 	public void setToken(Token token) {
 		this.token = token;
+	}
+
+	/**
+	 * @return the functionName
+	 */
+	public String getFunctionName() {
+		return functionName;
+	}
+
+	/**
+	 * @param functionName the functionName to set
+	 */
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
 	}
 	
 	

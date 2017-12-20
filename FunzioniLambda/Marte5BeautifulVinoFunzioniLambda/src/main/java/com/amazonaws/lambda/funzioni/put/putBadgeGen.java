@@ -7,18 +7,19 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
+import com.marte5.modello.Badge;
 import com.marte5.modello.Esito;
-import com.marte5.modello.richieste.put.RichiestaPutAzienda;
-import com.marte5.modello.risposte.put.RispostaPutAzienda;
+import com.marte5.modello.richieste.put.RichiestaPutGenerica;
+import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
-public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaPutAzienda> {
+public class putBadgeGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
     @Override
-    public RispostaPutAzienda handleRequest(RichiestaPutAzienda input, Context context) {
+    public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
-        RispostaPutAzienda risposta = new RispostaPutAzienda();
+        RispostaPutGenerica risposta = new RispostaPutGenerica();
         
+        long idBadgeRisposta = 0L;
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -26,7 +27,7 @@ public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaP
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putAzienda ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putBadge ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -35,39 +36,37 @@ public class putAzienda implements RequestHandler<RichiestaPutAzienda, RispostaP
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 
-	        Azienda azienda = input.getAzienda();
-	        if(azienda == null) {
+	        Badge badge = input.getBadge();
+	        if(badge == null) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Azienda NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Azienda NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Badge NULL");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Badge NULL");
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-	        	
-		        	long idAzienda = azienda.getIdAzienda();
-		        	
-		        	if(idAzienda == 0) {
+		        	long idBadge = badge.getIdBadge();
+		        	if(idBadge == 0) {
 	        			//insert
-		        		idAzienda = FunzioniUtils.getEntitaId();
+		        		idBadge = FunzioniUtils.getEntitaId();
 		        } 
-	        		azienda.setIdAzienda(idAzienda);
+		        	idBadgeRisposta = idBadge;
+		        	badge.setIdBadge(idBadge);
 		        
 		        try {
-					mapper.save(azienda);
+					mapper.save(badge);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getAzienda().getIdAzienda());
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Badge " + input.getBadge().getIdBadge());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;
 				}
-		        risposta.setIdAzienda(idAzienda);
 	        }
 		}	
         risposta.setEsito(esito);
-        
+        risposta.setIdBadge(idBadgeRisposta);
         return risposta;
     }
 }

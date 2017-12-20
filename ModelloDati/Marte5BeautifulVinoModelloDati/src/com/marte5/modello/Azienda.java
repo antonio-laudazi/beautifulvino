@@ -22,11 +22,18 @@ public class Azienda {
 	private String zonaAzienda;
 	private String nomeAzienda;
 	private String infoAzienda;
-	private String luogoAzienda;
+	private String descrizioneAzienda;
+	private String cittaAzienda;
+	private String regioneAzienda;
+	private String indirizzoAzienda;
 	private double latitudineAzienda;
 	private double longitudineAzienda;
 	private String urlLogoAzienda;
 	private String urlImmagineAzienda;
+	private String sitoAzienda;
+	private String emailAzienda;
+	private String emailSecondariaAzienda;
+	private String telefonoAzienda;
 	private List<Evento> eventiAzienda;
 	private List<Vino> viniAzienda;
 	private List<EventoAzienda> eventiAziendaInt;
@@ -89,17 +96,57 @@ public class Azienda {
 		this.infoAzienda = infoAzienda;
 	}
 	/**
-	 * @return the luogoAzienda
+	 * @return the descrizioneAzienda
 	 */
-	@DynamoDBAttribute(attributeName="luogoAzienda")
-	public String getLuogoAzienda() {
-		return luogoAzienda;
+	@DynamoDBAttribute(attributeName="descrizioneAzienda")
+	public String getDescrizioneAzienda() {
+		return descrizioneAzienda;
 	}
 	/**
-	 * @param luogoAzienda the luogoAzienda to set
+	 * @param descrizioneAzienda the descrizioneAzienda to set
 	 */
-	public void setLuogoAzienda(String luogoAzienda) {
-		this.luogoAzienda = luogoAzienda;
+	public void setDescrizioneAzienda(String descrizioneAzienda) {
+		this.descrizioneAzienda = descrizioneAzienda;
+	}
+	/**
+	 * @return the luogoAzienda
+	 */
+	@DynamoDBAttribute(attributeName="cittaAzienda")
+	public String getCittaAzienda() {
+		return cittaAzienda;
+	}
+	/**
+	 * @param cittaAzienda the luogoAzienda to set
+	 */
+	public void setCittaAzienda(String cittaAzienda) {
+		this.cittaAzienda = cittaAzienda;
+	}
+	/**
+	 * @return the regionezienda
+	 */
+	@DynamoDBAttribute(attributeName="regioneAzienda")
+	public String getRegioneAzienda() {
+		return regioneAzienda;
+	}
+	/**
+	 * @param cittaAzienda the luogoAzienda to set
+	 */
+	public void setRegioneAzienda(String regioneAzienda) {
+		this.regioneAzienda = regioneAzienda;
+	}
+	
+	/**
+	 * @return the indirizzoAzienda
+	 */
+	@DynamoDBAttribute(attributeName="indirizzoAzienda")
+	public String getiIdirizzoAzienda() {
+		return indirizzoAzienda;
+	}
+	/**
+	 * @param indirizzoAzienda the indirizzoAzienda to set
+	 */
+	public void setIndirizzoAzienda(String indirizzoAzienda) {
+		this.indirizzoAzienda = indirizzoAzienda;
 	}
 	/**
 	 * @return the latitudineAzienda
@@ -153,6 +200,59 @@ public class Azienda {
 	 */
 	public void setUrlImmagineAzienda(String urlImmagineAzienda) {
 		this.urlImmagineAzienda = urlImmagineAzienda;
+	}
+	
+	/**
+	 * @return the sitoAzienda
+	 */
+	@DynamoDBAttribute(attributeName="sitoAzienda")
+	public String getSitoAzienda() {
+		return sitoAzienda;
+	}
+	/**
+	 * @param sitoAzienda the sitoAzienda to set
+	 */
+	public void setSitoAzienda(String sitoAzienda) {
+		this.sitoAzienda = sitoAzienda;
+	}
+	/**
+	 * @return the emailAzienda
+	 */
+	@DynamoDBAttribute(attributeName="emailAzienda")
+	public String getEmailAzienda() {
+		return emailAzienda;
+	}
+	/**
+	 * @param emailAzienda the emailAzienda to set
+	 */
+	public void setEmailAzienda(String emailAzienda) {
+		this.emailAzienda = emailAzienda;
+	}
+	/**
+	 * @return the emailSecondariaAzienda
+	 */
+	@DynamoDBAttribute(attributeName="emailSecondariaAzienda")
+	public String getEmailSecondariaAzienda() {
+		return emailSecondariaAzienda;
+	}
+	/**
+	 * @param emailSecondariaAzienda the emailSecondariaAzienda to set
+	 */
+	public void setEmailSecondariaAzienda(String emailSecondariaAzienda) {
+		this.emailSecondariaAzienda = emailSecondariaAzienda;
+	}
+	/**
+	 * @return the telefonoAzienda
+	 */
+	@DynamoDBAttribute(attributeName="telefonoAzienda")
+	public String getTelefonoAzienda() {
+		return telefonoAzienda;
+	}
+	/**
+	 * @param telefonoAzienda the telefonoAzienda to set
+	 */
+	public void setTelefonoAzienda(String telefonoAzienda) {
+		this.telefonoAzienda = telefonoAzienda;
 	}
 	
 	/**
@@ -282,4 +382,6 @@ public class Azienda {
 			this.idEvento = idEvento;
 		}
 	}
+
+	
 }

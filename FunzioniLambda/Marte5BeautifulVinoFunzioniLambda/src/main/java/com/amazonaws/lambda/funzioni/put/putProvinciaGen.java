@@ -1,7 +1,5 @@
 package com.amazonaws.lambda.funzioni.put;
 
-import java.util.Date;
-
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -9,19 +7,19 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.marte5.modello.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Feed;
-import com.marte5.modello.richieste.put.RichiestaPutFeed;
-import com.marte5.modello.risposte.put.RispostaPutFeed;
+import com.marte5.modello.Provincia;
+import com.marte5.modello.richieste.put.RichiestaPutGenerica;
+import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
-public class putFeed implements RequestHandler<RichiestaPutFeed, RispostaPutFeed> {
+public class putProvinciaGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
     @Override
-    public RispostaPutFeed handleRequest(RichiestaPutFeed input, Context context) {
+    public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
-        RispostaPutFeed risposta = new RispostaPutFeed();
+        RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idFeed = FunzioniUtils.getEntitaId();
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -29,7 +27,7 @@ public class putFeed implements RequestHandler<RichiestaPutFeed, RispostaPutFeed
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putFeed ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putAzienda ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -38,31 +36,39 @@ public class putFeed implements RequestHandler<RichiestaPutFeed, RispostaPutFeed
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 
-	        Feed feed = input.getFeed();
-	        if(feed == null) {
+	        Provincia provincia = input.getProvincia();
+	        if(provincia == null) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Feed NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Feed NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Provincia NULL");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Provincia NULL");
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-	        		feed.setIdFeed(idFeed);
+	        	
+		        	long idProvincia = provincia.getIdProvincia();
+		        	
+		        	if(idProvincia == 0) {
+	        			//insert
+		        		idProvincia = FunzioniUtils.getEntitaId();
+		        } 
+	        		provincia.setIdProvincia(idProvincia);
 		        
 		        try {
-					mapper.save(feed);
+					mapper.save(provincia);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Evento " + input.getFeed().getIdFeed());
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getAzienda().getIdAzienda());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;
 				}
+		        risposta.setIdAzienda(idProvincia);
 	        }
 		}	
         risposta.setEsito(esito);
-        risposta.setIdFeed(idFeed);
+        
         return risposta;
     }
 }

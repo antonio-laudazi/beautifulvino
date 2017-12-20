@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.get;
+package com.amazonaws.lambda.funzioni.get.backup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,7 +67,7 @@ public class getAzienda implements RequestHandler<RichiestaGetAzienda, RispostaG
 				
 				eventoCompleto.setIdEvento(eventoEstratto.getIdEvento());
 				eventoCompleto.setDataEvento(eventoEstratto.getDataEvento());
-				eventoCompleto.setLuogoEvento(eventoEstratto.getLuogoEvento());
+				eventoCompleto.setCittaEvento(eventoEstratto.getCittaEvento());
 				eventoCompleto.setTitoloEvento(eventoEstratto.getTitoloEvento());
 				eventoCompleto.setTemaEvento(eventoEstratto.getTemaEvento());
 				eventoCompleto.setPrezzoEvento(eventoEstratto.getPrezzoEvento());
@@ -78,7 +78,6 @@ public class getAzienda implements RequestHandler<RichiestaGetAzienda, RispostaG
 				
 				eventoCompleto.setLatitudineEvento(eventoEstratto.getLatitudineEvento());
 				eventoCompleto.setLongitudineEvento(eventoEstratto.getLongitudineEvento());
-				eventoCompleto.setConvenzionataEvento(eventoEstratto.isConvenzionataEvento());
 				eventoCompleto.setNumMaxPartecipantiEvento(eventoEstratto.getNumMaxPartecipantiEvento());
 				eventoCompleto.setNumPostiDisponibiliEvento(eventoEstratto.getNumPostiDisponibiliEvento());
 				

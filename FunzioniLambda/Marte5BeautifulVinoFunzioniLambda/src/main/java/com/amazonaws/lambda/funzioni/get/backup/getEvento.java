@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.get;
+package com.amazonaws.lambda.funzioni.get.backup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.Evento;
 import com.marte5.modello.Utente;
-import com.marte5.modello.Utente.EventoUtente;
 import com.marte5.modello.Vino;
 import com.marte5.modello.richieste.get.RichiestaGetEvento;
 import com.marte5.modello.risposte.get.RispostaGetEvento;
@@ -94,24 +93,6 @@ public class getEvento implements RequestHandler<RichiestaGetEvento, RispostaGet
 				return risposta;
 			}
 			evento.setStatoEvento(statoEvento);
-//			
-//			if(utente == null) {
-//				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-//		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " utente non trovato sul database, non posso procedere");
-//		        risposta.setEsito(esito);
-//		        return risposta;
-//			}
-//			List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
-//			if(eventiUtente != null) {
-//				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
-//					EventoUtente eventoUtente = iterator.next();
-//					if(eventoUtente.getIdEvento() == idEvento) {
-//						//l'evento in questione è tra quelli associati all'utente
-//						statoEvento = eventoUtente.getStatoEvento();
-//					}
-//				}
-//			}
-//			evento.setStatoEvento(statoEvento);
 			
 			//gestione degli utenti da visualizzare
 			List<Utente> utentiEvento = evento.getIscrittiEvento();

@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.get.getEventi;
+import com.amazonaws.lambda.funzioni.get.backup.getEventi;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.marte5.modello.richieste.get.RichiestaGetEventi;
 import com.marte5.modello.risposte.get.RispostaGetEventi;

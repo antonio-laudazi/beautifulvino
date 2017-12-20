@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.get;
+package com.amazonaws.lambda.funzioni.get.backup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,11 +44,11 @@ public class getUtente implements RequestHandler<RichiestaGetUtente, RispostaGet
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
 			esito.setTrace(e1.getMessage());
+			risposta.setEsito(esito);
+			return risposta;
 		}
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
@@ -59,7 +59,14 @@ public class getUtente implements RequestHandler<RichiestaGetUtente, RispostaGet
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
+			
 			utente = mapper.load(Utente.class, idUtente);
+			if(utente == null) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " utente nullo, non posso procedere");
+		        risposta.setEsito(esito);
+		        return risposta;
+			}
 			
 			//gestione e recupero eventi associati all'utente
 			List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
@@ -68,12 +75,12 @@ public class getUtente implements RequestHandler<RichiestaGetUtente, RispostaGet
 				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
 					EventoUtente evento = iterator.next();
 					Evento eventoCompleto = mapper.load(Evento.class, evento.getIdEvento());
-					eventoCompleto.setStatoEvento(evento.getStatoEvento());
-					
-					eventiCompletiUtente.add(eventoCompleto);
+					if(eventoCompleto != null) {
+						eventoCompleto.setStatoEvento(evento.getStatoEvento());
+						eventiCompletiUtente.add(eventoCompleto);
+					}
 				}
 			}
-			
 			
 			utente.setEventiUtente(eventiCompletiUtente);
 			

@@ -17,23 +17,23 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.Evento;
 import com.marte5.modello.Utente;
-import com.marte5.modello.richieste.get.RichiestaGetEventi;
-import com.marte5.modello.risposte.get.RispostaGetEventi;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
-public class getEventi implements RequestHandler<RichiestaGetEventi, RispostaGetEventi> {
+public class getEventiGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
     @Override
-    public RispostaGetEventi handleRequest(RichiestaGetEventi input, Context context) {
+    public RispostaGetGenerica handleRequest(RichiestaGetGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
         
-        RispostaGetEventi risposta = getRisposta(input);
+        RispostaGetGenerica risposta = getRisposta(input);
        return risposta;
     }
     
-    private RispostaGetEventi getRisposta(RichiestaGetEventi input) {
+    private RispostaGetGenerica getRisposta(RichiestaGetGenerica input) {
     	
     		//controllo del token
-    		RispostaGetEventi risposta = new RispostaGetEventi();
+    		RispostaGetGenerica risposta = new RispostaGetGenerica();
     		long idUltimoEvento = input.getIdUltimoEvento();
     		long dataUltimoEvento = input.getDataUltimoEvento();
     		long idUtente = input.getIdUtente();

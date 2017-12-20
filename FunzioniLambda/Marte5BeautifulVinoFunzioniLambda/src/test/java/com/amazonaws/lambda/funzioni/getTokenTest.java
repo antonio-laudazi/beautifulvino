@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.get.getToken;
+import com.amazonaws.lambda.funzioni.get.backup.getToken;
 import com.amazonaws.services.lambda.runtime.Context;
 
 /**

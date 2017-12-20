@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.put;
+package com.amazonaws.lambda.funzioni.put.backup;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;

@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.get;
+package com.amazonaws.lambda.funzioni.get.backup;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;

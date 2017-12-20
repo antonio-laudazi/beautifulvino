@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Locale;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.marte5.modello.Esito;
+import com.marte5.modello.Provincia;
 import com.marte5.modello.Utente;
 import com.marte5.modello.Utente.EventoUtente;
 
@@ -64,5 +66,31 @@ public class FunzioniUtils {
 		}
 		
 		return statoEvento;
+	}
+	
+	public static long aggiungiProvincia(Provincia provincia, DynamoDBMapper mapper) {
+		
+		long idProvincia = provincia.getIdProvincia();
+		if(idProvincia == 0) {
+			//devo inserire la provincia sul DB
+			idProvincia = FunzioniUtils.getEntitaId();
+			provincia.setIdProvincia(idProvincia);
+			
+		}
+		mapper.save(provincia);
+		return idProvincia;
+	}
+	
+	public static long aggiungiProvincia(Provincia provincia, Transaction transaction) {
+		
+		long idProvincia = provincia.getIdProvincia();
+		if(idProvincia == 0) {
+			//devo inserire la provincia sul DB
+			idProvincia = FunzioniUtils.getEntitaId();
+			provincia.setIdProvincia(idProvincia);
+			
+		}
+		transaction.save(provincia);
+		return idProvincia;
 	}
 }

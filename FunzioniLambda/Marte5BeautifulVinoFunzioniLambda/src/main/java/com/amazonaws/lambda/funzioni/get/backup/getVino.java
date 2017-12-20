@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.get;
+package com.amazonaws.lambda.funzioni.get.backup;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,8 +35,7 @@ public class getVino implements RequestHandler<RichiestaGetVino, RispostaGetVino
     		Vino vino = new Vino();
     		vino.setIdVino(1);
     		vino.setNomeVino("Nomevino");
-    		vino.setDataVino(new Date());
-    		vino.setLuogoVino("Cecina");
+
     		vino.setInBreveVino("Descrizione in breve del vino selezionato");
     		vino.setInfoVino("info vino selezionato");
     		vino.setUrlLogoVino("");
@@ -51,7 +50,6 @@ public class getVino implements RequestHandler<RichiestaGetVino, RispostaGetVino
     		
     		Evento eventoVino = new Evento();
     		eventoVino.setDataEvento((new Date()).getTime());
-    		eventoVino.setLuogoEvento("Cecina");
     		eventoVino.setIdEvento((new Date()).getTime());
     		eventoVino.setTitoloEvento("Titolo evento vino");
     		eventoVino.setTemaEvento("TemaEvento vino");

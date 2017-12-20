@@ -22,7 +22,7 @@ public class Evento {
 	private long idEvento;
 	private long dataEvento;
 	private String dataEventoStringa;
-	private String luogoEvento;
+	private String cittaEvento;
 	private String titoloEvento;
 	private String temaEvento;
 	private float prezzoEvento;
@@ -32,13 +32,20 @@ public class Evento {
 	private double latitudineEvento;
 	private double longitudineEvento;
 	private String indirizzoEvento;
+	private String telefonoEvento;
+	private String emailEvento;
 	private int numMaxPartecipantiEvento;
 	private int numPostiDisponibiliEvento;
-	private boolean convenzionataEvento;
-	private Azienda aziendaEvento;
+	private Badge badgeEvento;
+	private Provincia provinciaEvento;
+	private Azienda aziendaOspitanteEvento;
+	private Azienda aziendaFornitriceEvento;
 	private List<Utente> iscrittiEvento;
 	private List<Vino> viniEvento;
-	private AziendaEvento aziendaEventoInt;
+	private BadgeEvento badgeEventoInt;
+	private ProvinciaEvento provinciaEventoInt;
+	private AziendaEvento aziendaOspitanteEventoInt;
+	private AziendaEvento aziendaFornitriceEventoInt;
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
 	
@@ -71,17 +78,17 @@ public class Evento {
 	}
 	
 	/**
-	 * @return the luogoEvento
+	 * @return the cittaEvento
 	 */
-	@DynamoDBAttribute(attributeName="luogoEvento")
-	public String getLuogoEvento() {
-		return luogoEvento;
+	@DynamoDBAttribute(attributeName="cittaEvento")
+	public String getCittaEvento() {
+		return cittaEvento;
 	}
 	/**
-	 * @param luogoEvento the luogoEvento to set
+	 * @param cittaEvento the cittaEvento to set
 	 */
-	public void setLuogoEvento(String luogoEvento) {
-		this.luogoEvento = luogoEvento;
+	public void setCittaEvento(String cittaEvento) {
+		this.cittaEvento = cittaEvento;
 	}
 	
 	/**
@@ -211,6 +218,46 @@ public class Evento {
 	}
 	
 	/**
+	 * @return the telefonoEvento
+	 */
+	@DynamoDBAttribute(attributeName="telefonoEvento")
+	public String getTelefonoEvento() {
+		return telefonoEvento;
+	}
+	/**
+	 * @param telefonoEvento the telefonoEvento to set
+	 */
+	public void setTelefonoEvento(String telefonoEvento) {
+		this.telefonoEvento = telefonoEvento;
+	}
+	/**
+	 * @return the emailEvento
+	 */
+	@DynamoDBAttribute(attributeName="emailEvento")
+	public String getEmailEvento() {
+		return emailEvento;
+	}
+	/**
+	 * @param emailEvento the emailEvento to set
+	 */
+	public void setEmailEvento(String emailEvento) {
+		this.emailEvento = emailEvento;
+	}
+	/**
+	 * @return the badgeEvento
+	 */
+	@DynamoDBIgnore
+	public Badge getBadgeEvento() {
+		return badgeEvento;
+	}
+	/**
+	 * @param badgeEvento the badgeEvento to set
+	 */
+	public void setBadgeEvento(Badge badgeEvento) {
+		this.badgeEvento = badgeEvento;
+	}
+	
+	/**
 	 * @return the numeroMaxPartecipantiEvento
 	 */
 	@DynamoDBAttribute(attributeName="numMaxPartecipantiEvento")
@@ -239,20 +286,6 @@ public class Evento {
 	}
 	
 	/**
-	 * @return the convenzionataEvento
-	 */
-	@DynamoDBAttribute(attributeName="convenzionataEvento")
-	public boolean isConvenzionataEvento() {
-		return convenzionataEvento;
-	}
-	/**
-	 * @param convenzionataEvento the convenzionataEvento to set
-	 */
-	public void setConvenzionataEvento(boolean convenzionataEvento) {
-		this.convenzionataEvento = convenzionataEvento;
-	}
-	
-	/**
 	 * @return the iscrittiEvento
 	 */
 	@DynamoDBIgnore
@@ -270,14 +303,28 @@ public class Evento {
 	 * @return the aziendaEvento
 	 */
 	@DynamoDBIgnore
-	public Azienda getAziendaEvento() {
-		return aziendaEvento;
+	public Azienda getAziendaOspitanteEvento() {
+		return aziendaOspitanteEvento;
 	}
 	/**
 	 * @param aziendaEvento the aziendaEvento to set
 	 */
-	public void setAziendaEvento(Azienda aziendaEvento) {
-		this.aziendaEvento = aziendaEvento;
+	public void setAziendaOspitanteEvento(Azienda aziendaOspitanteEvento) {
+		this.aziendaOspitanteEvento = aziendaOspitanteEvento;
+	}
+	
+	/**
+	 * @return the aziendaEvento
+	 */
+	@DynamoDBIgnore
+	public Azienda getAziendaFornitriceEvento() {
+		return aziendaFornitriceEvento;
+	}
+	/**
+	 * @param aziendaEvento the aziendaEvento to set
+	 */
+	public void setAziendaFornitriceEvento(Azienda aziendaFornitriceEvento) {
+		this.aziendaFornitriceEvento = aziendaFornitriceEvento;
 	}
 	
 	/**
@@ -309,11 +356,47 @@ public class Evento {
 	}
 	
 	/**
-	 * @return the aziendaEventoInt
+	 * @return the provinciaEvento
 	 */
-	@DynamoDBAttribute(attributeName="aziendaEvento")
-	public AziendaEvento getAziendaEventoInt() { return aziendaEventoInt; }
-	public void setAziendaEventoInt(AziendaEvento aziendaEventoInt) { this.aziendaEventoInt = aziendaEventoInt; }
+	@DynamoDBIgnore
+	public Provincia getProvinciaEvento() {
+		return provinciaEvento;
+	}
+	/**
+	 * @param provinciaEvento the provinciaEvento to set
+	 */
+	public void setProvinciaEvento(Provincia provinciaEvento) {
+		this.provinciaEvento = provinciaEvento;
+	}
+	
+	/**
+	 * @return the aziendaOspitanteEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="aziendaOspitanteEvento")
+	public AziendaEvento getAziendaOspitanteEventoInt() { return aziendaOspitanteEventoInt; }
+	public void setAziendaOspitanteEventoInt(AziendaEvento aziendaOspitanteEventoInt) { this.aziendaOspitanteEventoInt = aziendaOspitanteEventoInt; }
+	
+	/**
+	 * @return the aziendaFornitriceEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="aziendaFornitriceEvento")
+	public AziendaEvento getAziendaFornitriceEventoInt() { return aziendaFornitriceEventoInt; }
+	public void setAziendaFornitriceEventoInt(AziendaEvento aziendaFornitriceEventoInt) { this.aziendaFornitriceEventoInt = aziendaFornitriceEventoInt; }
+	
+	
+	/**
+	 * @return the badgeEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="badgeEvento")
+	public BadgeEvento getBadgeEventoInt() { return badgeEventoInt; }
+	public void setBadgeEventoInt(BadgeEvento badgeEventoInt) { this.badgeEventoInt = badgeEventoInt; }
+	
+	/**
+	 * @return the provinciaEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="provinciaEvento")
+	public ProvinciaEvento getProvinciaEventoInt() { return provinciaEventoInt; }
+	public void setProvinciaEventoInt(ProvinciaEvento provinciaEventoInt) { this.provinciaEventoInt = provinciaEventoInt; }
 	
 	/**
 	 * @return the iscrittiEventoInt
@@ -372,13 +455,16 @@ public class Evento {
 		public void setIdUtente(long idUtente) {
 			this.idUtente = idUtente;
 		}
-		
 	}
 	
 	@DynamoDBDocument
 	public static class VinoEvento{
+		
 		private long idVino;
-
+		private String nomeVino;
+		private String nomeAziendaVino;
+		private int annoVino;
+		
 		/**
 		 * @return the idVino
 		 */
@@ -392,8 +478,112 @@ public class Evento {
 		public void setIdVino(long idVino) {
 			this.idVino = idVino;
 		}
+		/**
+		 * @return the nomeVino
+		 */
+		@DynamoDBAttribute(attributeName="nomeVino")
+		public String getNomeVino() {
+			return nomeVino;
+		}
+		/**
+		 * @param nomeVino the nomeVino to set
+		 */
+		public void setNomeVino(String nomeVino) {
+			this.nomeVino = nomeVino;
+		}
+		/**
+		 * @return the annoVino
+		 */
+		@DynamoDBAttribute(attributeName="annoVino")
+		public int getAnnoVino() {
+			return annoVino;
+		}
+		/**
+		 * @param annoVino the annoVino to set
+		 */
+		public void setAnnoVino(int annoVino) {
+			this.annoVino = annoVino;
+		}
+		/**
+		 * @return the nomeAziendaVino
+		 */
+		@DynamoDBAttribute(attributeName="nomeAziendaVino")
+		public String getNomeAziendaVino() {
+			return nomeAziendaVino;
+		}
+		/**
+		 * @param nomeAziendaVino the nomeAziendaVino to set
+		 */
+		public void setNomeAziendaVino(String nomeAziendaVino) {
+			this.nomeAziendaVino = nomeAziendaVino;
+		}
+	}
+	
+	@DynamoDBDocument
+	public static class ProvinciaEvento{
 		
-		
+		private long idProvincia;
+		private String nomeProvincia;
+		private String siglaProvincia;
+
+		/**
+		 * @return the idProvincia
+		 */
+		@DynamoDBAttribute(attributeName="idProvincia")
+		public long getIdProvincia() {
+			return idProvincia;
+		}
+		/**
+		 * @param idProvincia the idProvincia to set
+		 */
+		public void setIdProvincia(long idProvincia) {
+			this.idProvincia = idProvincia;
+		}
+		/**
+		 * @return the nomeProvincia
+		 */
+		@DynamoDBAttribute(attributeName="nomeProvincia")
+		public String getNomeProvincia() {
+			return nomeProvincia;
+		}
+		/**
+		 * @param nomeProvincia the nomeProvincia to set
+		 */
+		public void setNomeProvincia(String nomeProvincia) {
+			this.nomeProvincia = nomeProvincia;
+		}
+		/**
+		 * @return the siglaProvincia
+		 */
+		@DynamoDBAttribute(attributeName="siglaProvincia")
+		public String getSiglaProvincia() {
+			return siglaProvincia;
+		}
+		/**
+		 * @param siglaProvincia the siglaProvincia to set
+		 */
+		public void setSiglaProvincia(String siglaProvincia) {
+			this.siglaProvincia = siglaProvincia;
+		}
+	}
+	
+	@DynamoDBDocument
+	public static class BadgeEvento{
+		private long idBadge;
+
+		/**
+		 * @return the idBadge
+		 */
+		@DynamoDBAttribute(attributeName="idBadge")
+		public long getIdBadge() {
+			return idBadge;
+		}
+		/**
+		 * @param idBadge the idBadge to set
+		 */
+		public void setIdBadge(long idBadge) {
+			this.idBadge = idBadge;
+		}
 	}
 
 	

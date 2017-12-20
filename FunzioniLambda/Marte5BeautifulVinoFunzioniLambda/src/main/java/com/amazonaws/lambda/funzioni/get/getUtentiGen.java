@@ -10,26 +10,26 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.richieste.get.RichiestaGetAziende;
-import com.marte5.modello.risposte.get.RispostaGetAziende;
+import com.marte5.modello.Utente;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
-public class getAziende implements RequestHandler<RichiestaGetAziende, RispostaGetAziende> {
+public class getUtentiGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
     @Override
-    public RispostaGetAziende handleRequest(RichiestaGetAziende input, Context context) {
+    public RispostaGetGenerica handleRequest(RichiestaGetGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
         
-        RispostaGetAziende risposta = getRisposta(input);
+        RispostaGetGenerica risposta = getRisposta(input);
         return risposta;
     }
     
-    private RispostaGetAziende getRisposta(RichiestaGetAziende input) {
+    private RispostaGetGenerica getRisposta(RichiestaGetGenerica input) {
     	
     		//controllo del token
     	
-    		RispostaGetAziende risposta = new RispostaGetAziende();
+    		RispostaGetGenerica risposta = new RispostaGetGenerica();
     		Esito esito = FunzioniUtils.getEsitoPositivo();
         
         AmazonDynamoDB client = null;
@@ -37,7 +37,7 @@ public class getAziende implements RequestHandler<RichiestaGetAziende, RispostaG
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getAziende ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtenti ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -45,17 +45,17 @@ public class getAziende implements RequestHandler<RichiestaGetAziende, RispostaG
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
-			List<Azienda> aziende;
+			List<Utente> utenti;
 			try {
-				aziende = mapper.scan(Azienda.class, expr);
+				utenti = mapper.scan(Utente.class, expr);
 			} catch (Exception e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getAziende ");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtenti ");
 				esito.setTrace(e.getMessage());
 				risposta.setEsito(esito);
 				return risposta;
 			}
-			risposta.setAziende(aziende);
+			risposta.setUtenti(utenti);
 		}	
 		
 		risposta.setEsito(esito);

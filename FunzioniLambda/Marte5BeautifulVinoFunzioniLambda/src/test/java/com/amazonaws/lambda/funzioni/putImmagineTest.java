@@ -6,8 +6,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.put.putEvento;
-import com.amazonaws.lambda.funzioni.put.putImage;
+import com.amazonaws.lambda.funzioni.put.backup.putEvento;
+import com.amazonaws.lambda.funzioni.put.backup.putImage;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.marte5.modello.richieste.put.RichiestaPutEvento;
 import com.marte5.modello.richieste.put.RichiestaPutImage;

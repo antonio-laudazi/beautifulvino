@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.put;
+package com.amazonaws.lambda.funzioni.put.backup;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class putVino implements RequestHandler<RichiestaPutVino, RispostaPutVino
         context.getLogger().log("Input: " + input);
         RispostaPutVino risposta = new RispostaPutVino();
         
-        long idVino = FunzioniUtils.getEntitaId();
+        long idVinoRisposta = 0;
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -77,6 +77,13 @@ public class putVino implements RequestHandler<RichiestaPutVino, RispostaPutVino
 				transaction.rollback();
 				return risposta;
 	        } else {
+		        	long idVino = vino.getIdVino();
+		        	
+		        	if(idVino == 0) {
+	        			//insert
+		        		idVino = FunzioniUtils.getEntitaId();
+		        } 
+		        	idVinoRisposta = idVino;
 	        		vino.setIdVino(idVino);
 		        
 	        		//controlli sull'azienda associata al vino
@@ -88,6 +95,7 @@ public class putVino implements RequestHandler<RichiestaPutVino, RispostaPutVino
 	    				transaction.rollback();
 	    				return risposta;
 	        		}
+	        		
 	        		Azienda toLoad = new Azienda();
 	        		toLoad.setIdAzienda(vino.getAziendaVino().getIdAzienda());
 	        		Azienda azienda = transaction.load(toLoad);
@@ -100,9 +108,13 @@ public class putVino implements RequestHandler<RichiestaPutVino, RispostaPutVino
 	    				transaction.rollback();
 	    				return risposta;
 	        		}
-	        		AziendaVino aziendaVino = new AziendaVino();
-	        		aziendaVino.setIdAzienda(azienda.getIdAzienda());
-	        		vino.setAziendaVinoInt(aziendaVino);
+	        		if(vino.getAziendaVinoInt() == null){
+	        			
+		        		AziendaVino aziendaVino = new AziendaVino();
+		        		aziendaVino.setIdAzienda(azienda.getIdAzienda());
+		        		aziendaVino.setNomeAzienda(azienda.getNomeAzienda());
+		        		vino.setAziendaVinoInt(aziendaVino);
+	        		}
 	        		
 		        try {
 		        		transaction.save(vino);
@@ -143,7 +155,7 @@ public class putVino implements RequestHandler<RichiestaPutVino, RispostaPutVino
 	        transaction.commit();
 		}	
         risposta.setEsito(esito);
-        risposta.setIdVino(idVino);
+        risposta.setIdVino(idVinoRisposta);
         return risposta;
     }
 }

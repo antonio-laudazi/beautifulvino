@@ -1,5 +1,6 @@
 package com.amazonaws.lambda.funzioni.put;
 
+
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -7,19 +8,19 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Badge;
 import com.marte5.modello.Esito;
-import com.marte5.modello.richieste.put.RichiestaPutBadge;
-import com.marte5.modello.risposte.put.RispostaPutBadge;
+import com.marte5.modello.Feed;
+import com.marte5.modello.richieste.put.RichiestaPutGenerica;
+import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
-public class putBadge implements RequestHandler<RichiestaPutBadge, RispostaPutBadge> {
+public class putFeedGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
     @Override
-    public RispostaPutBadge handleRequest(RichiestaPutBadge input, Context context) {
+    public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
-        RispostaPutBadge risposta = new RispostaPutBadge();
+        RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idBadge = FunzioniUtils.getEntitaId();
+        long idFeed = FunzioniUtils.getEntitaId();
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -27,7 +28,7 @@ public class putBadge implements RequestHandler<RichiestaPutBadge, RispostaPutBa
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putBadge ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putFeed ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -36,23 +37,23 @@ public class putBadge implements RequestHandler<RichiestaPutBadge, RispostaPutBa
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 
-	        Badge badge = input.getBadge();
-	        if(badge == null) {
+	        Feed feed = input.getFeed();
+	        if(feed == null) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Badge NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Badge NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Feed NULL");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Feed NULL");
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-	        		badge.setIdBadge(idBadge);
+	        		feed.setIdFeed(idFeed);
 		        
 		        try {
-					mapper.save(badge);
+					mapper.save(feed);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getBadge().getIdBadge());
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Evento " + input.getFeed().getIdFeed());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;
@@ -60,7 +61,7 @@ public class putBadge implements RequestHandler<RichiestaPutBadge, RispostaPutBa
 	        }
 		}	
         risposta.setEsito(esito);
-        risposta.setIdBadge(idBadge);
+        risposta.setIdFeed(idFeed);
         return risposta;
     }
 }

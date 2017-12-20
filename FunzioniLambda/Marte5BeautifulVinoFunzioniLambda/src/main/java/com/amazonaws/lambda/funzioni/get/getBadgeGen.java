@@ -9,20 +9,20 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Badge;
 import com.marte5.modello.Esito;
-import com.marte5.modello.richieste.get.RichiestaGetBadge;
-import com.marte5.modello.risposte.get.RispostaGetBadge;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
-public class getBadge implements RequestHandler<RichiestaGetBadge, RispostaGetBadge> {
+public class getBadgeGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
     @Override
-    public RispostaGetBadge handleRequest(RichiestaGetBadge input, Context context) {
+    public RispostaGetGenerica handleRequest(RichiestaGetGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
-        RispostaGetBadge risposta = getRisposta(input);
+        RispostaGetGenerica risposta = getRisposta(input);
         return risposta;
     }
     
-    private RispostaGetBadge getRisposta(RichiestaGetBadge input) {
-    		RispostaGetBadge risposta = new RispostaGetBadge();
+    private RispostaGetGenerica getRisposta(RichiestaGetGenerica input) {
+    		RispostaGetGenerica risposta = new RispostaGetGenerica();
         long idBadge = input.getIdBadge();
         
         Esito esito = FunzioniUtils.getEsitoPositivo();

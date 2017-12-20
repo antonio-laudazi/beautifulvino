@@ -1,6 +1,5 @@
 package com.marte5.modello;
 
-import java.util.Date;
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -19,13 +18,13 @@ public class Vino {
 
 	private long idVino;
 	private String nomeVino;
-	private Date dataVino;
 	private int annoVino;
-	private String luogoVino;
 	private String inBreveVino;
 	private String descrizioneVino;
-	private String uvaggioVino;
 	private String infoVino;
+	private String uvaggioVino;
+	private String regioneVino;
+	private String profumoVino;
 	private String urlLogoVino;
 	private String urlImmagineVino;
 	private String statoVino;
@@ -62,32 +61,8 @@ public class Vino {
 	public void setNomeVino(String nomeVino) {
 		this.nomeVino = nomeVino;
 	}
-	/**
-	 * @return the dataVino
-	 */
-	@DynamoDBAttribute(attributeName="dataVino")
-	public Date getDataVino() {
-		return dataVino;
-	}
-	/**
-	 * @param dataVino the dataVino to set
-	 */
-	public void setDataVino(Date dataVino) {
-		this.dataVino = dataVino;
-	}
-	/**
-	 * @return the luogoVino
-	 */
-	@DynamoDBAttribute(attributeName="luogoVino")
-	public String getLuogoVino() {
-		return luogoVino;
-	}
-	/**
-	 * @param luogoVino the luogoVino to set
-	 */
-	public void setLuogoVino(String luogoVino) {
-		this.luogoVino = luogoVino;
-	}
+	
+	
 	/**
 	 * @return the inBreveVino
 	 */
@@ -165,6 +140,32 @@ public class Vino {
 	 */
 	public void setUvaggioVino(String uvaggioVino) {
 		this.uvaggioVino = uvaggioVino;
+	}
+	/**
+	 * @return the regioneVino
+	 */
+	@DynamoDBAttribute(attributeName="regioneVino")
+	public String getRegioneVino() {
+		return regioneVino;
+	}
+	/**
+	 * @param regioneVino the regioneVino to set
+	 */
+	public void setRegioneVino(String regioneVino) {
+		this.regioneVino = regioneVino;
+	}
+	/**
+	 * @return the profumoVino
+	 */
+	@DynamoDBAttribute(attributeName="profumoVino")
+	public String getProfumoVino() {
+		return profumoVino;
+	}
+	/**
+	 * @param profumoVino the profumoVino to set
+	 */
+	public void setProfumoVino(String profumoVino) {
+		this.profumoVino = profumoVino;
 	}
 	/**
 	 * @return the urlImmagineVino
@@ -258,7 +259,8 @@ public class Vino {
 	@DynamoDBDocument
 	public static class AziendaVino{
 		private long idAzienda;
-
+		private String nomeAzienda;
+		
 		@DynamoDBAttribute(attributeName="idAzienda")
 		public long getIdAzienda() {
 			return idAzienda;
@@ -266,6 +268,21 @@ public class Vino {
 
 		public void setIdAzienda(long idAzienda) {
 			this.idAzienda = idAzienda;
+		}
+
+		/**
+		 * @return the nomeAzienda
+		 */
+		@DynamoDBAttribute(attributeName="nomeAzienda")
+		public String getNomeAzienda() {
+			return nomeAzienda;
+		}
+
+		/**
+		 * @param nomeAzienda the nomeAzienda to set
+		 */
+		public void setNomeAzienda(String nomeAzienda) {
+			this.nomeAzienda = nomeAzienda;
 		}
 	}
 	

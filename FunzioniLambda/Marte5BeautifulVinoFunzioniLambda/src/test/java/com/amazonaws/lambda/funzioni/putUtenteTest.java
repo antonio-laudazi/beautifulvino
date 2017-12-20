@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.put.putUtente;
+import com.amazonaws.lambda.funzioni.put.backup.putUtente;
 import com.amazonaws.services.lambda.runtime.Context;
 
 /**
