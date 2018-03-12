@@ -2,13 +2,13 @@ package com.marte5.modello.richieste.connect;
 
 import java.util.List;
 
-import com.marte5.modello.Badge;
+import com.marte5.modello2.Badge;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaConnectBadgeAUtente extends Richiesta {
 
 	private List<Badge> badges;
-	private long idUtente;
+	private String idUtente;
 	/**
 	 * @return the badges
 	 */
@@ -24,13 +24,13 @@ public class RichiestaConnectBadgeAUtente extends Richiesta {
 	/**
 	 * @return the idUtente
 	 */
-	public long getIdUtente() {
+	public String getIdUtente() {
 		return idUtente;
 	}
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(long idUtente) {
+	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
 }

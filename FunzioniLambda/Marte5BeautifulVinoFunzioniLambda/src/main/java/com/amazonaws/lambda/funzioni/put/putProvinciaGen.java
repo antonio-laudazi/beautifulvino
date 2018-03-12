@@ -7,9 +7,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Provincia;
+import com.marte5.modello2.Provincia;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
@@ -20,6 +19,7 @@ public class putProvinciaGen implements RequestHandler<RichiestaPutGenerica, Ris
         context.getLogger().log("Input: " + input);
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
+        String idProvinciaRisposta = "";
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -45,13 +45,14 @@ public class putProvinciaGen implements RequestHandler<RichiestaPutGenerica, Ris
 				return risposta;
 	        } else {
 	        	
-		        	long idProvincia = provincia.getIdProvincia();
+		        	String idProvincia = provincia.getIdProvincia();
 		        	
-		        	if(idProvincia == 0) {
+		        	if(idProvincia == null || idProvincia.equals("")) {
 	        			//insert
 		        		idProvincia = FunzioniUtils.getEntitaId();
-		        } 
+		        }
 	        		provincia.setIdProvincia(idProvincia);
+	        		idProvinciaRisposta = idProvincia;
 		        
 		        try {
 					mapper.save(provincia);
@@ -64,9 +65,10 @@ public class putProvinciaGen implements RequestHandler<RichiestaPutGenerica, Ris
 					risposta.setEsito(esito);
 					return risposta;
 				}
-		        risposta.setIdAzienda(idProvincia);
+		        
 	        }
-		}	
+		}
+		risposta.setIdProvincia(idProvinciaRisposta);
         risposta.setEsito(esito);
         
         return risposta;

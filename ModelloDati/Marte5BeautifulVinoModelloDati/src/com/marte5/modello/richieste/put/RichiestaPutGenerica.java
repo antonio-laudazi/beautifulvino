@@ -1,12 +1,12 @@
 package com.marte5.modello.richieste.put;
 
-import com.marte5.modello.Azienda;
-import com.marte5.modello.Badge;
-import com.marte5.modello.Evento;
-import com.marte5.modello.Feed;
-import com.marte5.modello.Provincia;
-import com.marte5.modello.Utente;
-import com.marte5.modello.Vino;
+import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Badge;
+import com.marte5.modello2.Evento;
+import com.marte5.modello2.Feed;
+import com.marte5.modello2.Provincia;
+import com.marte5.modello2.Utente;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaPutGenerica extends Richiesta {
@@ -22,6 +22,7 @@ public class RichiestaPutGenerica extends Richiesta {
 	private String filename;
 	private Utente utente;
 	private Vino vino;
+	private String idUtente;
 	
 	
 	/**
@@ -143,5 +144,17 @@ public class RichiestaPutGenerica extends Richiesta {
 	 */
 	public void setVino(Vino vino) {
 		this.vino = vino;
+	}
+	/**
+	 * @return the idUtente
+	 */
+	public String getIdUtente() {
+		return idUtente;
+	}
+	/**
+	 * @param idUtente the idUtente to set
+	 */
+	public void setIdUtente(String idUtente) {
+		this.idUtente = idUtente;
 	}
 }

@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.connect;
+package com.amazonaws.lambda.funzioni.connect.backup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,10 +10,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
+import com.marte5.modello2.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
-import com.marte5.modello.Vino;
+import com.marte5.modello2.Utente;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.richieste.connect.RichiestaConnectViniAUtente;
 import com.marte5.modello.risposte.connect.RispostaConnectViniAUtente;
 
@@ -34,7 +34,7 @@ public class connectViniAUtente implements RequestHandler<RichiestaConnectViniAU
 		esito.setCodice(100);
         esito.setMessage("Esito corretto per la richiesta getEventi");
         
-        long idUtente = input.getIdUtente();
+        String idUtente = input.getIdUtente();
 		List<Azienda> aziendeViniDaAssociare = input.getAziendeViniDaAssociare();
 		
 		AmazonDynamoDB client = null;
@@ -56,7 +56,7 @@ public class connectViniAUtente implements RequestHandler<RichiestaConnectViniAU
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
-			if(idUtente == 0) {
+			if(idUtente == null || idUtente.equals("")) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idUtente nullo, non posso procedere");
 		        risposta.setEsito(esito);
@@ -73,7 +73,7 @@ public class connectViniAUtente implements RequestHandler<RichiestaConnectViniAU
 			List<Azienda> aziendeNuove = new ArrayList<>();
 			for (Iterator<Azienda> iterator = aziendeViniDaAssociare.iterator(); iterator.hasNext();) {
 				Azienda aziendaDaAssociare = iterator.next();
-				long idAzienda = aziendaDaAssociare.getIdAzienda();
+				String idAzienda = aziendaDaAssociare.getIdAzienda();
 				
 				List<Azienda> aziendeViniUtente = utente.getAziendeUtente();
 				for (Iterator<Azienda> iteratorAziendeUtente = aziendeViniUtente.iterator(); iterator.hasNext();) {
@@ -108,11 +108,11 @@ public class connectViniAUtente implements RequestHandler<RichiestaConnectViniAU
 		
 		for (Iterator<Vino> iterator = listaRicevuta.iterator(); iterator.hasNext();) {
 			Vino vinoRicevuto = iterator.next();
-			long idVinoRicevuto = vinoRicevuto.getIdVino();
+			String idVinoRicevuto = vinoRicevuto.getIdVino();
 			for (Iterator<Vino> iterator2 = listaAttuale.iterator(); iterator2.hasNext();) {
 				Vino vinoAttuale = iterator2.next();
-				long idVinoAttuale = vinoAttuale.getIdVino();
-				if(idVinoAttuale != idVinoRicevuto) {
+				String idVinoAttuale = vinoAttuale.getIdVino();
+				if(!idVinoAttuale.equals(idVinoRicevuto)) {
 					risultato.add(vinoRicevuto);
 				} 
 			}

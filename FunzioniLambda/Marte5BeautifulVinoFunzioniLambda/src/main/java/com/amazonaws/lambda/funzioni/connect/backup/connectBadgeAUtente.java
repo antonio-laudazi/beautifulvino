@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.connect;
+package com.amazonaws.lambda.funzioni.connect.backup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,9 +11,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Badge;
+import com.marte5.modello2.Badge;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
+import com.marte5.modello2.Utente;
 import com.marte5.modello.richieste.connect.RichiestaConnectBadgeAUtente;
 import com.marte5.modello.risposte.connect.RispostaConnectBadgeAUtente;
 
@@ -31,7 +31,7 @@ public class connectBadgeAUtente implements RequestHandler<RichiestaConnectBadge
 		RispostaConnectBadgeAUtente risposta = new RispostaConnectBadgeAUtente();
 		Esito esito = FunzioniUtils.getEsitoPositivo();
         
-        long idUtente = input.getIdUtente();
+        String idUtente = input.getIdUtente();
 		List<Badge> badgeUtente = input.getBadges();
 		
 		AmazonDynamoDB client = null;
@@ -53,7 +53,7 @@ public class connectBadgeAUtente implements RequestHandler<RichiestaConnectBadge
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
-			if(idUtente == 0) {
+			if(idUtente == null || idUtente.equals("")) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idUtente nullo, non posso procedere");
 		        risposta.setEsito(esito);

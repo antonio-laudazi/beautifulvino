@@ -4,25 +4,25 @@ import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaGetGenerica extends Richiesta {
 
-	private long idAzienda;
-	private long idUtente;
+	private String idAzienda;
+	private String idUtente;
 	
-	private long idBadge;
+	private String idBadge;
 	
-	private int idProvincia; //puo' valere -1 oppure un codice. Se vale -1 rilascio il filtro sulla provincia
+	private String idProvincia; //puo' valere -1 oppure un codice. Se vale -1 rilascio il filtro sulla provincia
 	private int numEventiVisualizzati;
-	private long idUltimoEvento;
+	private String idUltimoEvento;
 	private long dataUltimoEvento;
 	
-	private long idEvento;
+	private String idEvento;
 	private long dataEvento;
 	
-	private long idUltimoFeed;
+	private String idUltimoFeed;
 	private long dataUltimoFeed;
 	
 	private String oldToken;
 	
-	private int idVino;
+	private String idVino;
 	
 	private String emailUtente;
 	private String passwordUtente;
@@ -33,49 +33,49 @@ public class RichiestaGetGenerica extends Richiesta {
 	/**
 	 * @return the idAzienda
 	 */
-	public long getIdAzienda() {
+	public String getIdAzienda() {
 		return idAzienda;
 	}
 	/**
 	 * @param idAzienda the idAzienda to set
 	 */
-	public void setIdAzienda(long idAzienda) {
+	public void setIdAzienda(String idAzienda) {
 		this.idAzienda = idAzienda;
 	}
 	/**
 	 * @return the idUtente
 	 */
-	public long getIdUtente() {
+	public String getIdUtente() {
 		return idUtente;
 	}
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(long idUtente) {
+	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
 	/**
 	 * @return the idBadge
 	 */
-	public long getIdBadge() {
+	public String getIdBadge() {
 		return idBadge;
 	}
 	/**
 	 * @param idBadge the idBadge to set
 	 */
-	public void setIdBadge(long idBadge) {
+	public void setIdBadge(String idBadge) {
 		this.idBadge = idBadge;
 	}
 	/**
 	 * @return the idProvincia
 	 */
-	public int getIdProvincia() {
+	public String getIdProvincia() {
 		return idProvincia;
 	}
 	/**
 	 * @param idProvincia the idProvincia to set
 	 */
-	public void setIdProvincia(int idProvincia) {
+	public void setIdProvincia(String idProvincia) {
 		this.idProvincia = idProvincia;
 	}
 	/**
@@ -93,13 +93,13 @@ public class RichiestaGetGenerica extends Richiesta {
 	/**
 	 * @return the idUltimoEvento
 	 */
-	public long getIdUltimoEvento() {
+	public String getIdUltimoEvento() {
 		return idUltimoEvento;
 	}
 	/**
 	 * @param idUltimoEvento the idUltimoEvento to set
 	 */
-	public void setIdUltimoEvento(long idUltimoEvento) {
+	public void setIdUltimoEvento(String idUltimoEvento) {
 		this.idUltimoEvento = idUltimoEvento;
 	}
 	/**
@@ -117,13 +117,13 @@ public class RichiestaGetGenerica extends Richiesta {
 	/**
 	 * @return the idEvento
 	 */
-	public long getIdEvento() {
+	public String getIdEvento() {
 		return idEvento;
 	}
 	/**
 	 * @param idEvento the idEvento to set
 	 */
-	public void setIdEvento(long idEvento) {
+	public void setIdEvento(String idEvento) {
 		this.idEvento = idEvento;
 	}
 	/**
@@ -141,13 +141,13 @@ public class RichiestaGetGenerica extends Richiesta {
 	/**
 	 * @return the idUltimoFeed
 	 */
-	public long getIdUltimoFeed() {
+	public String getIdUltimoFeed() {
 		return idUltimoFeed;
 	}
 	/**
 	 * @param idUltimoFeed the idUltimoFeed to set
 	 */
-	public void setIdUltimoFeed(long idUltimoFeed) {
+	public void setIdUltimoFeed(String idUltimoFeed) {
 		this.idUltimoFeed = idUltimoFeed;
 	}
 	/**
@@ -177,13 +177,13 @@ public class RichiestaGetGenerica extends Richiesta {
 	/**
 	 * @return the idVino
 	 */
-	public int getIdVino() {
+	public String getIdVino() {
 		return idVino;
 	}
 	/**
 	 * @param idVino the idVino to set
 	 */
-	public void setIdVino(int idVino) {
+	public void setIdVino(String idVino) {
 		this.idVino = idVino;
 	}
 	/**

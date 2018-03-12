@@ -15,8 +15,8 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Evento;
-import com.marte5.modello.Utente;
+import com.marte5.modello2.Evento;
+import com.marte5.modello2.Utente;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
@@ -34,11 +34,12 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
     	
     		//controllo del token
     		RispostaGetGenerica risposta = new RispostaGetGenerica();
-    		long idUltimoEvento = input.getIdUltimoEvento();
+    		String idUltimoEvento = input.getIdUltimoEvento();
     		long dataUltimoEvento = input.getDataUltimoEvento();
-    		long idUtente = input.getIdUtente();
+    		String idUtente = input.getIdUtente();
     		
     		Esito esito = FunzioniUtils.getEsitoPositivo();
+    		esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
         
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
@@ -47,8 +48,9 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi ");
+			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi ");
 			esito.setTrace(e1.getMessage());
+			esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
 		}
@@ -56,12 +58,26 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
 
+			if(idUtente == null || idUtente.equals("")) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idUtente nullo, non posso procedere");
+		        risposta.setEsito(esito);
+		        return risposta;
+			}
+			Utente utente = mapper.load(Utente.class, idUtente);
+			if(utente == null) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " utente non trovato su DB, non posso procedere");
+		        risposta.setEsito(esito);
+		        return risposta;
+			}
+			
 			//ottengo il numero totale di elementi, esclusa la paginazione
 			scannedCount = mapper.count(Evento.class, expr);
 			expr.withLimit(12);
 			//qexpr.withLimit(5);
 			
-			if(idUltimoEvento != 0 && dataUltimoEvento != 0) {
+			if((idUltimoEvento != "" || !idUltimoEvento.equals(null)) && dataUltimoEvento != 0) {
 				//configuro la paginazione
 				
 				Map<String, AttributeValue> exclusiveStartKey = new HashMap<>();
@@ -80,16 +96,17 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			ScanResultPage<Evento> page = mapper.scanPage(Evento.class, expr);
 			
 			List<Evento> eventi = page.getResults();
-			Utente utente = mapper.load(Utente.class, idUtente);
-			if(utente != null) {
+			
+			if(eventi != null) {
 				for (Evento evento : eventi) {
 					String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
 					try {
 						statoEvento = FunzioniUtils.getStatoEvento(utente, evento.getIdEvento(), evento.getDataEvento(), mapper);
 					} catch (Exception e) {
 						esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-						esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi: errore nell'estrazione delle associazioni degli eventi preferiti");
+						esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi: errore nell'estrazione delle associazioni degli eventi preferiti");
 						esito.setTrace(e.getMessage());
+						esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
 						risposta.setEsito(esito);
 						return risposta;
 					}
@@ -101,6 +118,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 		}	
             
 		risposta.setNumTotEventi(scannedCount);
+		esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
 		risposta.setEsito(esito);
     		return risposta;
     }

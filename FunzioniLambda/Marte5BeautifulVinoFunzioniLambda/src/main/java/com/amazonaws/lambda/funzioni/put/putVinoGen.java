@@ -10,11 +10,11 @@ import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
-import com.marte5.modello.Azienda.VinoAzienda;
+import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Azienda.VinoAzienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Vino;
-import com.marte5.modello.Vino.AziendaVino;
+import com.marte5.modello2.Vino;
+import com.marte5.modello2.Vino.AziendaVino;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
@@ -29,7 +29,7 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
         context.getLogger().log("Input: " + input);
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idVinoRisposta = 0;
+        String idVinoRisposta = "";
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -77,9 +77,9 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 				transaction.rollback();
 				return risposta;
 	        } else {
-		        	long idVino = vino.getIdVino();
+		        	String idVino = vino.getIdVino();
 		        	
-		        	if(idVino == 0) {
+		        	if(idVino == null || idVino.equals("")) {
 	        			//insert
 		        		idVino = FunzioniUtils.getEntitaId();
 		        } 
@@ -87,7 +87,7 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 	        		vino.setIdVino(idVino);
 		        
 	        		//controlli sull'azienda associata al vino
-	        		if(vino.getAziendaVino().getIdAzienda() == 0) {
+	        		if(vino.getAziendaVino().getIdAzienda() == null || vino.getAziendaVino().getIdAzienda().equals("")) {
 	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda associata al vino che si vuole inserire è priva di Id");
 	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda associata al vino che si vuole inserire è priva di Id");

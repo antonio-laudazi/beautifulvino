@@ -463,6 +463,7 @@ public class Evento {
 		private long idVino;
 		private String nomeVino;
 		private String nomeAziendaVino;
+		private long idAziendaVino;
 		private int annoVino;
 		
 		/**
@@ -516,6 +517,19 @@ public class Evento {
 		 */
 		public void setNomeAziendaVino(String nomeAziendaVino) {
 			this.nomeAziendaVino = nomeAziendaVino;
+		}
+		/**
+		 * @return the idAziendaVino
+		 */
+		@DynamoDBAttribute(attributeName="idAziendaVino")
+		public long getIdAziendaVino() {
+			return idAziendaVino;
+		}
+		/**
+		 * @param idAziendaVino the idAziendaVino to set
+		 */
+		public void setIdAziendaVino(long idAziendaVino) {
+			this.idAziendaVino = idAziendaVino;
 		}
 	}
 	

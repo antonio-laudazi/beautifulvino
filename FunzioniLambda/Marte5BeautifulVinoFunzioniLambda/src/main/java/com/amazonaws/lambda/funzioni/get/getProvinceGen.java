@@ -12,7 +12,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Provincia;
+import com.marte5.modello2.Provincia;
 import com.marte5.modello.richieste.Richiesta;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.richieste.get.RichiestaGetProvince;
@@ -33,11 +33,12 @@ public class getProvinceGen implements RequestHandler<RichiestaGetGenerica, Risp
     	RispostaGetGenerica risposta = new RispostaGetGenerica();
         
         Esito esito = FunzioniUtils.getEsitoPositivo();
+        esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
         List<Provincia> provinceTotali = new ArrayList<>();
         
         //inizializzo con valore ALL
         Provincia all = new Provincia();
-        all.setIdProvincia(0);
+        all.setIdProvincia("X");
         all.setNomeProvincia("TUTTE");
         all.setSiglaProvincia("00");
         provinceTotali.add(all);
@@ -48,7 +49,7 @@ public class getProvinceGen implements RequestHandler<RichiestaGetGenerica, Risp
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getProvince ");
+			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getProvince ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -61,7 +62,7 @@ public class getProvinceGen implements RequestHandler<RichiestaGetGenerica, Risp
 				province = mapper.scan(Provincia.class, expr);
 			} catch (Exception e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getProvince ");
+				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getProvince ");
 				esito.setTrace(e.getMessage());
 				risposta.setEsito(esito);
 				return risposta;

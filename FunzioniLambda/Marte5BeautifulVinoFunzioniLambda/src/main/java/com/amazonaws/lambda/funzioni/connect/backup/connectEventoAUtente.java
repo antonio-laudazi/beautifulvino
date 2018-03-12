@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.connect;
+package com.amazonaws.lambda.funzioni.connect.backup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,8 +12,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
-import com.marte5.modello.Utente.EventoUtente;
+import com.marte5.modello2.Utente;
+import com.marte5.modello2.Utente.EventoUtente;
 import com.marte5.modello.richieste.connect.RichiestaConnectEventoAUtente;
 import com.marte5.modello.risposte.connect.RispostaConnectEventoAUtente;
 
@@ -34,8 +34,8 @@ public class connectEventoAUtente implements RequestHandler<RichiestaConnectEven
 
     		Esito esito = FunzioniUtils.getEsitoPositivo();
     		
-    		long idUtente = input.getIdUtente();
-    		long idEvento = input.getIdEvento();
+    		String idUtente = input.getIdUtente();
+    		String idEvento = input.getIdEvento();
     		String statoEvento = input.getStatoEvento();
     		
         AmazonDynamoDB client = null;
@@ -51,13 +51,13 @@ public class connectEventoAUtente implements RequestHandler<RichiestaConnectEven
     		if(client != null) {
     			DynamoDBMapper mapper = new DynamoDBMapper(client);
     			
-    			if(idEvento == 0) {
+    			if(idEvento == null || idEvento.equals("")) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
     		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idEvento nullo, non posso procedere");
     		        risposta.setEsito(esito);
     		        return risposta;
     			}
-    			if(idUtente == 0) {
+    			if(idUtente == null || idUtente.equals("")) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
     		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idUtente nullo, non posso procedere");
     		        risposta.setEsito(esito);

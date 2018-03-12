@@ -2,13 +2,13 @@ package com.marte5.modello.richieste.connect;
 
 import java.util.List;
 
-import com.marte5.modello.Azienda;
+import com.marte5.modello2.Azienda;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaConnectViniAUtente extends Richiesta {
 	
 	List<Azienda> aziendeViniDaAssociare;
-	long idUtente;
+	String idUtente;
 	/**
 	 * @return the viniDaAssociare
 	 */
@@ -24,13 +24,13 @@ public class RichiestaConnectViniAUtente extends Richiesta {
 	/**
 	 * @return the idUtente
 	 */
-	public long getIdUtente() {
+	public String getIdUtente() {
 		return idUtente;
 	}
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(long idUtente) {
+	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
 }

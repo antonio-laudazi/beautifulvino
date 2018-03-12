@@ -289,6 +289,7 @@ public class Vino {
 	@DynamoDBDocument
 	public static class EventoVino{
 		private long idEvento;
+		private long dataEvento;
 
 		@DynamoDBAttribute(attributeName="idEvento")
 		public long getIdEvento() {
@@ -297,6 +298,20 @@ public class Vino {
 
 		public void setIdEvento(long idEvento) {
 			this.idEvento = idEvento;
+		}
+
+		/**
+		 * @return the dataEvento
+		 */
+		public long getDataEvento() {
+			return dataEvento;
+		}
+
+		/**
+		 * @param dataEvento the dataEvento to set
+		 */
+		public void setDataEvento(long dataEvento) {
+			this.dataEvento = dataEvento;
 		}
 	}
 	

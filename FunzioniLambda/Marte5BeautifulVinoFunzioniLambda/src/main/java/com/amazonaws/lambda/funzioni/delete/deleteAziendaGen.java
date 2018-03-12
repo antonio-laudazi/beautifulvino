@@ -9,15 +9,15 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.richieste.delete.RichiestaDeleteAzienda;
-import com.marte5.modello.risposte.delete.RispostaDeleteAzienda;
+import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
+import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
 
-public class deleteAzienda implements RequestHandler<RichiestaDeleteAzienda, RispostaDeleteAzienda> {
+public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica, RispostaDeleteGenerica> {
 
     @Override
-    public RispostaDeleteAzienda handleRequest(RichiestaDeleteAzienda input, Context context) {
+    public RispostaDeleteGenerica handleRequest(RichiestaDeleteGenerica input, Context context) {
     		context.getLogger().log("Input: " + input);
-    		RispostaDeleteAzienda risposta = new RispostaDeleteAzienda();
+    		RispostaDeleteGenerica risposta = new RispostaDeleteGenerica();
 
         long idAzienda = input.getIdAzienda();
         
@@ -27,8 +27,6 @@ public class deleteAzienda implements RequestHandler<RichiestaDeleteAzienda, Ris
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
 			esito.setTrace(e1.getMessage());
@@ -53,7 +51,6 @@ public class deleteAzienda implements RequestHandler<RichiestaDeleteAzienda, Ris
 	    				risposta.setEsito(esito);
 	    				return risposta;
 	        		} else {
-	        			//caricato l'evento, lo vado a cancellare
 	        			
 	        			try {
 						mapper.delete(aziendaDaCancellare);
@@ -66,6 +63,13 @@ public class deleteAzienda implements RequestHandler<RichiestaDeleteAzienda, Ris
 		    				risposta.setEsito(esito);
 		    				return risposta;
 					}
+	        			
+	        			//cancello eventuale immagine dell'evento
+	        			String immagineAziendaUrl = aziendaDaCancellare.getUrlImmagineAzienda();
+	        			if(!immagineAziendaUrl.equals("")) {
+	        				esito = FunzioniUtils.cancellaImmagine(immagineAziendaUrl);
+	        			}
+	        			
 	        		}
 	        }
 		}

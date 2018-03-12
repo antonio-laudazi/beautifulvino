@@ -22,6 +22,8 @@ public class BeautifulVinoPut implements RequestHandler<RichiestaPutGenerica, Ri
 	private final static String FUNCTION_NAME_PUT_UTENTE = "putUtenteGen";
 	private final static String FUNCTION_NAME_PUT_VINO = "putVinoGen";
 	private final static String FUNCTION_NAME_PUT_PROVINCIA = "putProvinciaGen";
+	private final static String FUNCTION_NAME_PUT_PROFILE_IMAGE = "putUserProfileImageGen";
+	private final static String FUNCTION_NAME_PUT_PROFILE_IMAGE_WITH_USER = "putUserProfileImageWithUserGen";
 	
 	private static final String PACKAGE_NAME_GET = "com.amazonaws.lambda.funzioni.put.";
 	
@@ -67,6 +69,8 @@ public class BeautifulVinoPut implements RequestHandler<RichiestaPutGenerica, Ri
     		funzioni.add(FUNCTION_NAME_PUT_UTENTE);
     		funzioni.add(FUNCTION_NAME_PUT_VINO);
     		funzioni.add(FUNCTION_NAME_PUT_PROVINCIA);
+    		funzioni.add(FUNCTION_NAME_PUT_PROFILE_IMAGE);
+    		funzioni.add(FUNCTION_NAME_PUT_PROFILE_IMAGE_WITH_USER);
     		
     		return funzioni.contains(nomeFunzione);
     		

@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.delete;
+package com.amazonaws.lambda.funzioni.delete.backup;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -8,21 +8,18 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.Evento;
-import com.marte5.modello.Feed;
 import com.marte5.modello.richieste.delete.RichiestaDeleteEvento;
-import com.marte5.modello.richieste.delete.RichiestaDeleteFeed;
 import com.marte5.modello.risposte.delete.RispostaDeleteEvento;
-import com.marte5.modello.risposte.delete.RispostaDeleteFeed;
 
-public class deleteFeed implements RequestHandler<RichiestaDeleteFeed, RispostaDeleteFeed> {
+public class deleteEvento implements RequestHandler<RichiestaDeleteEvento, RispostaDeleteEvento> {
 
     @Override
-    public RispostaDeleteFeed handleRequest(RichiestaDeleteFeed input, Context context) {
-        context.getLogger().log("Input: " + input);
-        RispostaDeleteFeed risposta = new RispostaDeleteFeed();
+    public RispostaDeleteEvento handleRequest(RichiestaDeleteEvento input, Context context) {
+          context.getLogger().log("Input: " + input);
+        RispostaDeleteEvento risposta = new RispostaDeleteEvento();
 
-        long idFeed = input.getIdFeed();
-        long dataFeed = input.getDataFeed();
+        long idEvento = input.getIdEvento();
+        long dataEvento = input.getDataEvento();
         
         Esito esito = new Esito();
         esito.setCodice(EsitoHelper.ESITO_OK_CODICE);
@@ -35,33 +32,41 @@ public class deleteFeed implements RequestHandler<RichiestaDeleteFeed, RispostaD
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " deleteFeed ");
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
 			esito.setTrace(e1.getMessage());
+			risposta.setEsito(esito);
+			return risposta;
 		}
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idFeed == 0 || dataFeed == 0) {
+			if(idEvento == 0 || dataEvento == 0) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdFeed NULL oppure DataFeed NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdFeed NULL oppure DataFeed NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL oppure DataEvento NULL");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL oppure DataEvento NULL");
+				risposta.setEsito(esito);
+				return risposta;
 	        } else {
-	        		Feed feedDaCancellare = mapper.load(Feed.class, idFeed, dataFeed );
-	        		if(feedDaCancellare == null) {
+	        		Evento eventoDaCancellare = mapper.load(Evento.class, idEvento, dataEvento );
+	        		if(eventoDaCancellare == null) {
 	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Feed con id: " + idFeed + " non trovato sul database");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Feed con id: " + idFeed + " non trovato sul database");
+	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Evento con id: " + idEvento + " non trovato sul database");
+	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Evento con id: " + idEvento + " non trovato sul database");
+	    				risposta.setEsito(esito);
+	    				return risposta;
 	        		} else {
 	        			//caricato l'evento, lo vado a cancellare
 	        			
 	        			try {
-						mapper.delete(feedDaCancellare);
+						mapper.delete(eventoDaCancellare);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 		    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Eccezione nell'operazione interna di salvataggio");
 		    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + e.getMessage());
+		    				risposta.setEsito(esito);
+		    				return risposta;
 					}
 	        		}
 	        }

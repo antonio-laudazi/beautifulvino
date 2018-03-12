@@ -6,6 +6,7 @@ package com.marte5.modello;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
@@ -17,20 +18,22 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 public class Feed {
 
 	private long idFeed;
-	private long idEntitaFeed;
+	private String idEntitaFeed;
 	private int tipoFeed;
 	private long dataFeed;
 	private String urlImmagineFeed;
 	private String urlVideoFeed;
 	private String titoloFeed;
 	private String testoLabelFeed;
-	private long idEntitaHeaderFeed;
+	private String idEntitaHeaderFeed;
 	private String tipoEntitaHeaderFeed;
 	private String urlImmagineHeaderFeed;
 	private String headerFeed;
 	private String sottoHeaderFeed;
-	private VinoFeed vinoFeed;
-	private EventoFeed eventoFeed;
+	private Vino vinoFeed;
+	private VinoFeed vinoFeedInt;
+	private Evento eventoFeed;
+	private EventoFeed eventoFeedInt;
 	private String testoFeed;
 	private String visualizzaButtonFeed;
 	
@@ -52,13 +55,13 @@ public class Feed {
 	 * @return the idEntitaFeed
 	 */
 	@DynamoDBAttribute(attributeName="idEntitaFeed")
-	public long getIdEntitaFeed() {
+	public String getIdEntitaFeed() {
 		return idEntitaFeed;
 	}
 	/**
 	 * @param idEntitaFeed the idEntitaFeed to set
 	 */
-	public void setIdEntitaFeed(long idEntitaFeed) {
+	public void setIdEntitaFeed(String idEntitaFeed) {
 		this.idEntitaFeed = idEntitaFeed;
 	}
 	
@@ -169,14 +172,15 @@ public class Feed {
 	/**
 	 * @return the viniFeed
 	 */
-	@DynamoDBAttribute(attributeName="viniFeed")
-	public VinoFeed getVinoFeed() {
+	
+	@DynamoDBIgnore
+	public Vino getVinoFeed() {
 		return vinoFeed;
 	}
 	/**
 	 * @param viniFeed the viniFeed to set
 	 */
-	public void setVinoFeed(VinoFeed vinoFeed) {
+	public void setVinoFeed(Vino vinoFeed) {
 		this.vinoFeed = vinoFeed;
 	}
 	/**
@@ -255,20 +259,24 @@ public class Feed {
 		
 		@DynamoDBDocument
 		public class AziendaVino {
-			private long idAzienda;
+			private String idAzienda;
 			private String nomeAzienda;
+			
+			public AziendaVino() {
+				// TODO Auto-generated constructor stub
+			}
 			
 			/**
 			 * @return the idAzienda
 			 */
 			@DynamoDBAttribute(attributeName="idAzienda")
-			public long getIdAzienda() {
+			public String getIdAzienda() {
 				return idAzienda;
 			}
 			/**
 			 * @param idAzienda the idAzienda to set
 			 */
-			public void setIdAzienda(long idAzienda) {
+			public void setIdAzienda(String idAzienda) {
 				this.idAzienda = idAzienda;
 			}
 			/**
@@ -292,21 +300,22 @@ public class Feed {
 	
 	@DynamoDBDocument
 	public class EventoFeed{
-		private long idEvento;
+		private String idEvento;
 		private String titoloEvento;
 		private String temaEvento;
 		private String urlFotoEvento;
+		
 		/**
 		 * @return the idEvento
 		 */
 		@DynamoDBAttribute(attributeName="idEvento")
-		public long getIdEvento() {
+		public String getIdEvento() {
 			return idEvento;
 		}
 		/**
 		 * @param idEvento the idEvento to set
 		 */
-		public void setIdEvento(long idEvento) {
+		public void setIdEvento(String idEvento) {
 			this.idEvento = idEvento;
 		}
 		/**
@@ -365,13 +374,13 @@ public class Feed {
 	/**
 	 * @return the idEntitaHeaderFeed
 	 */
-	public long getIdEntitaHeaderFeed() {
+	public String getIdEntitaHeaderFeed() {
 		return idEntitaHeaderFeed;
 	}
 	/**
 	 * @param idEntitaHeaderFeed the idEntitaHeaderFeed to set
 	 */
-	public void setIdEntitaHeaderFeed(long idEntitaHeaderFeed) {
+	public void setIdEntitaHeaderFeed(String idEntitaHeaderFeed) {
 		this.idEntitaHeaderFeed = idEntitaHeaderFeed;
 	}
 	/**
@@ -389,13 +398,14 @@ public class Feed {
 	/**
 	 * @return the eventoFeed
 	 */
-	public EventoFeed getEventoFeed() {
+	@DynamoDBIgnore
+	public Evento getEventoFeed() {
 		return eventoFeed;
 	}
 	/**
 	 * @param eventoFeed the eventoFeed to set
 	 */
-	public void setEventoFeed(EventoFeed eventoFeed) {
+	public void setEventoFeed(Evento eventoFeed) {
 		this.eventoFeed = eventoFeed;
 	}
 	/**
@@ -409,6 +419,32 @@ public class Feed {
 	 */
 	public void setVisualizzaButtonFeed(String visualizzaButtonFeed) {
 		this.visualizzaButtonFeed = visualizzaButtonFeed;
+	}
+	/**
+	 * @return the vinoFeedInt
+	 */
+	@DynamoDBAttribute(attributeName="vinoFeed")
+	public VinoFeed getVinoFeedInt() {
+		return vinoFeedInt;
+	}
+	/**
+	 * @param vinoFeedInt the vinoFeedInt to set
+	 */
+	public void setVinoFeedInt(VinoFeed vinoFeedInt) {
+		this.vinoFeedInt = vinoFeedInt;
+	}
+	/**
+	 * @return the eventoFeedInt
+	 */
+	@DynamoDBAttribute(attributeName="eventoFeed")
+	public EventoFeed getEventoFeedInt() {
+		return eventoFeedInt;
+	}
+	/**
+	 * @param eventoFeedInt the eventoFeedInt to set
+	 */
+	public void setEventoFeedInt(EventoFeed eventoFeedInt) {
+		this.eventoFeedInt = eventoFeedInt;
 	}
 	
 }

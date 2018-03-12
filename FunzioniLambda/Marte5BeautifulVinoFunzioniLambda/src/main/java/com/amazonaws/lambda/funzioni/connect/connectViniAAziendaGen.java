@@ -11,31 +11,31 @@ import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
-import com.marte5.modello.Azienda.VinoAzienda;
+import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Azienda.VinoAzienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Vino;
-import com.marte5.modello.richieste.connect.RichiestaConnectViniAAzienda;
-import com.marte5.modello.risposte.connect.RispostaConnectViniAAzienda;
+import com.marte5.modello2.Vino;
+import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
+import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
 
-public class connectViniAAzienda implements RequestHandler<RichiestaConnectViniAAzienda, RispostaConnectViniAAzienda> {
+public class connectViniAAziendaGen implements RequestHandler<RichiestaConnectGenerica, RispostaConnectGenerica> {
 
     @Override
-    public RispostaConnectViniAAzienda handleRequest(RichiestaConnectViniAAzienda input, Context context) {
+    public RispostaConnectGenerica handleRequest(RichiestaConnectGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
 
-        RispostaConnectViniAAzienda risposta = getRisposta(input);
+        RispostaConnectGenerica risposta = getRisposta(input);
         // TODO: implement your handler
         return risposta;
     }
 
-	private RispostaConnectViniAAzienda getRisposta(RichiestaConnectViniAAzienda input) {
-		RispostaConnectViniAAzienda risposta = new RispostaConnectViniAAzienda();
+	private RispostaConnectGenerica getRisposta(RichiestaConnectGenerica input) {
+		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
 		Esito esito = new Esito();
 		esito.setCodice(100);
         esito.setMessage("Esito corretto per la richiesta connectViniAAzienda");
         
-        long idAzienda = input.getIdAzienda();
+        String idAzienda = input.getIdAzienda();
 		List<Vino> viniAzienda = input.getViniAzienda();
 		
 		AmazonDynamoDB client = null;
@@ -74,7 +74,7 @@ public class connectViniAAzienda implements RequestHandler<RichiestaConnectViniA
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
-			if(idAzienda == 0) {
+			if(idAzienda == null || idAzienda.equals("")) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 		        esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idAzienda nullo, non posso procedere");
 		        risposta.setEsito(esito);
@@ -98,7 +98,7 @@ public class connectViniAAzienda implements RequestHandler<RichiestaConnectViniA
 				Vino vinoPresente = iterator.next();
 				for (Iterator<Vino> iterator2 = viniAzienda.iterator(); iterator2.hasNext();) {
 					Vino vinoDaAssociare = iterator2.next();
-					if(vinoPresente.getIdVino() != vinoDaAssociare.getIdVino()) {
+					if(!vinoPresente.getIdVino().equals(vinoDaAssociare.getIdVino())) {
 						viniNuovi.add(vinoDaAssociare);
 					}
 				}

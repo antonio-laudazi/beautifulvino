@@ -1,6 +1,6 @@
 package com.marte5.modello.richieste.put;
 
-import com.marte5.modello.Evento;
+import com.marte5.modello2.Evento;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaPutEvento extends Richiesta {

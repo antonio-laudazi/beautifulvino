@@ -3,31 +3,31 @@ package com.marte5.modello.richieste.connect;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaConnectEventoAUtente extends Richiesta {
-	private long idUtente;
-	private long idEvento;
+	private String idUtente;
+	private String idEvento;
 	private String statoEvento;
 	/**
 	 * @return the idUtente
 	 */
-	public long getIdUtente() {
+	public String getIdUtente() {
 		return idUtente;
 	}
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(long idUtente) {
+	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
 	/**
 	 * @return the idEvento
 	 */
-	public long getIdEvento() {
+	public String getIdEvento() {
 		return idEvento;
 	}
 	/**
 	 * @param idEvento the idEvento to set
 	 */
-	public void setIdEvento(long idEvento) {
+	public void setIdEvento(String idEvento) {
 		this.idEvento = idEvento;
 	}
 	/**

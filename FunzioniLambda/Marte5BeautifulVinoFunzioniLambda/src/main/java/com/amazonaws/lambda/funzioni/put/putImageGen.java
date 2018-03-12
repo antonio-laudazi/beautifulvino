@@ -28,7 +28,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
     	
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idImmagine = FunzioniUtils.getEntitaId();
+        String idImmagine = FunzioniUtils.getEntitaId();
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         //logica per salvataggio file su S3

@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.delete.deleteEvento;
+import com.amazonaws.lambda.funzioni.delete.backup.deleteEvento;
 import com.amazonaws.services.lambda.runtime.Context;
 
 /**

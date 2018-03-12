@@ -1,6 +1,6 @@
 package com.marte5.modello.richieste.put;
 
-import com.marte5.modello.Feed;
+import com.marte5.modello2.Feed;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaPutFeed extends Richiesta {

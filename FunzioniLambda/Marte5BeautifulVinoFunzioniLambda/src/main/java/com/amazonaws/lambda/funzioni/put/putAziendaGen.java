@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
+import com.marte5.modello2.Azienda;
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
@@ -44,9 +44,9 @@ public class putAziendaGen implements RequestHandler<RichiestaPutGenerica, Rispo
 				return risposta;
 	        } else {
 	        	
-		        	long idAzienda = azienda.getIdAzienda();
+		        	String idAzienda = azienda.getIdAzienda();
 		        	
-		        	if(idAzienda == 0) {
+		        	if(idAzienda == null || idAzienda.equals("")) {
 	        			//insert
 		        		idAzienda = FunzioniUtils.getEntitaId();
 		        } 

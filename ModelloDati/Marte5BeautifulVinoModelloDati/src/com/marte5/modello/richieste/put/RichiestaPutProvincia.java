@@ -1,6 +1,6 @@
 package com.marte5.modello.richieste.put;
 
-import com.marte5.modello.Provincia;
+import com.marte5.modello2.Provincia;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaPutProvincia extends Richiesta {

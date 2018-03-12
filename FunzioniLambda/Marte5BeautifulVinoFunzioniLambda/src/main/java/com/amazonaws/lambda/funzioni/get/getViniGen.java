@@ -11,7 +11,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Vino;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
@@ -28,6 +28,7 @@ public class getViniGen implements RequestHandler<RichiestaGetGenerica, Risposta
     		RispostaGetGenerica risposta = new RispostaGetGenerica();
 
 		Esito esito = FunzioniUtils.getEsitoPositivo();
+		esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
 		
 		//scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
 		AmazonDynamoDB client = null;
@@ -35,7 +36,7 @@ public class getViniGen implements RequestHandler<RichiestaGetGenerica, Risposta
 			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getVini ");
+			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getVini ");
 			esito.setTrace(e1.getMessage());
 			risposta.setEsito(esito);
 			return risposta;
@@ -48,7 +49,7 @@ public class getViniGen implements RequestHandler<RichiestaGetGenerica, Risposta
 				vini = mapper.scan(Vino.class, expr);
 			} catch (Exception e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getVini ");
+				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getVini ");
 				esito.setTrace(e.getMessage());
 				risposta.setEsito(esito);
 				return risposta;

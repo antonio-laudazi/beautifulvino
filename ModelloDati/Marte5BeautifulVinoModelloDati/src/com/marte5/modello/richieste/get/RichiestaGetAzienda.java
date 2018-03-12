@@ -11,20 +11,20 @@ import com.marte5.modello.richieste.Richiesta;
  */
 public class RichiestaGetAzienda extends Richiesta {
 
-	private long idAzienda;
-	private long idUtente;
+	private String idAzienda;
+	private String idUtente;
 
 	/**
 	 * @return the idAzienda
 	 */
-	public long getIdAzienda() {
+	public String getIdAzienda() {
 		return idAzienda;
 	}
 
 	/**
 	 * @param idAzienda the idAzienda to set
 	 */
-	public void setIdAzienda(long idAzienda) {
+	public void setIdAzienda(String idAzienda) {
 		this.idAzienda = idAzienda;
 	}
 

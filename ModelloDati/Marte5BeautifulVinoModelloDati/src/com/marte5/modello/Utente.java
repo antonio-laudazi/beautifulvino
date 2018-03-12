@@ -26,6 +26,7 @@ public class Utente {
 	private String livelloUtente;
 	private String biografiaUtente;
 	private String urlFotoUtente;
+	private String professioneUtente;
 	private int numTotEventi;
 	private int numTotAziende;
 	private int numTotBadge;
@@ -137,6 +138,19 @@ public class Utente {
 	@DynamoDBAttribute(attributeName="urlFotoUtente")
 	public String getUrlFotoUtente() {
 		return urlFotoUtente;
+	}
+	/**
+	 * @return the professioneUtente
+	 */
+	@DynamoDBAttribute(attributeName="professioneUtente")
+	public String getProfessioneUtente() {
+		return professioneUtente;
+	}
+	/**
+	 * @param professioneUtente the professioneUtente to set
+	 */
+	public void setProfessioneUtente(String professioneUtente) {
+		this.professioneUtente = professioneUtente;
 	}
 	/**
 	 * @param urlFotoUtente the urlFotoUtente to set
@@ -362,7 +376,4 @@ public class Utente {
 			this.idVino = idVino;
 		}
 	}
-
-	
-
 }

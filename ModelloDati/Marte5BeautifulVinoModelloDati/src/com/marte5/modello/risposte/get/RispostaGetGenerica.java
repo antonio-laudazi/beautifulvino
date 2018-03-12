@@ -2,14 +2,14 @@ package com.marte5.modello.risposte.get;
 
 import java.util.List;
 
-import com.marte5.modello.Azienda;
-import com.marte5.modello.Badge;
-import com.marte5.modello.Evento;
-import com.marte5.modello.Feed;
-import com.marte5.modello.Provincia;
+import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Badge;
+import com.marte5.modello2.Evento;
+import com.marte5.modello2.Feed;
+import com.marte5.modello2.Provincia;
 import com.marte5.modello.Token;
-import com.marte5.modello.Utente;
-import com.marte5.modello.Vino;
+import com.marte5.modello2.Utente;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.risposte.Risposta;
 
 public class RispostaGetGenerica extends Risposta {

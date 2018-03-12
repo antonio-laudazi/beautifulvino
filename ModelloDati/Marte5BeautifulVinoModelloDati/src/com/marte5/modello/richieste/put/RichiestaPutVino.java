@@ -1,6 +1,6 @@
 package com.marte5.modello.richieste.put;
 
-import com.marte5.modello.Vino;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaPutVino extends Richiesta {

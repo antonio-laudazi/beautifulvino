@@ -9,7 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Feed;
+import com.marte5.modello2.Feed;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
@@ -20,7 +20,7 @@ public class putFeedGen implements RequestHandler<RichiestaPutGenerica, Risposta
         context.getLogger().log("Input: " + input);
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idFeed = FunzioniUtils.getEntitaId();
+        String idFeed = FunzioniUtils.getEntitaId();
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;

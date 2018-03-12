@@ -1,5 +1,7 @@
 package com.amazonaws.lambda.funzioni.put;
 
+import java.util.List;
+
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -8,12 +10,12 @@ import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
+import com.marte5.modello2.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Evento;
-import com.marte5.modello.Evento.AziendaEvento;
-import com.marte5.modello.Evento.ProvinciaEvento;
-import com.marte5.modello.Provincia;
+import com.marte5.modello2.Evento;
+import com.marte5.modello2.Evento.AziendaEvento;
+import com.marte5.modello2.Evento.VinoEvento;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
@@ -24,7 +26,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         context.getLogger().log("Input: " + input);
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idEventoRisposta = 0;
+        String idEventoRisposta = "";
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -64,30 +66,14 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 				return risposta;
 	        } else {
 	        	
-	        		long idEvento = evento.getIdEvento();
-		        	if(idEvento == 0) {
+	        		String idEvento = evento.getIdEvento();
+		        	if(idEvento == null || idEvento.equals("")) {
 	        			//insert
 		        		idEvento = FunzioniUtils.getEntitaId();
 		        } 
 		        	idEventoRisposta = idEvento;
 		        	evento.setIdEvento(idEvento);
 		        
-	        		//gestione provincia
-	        		ProvinciaEvento provincia = evento.getProvinciaEventoInt();
-	        		if(provincia != null) {
-	        			Provincia prov = new Provincia();
-	        			
-	        			prov.setIdProvincia(provincia.getIdProvincia());
-	        			prov.setNomeProvincia(provincia.getNomeProvincia());
-	        			prov.setSiglaProvincia(provincia.getSiglaProvincia());
-	        			long idProvincia = FunzioniUtils.aggiungiProvincia(prov, transaction);
-	        			prov.setIdProvincia(idProvincia);
-	        			
-	        			provincia.setIdProvincia(idProvincia);
-	        			
-	        		}
-	        		evento.setProvinciaEventoInt(provincia);
-	        		
 	        		//gestione aziende
 	        		//OSPITANTE
 	        		Azienda toLoadOspitante = new Azienda();
@@ -125,6 +111,27 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        		aziendaVinoFornitrice.setIdAzienda(aziendaFornitrice.getIdAzienda());
 		        		evento.setAziendaFornitriceEventoInt(aziendaVinoFornitrice);
 	        		}
+	        		
+	        		//gestione vini
+	        		List<VinoEvento> viniEvento = evento.getViniEventoInt();
+	        		//per ogni vino associato a questo evento devo associare questo evento al vino
+	        		if(viniEvento != null) {
+	        			for (VinoEvento vinoEvento : viniEvento) {
+	    					String idVino = vinoEvento.getIdVino();
+	    					if(idVino != null && !idVino.equals("")){
+	    						Vino vinoToLoad = new Vino();
+	    						vinoToLoad.setIdVino(idVino);
+	    						Vino vino = (Vino)transaction.load(vinoToLoad);
+	    						if(vino != null) {
+	    							List<Evento> eventiVino = vino.getEventiVino();
+	    							eventiVino.add(evento);
+	    							vino.setEventiVino(eventiVino);
+	    							transaction.save(vino);
+	    						}
+	    					}
+	    				}
+	        		}
+	        		
 	        		
 		        try {
 		        		transaction.save(evento);

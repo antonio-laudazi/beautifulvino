@@ -1,6 +1,6 @@
 package com.marte5.modello.richieste.put;
 
-import com.marte5.modello.Badge;
+import com.marte5.modello2.Badge;
 import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaPutBadge extends Richiesta {

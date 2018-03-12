@@ -22,7 +22,31 @@ public class getTest {
     public static void createInput() throws IOException {
         // TODO: set up your sample input object here.
         input = new RichiestaGetGenerica();
-        input.setFunctionName("getUtentiGen");
+//        input.setFunctionName("getViniEventoGen");
+//        input.setIdEvento(1513789129406L);
+//        input.setDataEvento(1513724400000L);
+        
+//        input.setFunctionName("getUtenteGen");
+//        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+        
+        /*	"functionName":"getViniEventoGen",
+	"idEvento":"1513789129406",
+	"dataEvento": 1513724400000*/
+        
+//        input.setFunctionName("getEventoGen");
+//        input.setIdEvento("1513789129406");
+//        input.setDataEvento(1513724400000L);
+//        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+        
+        input.setFunctionName("getVinoGen");
+        input.setIdVino("1513357582823");
+        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+        
+        //getUtenteGen
+//        input.setFunctionName("getUtenteGen");
+//        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+        
+        //input.setIdAzienda(1513241364518L);
     }
 
     private Context createContext() {

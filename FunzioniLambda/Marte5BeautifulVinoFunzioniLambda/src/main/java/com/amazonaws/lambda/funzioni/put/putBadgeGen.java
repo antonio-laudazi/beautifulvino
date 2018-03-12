@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Badge;
+import com.marte5.modello2.Badge;
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
@@ -19,7 +19,7 @@ public class putBadgeGen implements RequestHandler<RichiestaPutGenerica, Rispost
         context.getLogger().log("Input: " + input);
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        long idBadgeRisposta = 0L;
+        String idBadgeRisposta = "";
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -44,8 +44,8 @@ public class putBadgeGen implements RequestHandler<RichiestaPutGenerica, Rispost
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-		        	long idBadge = badge.getIdBadge();
-		        	if(idBadge == 0) {
+		        	String idBadge = badge.getIdBadge();
+		        	if(idBadge == null || idBadge.equals("")) {
 	        			//insert
 		        		idBadge = FunzioniUtils.getEntitaId();
 		        } 
