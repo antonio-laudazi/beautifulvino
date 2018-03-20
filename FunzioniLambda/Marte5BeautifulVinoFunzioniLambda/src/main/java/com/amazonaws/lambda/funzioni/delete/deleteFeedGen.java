@@ -35,6 +35,8 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " deleteFeed ");
 			esito.setTrace(e1.getMessage());
+			risposta.setEsito(esito);
+			return risposta;
 		}
 		if(client != null) {
 			
@@ -43,12 +45,16 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdFeed NULL oppure DataFeed NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdFeed NULL oppure DataFeed NULL");
+				risposta.setEsito(esito);
+				return risposta;
 	        } else {
 	        		Feed feedDaCancellare = mapper.load(Feed.class, idFeed, dataFeed );
 	        		if(feedDaCancellare == null) {
 	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Feed con id: " + idFeed + " non trovato sul database");
 	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Feed con id: " + idFeed + " non trovato sul database");
+	    				risposta.setEsito(esito);
+	    				return risposta;
 	        		} else {
 	        			//caricato l'evento, lo vado a cancellare
 	        			
@@ -60,6 +66,8 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 						esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 		    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Eccezione nell'operazione interna di salvataggio");
 		    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + e.getMessage());
+		    				risposta.setEsito(esito);
+		    				return risposta;
 					}
 	        			
 	        			//cancello eventuale immagine del feed
