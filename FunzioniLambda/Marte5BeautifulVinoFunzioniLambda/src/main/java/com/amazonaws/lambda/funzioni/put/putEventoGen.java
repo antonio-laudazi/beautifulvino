@@ -1,5 +1,6 @@
 package com.amazonaws.lambda.funzioni.put;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
@@ -124,6 +125,9 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    						Vino vino = (Vino)transaction.load(vinoToLoad);
 	    						if(vino != null) {
 	    							List<Evento> eventiVino = vino.getEventiVino();
+	    							if(eventiVino == null) {
+	    								eventiVino = new ArrayList<Evento>();
+	    							}
 	    							eventiVino.add(evento);
 	    							vino.setEventiVino(eventiVino);
 	    							transaction.save(vino);
@@ -131,8 +135,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    					}
 	    				}
 	        		}
-	        		
-	        		
+
 		        try {
 		        		transaction.save(evento);
 				} catch (Exception e) {
@@ -146,7 +149,6 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 					return risposta;
 				}
 	        }
-	        
 	        transaction.commit();
 		}	
         risposta.setEsito(esito);

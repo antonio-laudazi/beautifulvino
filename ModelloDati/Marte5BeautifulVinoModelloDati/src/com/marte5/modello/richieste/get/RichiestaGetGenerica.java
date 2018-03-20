@@ -29,6 +29,8 @@ public class RichiestaGetGenerica extends Richiesta {
 	private String latitudineUtente;
 	private String longitudineUtente;
 	
+	private String elencoCompleto;
+	
 	
 	/**
 	 * @return the idAzienda
@@ -233,5 +235,17 @@ public class RichiestaGetGenerica extends Richiesta {
 	 */
 	public void setLongitudineUtente(String longitudineUtente) {
 		this.longitudineUtente = longitudineUtente;
+	}
+	/**
+	 * @return the elencoCompleto
+	 */
+	public String getElencoCompleto() {
+		return elencoCompleto;
+	}
+	/**
+	 * @param elencoCompleto the elencoCompleto to set
+	 */
+	public void setElencoCompleto(String elencoCompleto) {
+		this.elencoCompleto = elencoCompleto;
 	}
 }

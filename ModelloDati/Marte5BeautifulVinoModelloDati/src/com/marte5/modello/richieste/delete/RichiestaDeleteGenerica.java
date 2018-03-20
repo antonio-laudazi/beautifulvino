@@ -4,35 +4,35 @@ import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaDeleteGenerica extends Richiesta {
 	
-	private long idAzienda;
-	private long idEvento;
+	private String idAzienda;
+	private String idEvento;
 	private long dataEvento;
-	private long idFeed;
+	private String idFeed;
 	private long dataFeed;
-	private long idUtente;
+	private String idUtente;
 	
 	/**
 	 * @return the idAzienda
 	 */
-	public long getIdAzienda() {
+	public String getIdAzienda() {
 		return idAzienda;
 	}
 	/**
 	 * @param idAzienda the idAzienda to set
 	 */
-	public void setIdAzienda(long idAzienda) {
+	public void setIdAzienda(String idAzienda) {
 		this.idAzienda = idAzienda;
 	}
 	/**
 	 * @return the idEvento
 	 */
-	public long getIdEvento() {
+	public String getIdEvento() {
 		return idEvento;
 	}
 	/**
 	 * @param idEvento the idEvento to set
 	 */
-	public void setIdEvento(long idEvento) {
+	public void setIdEvento(String idEvento) {
 		this.idEvento = idEvento;
 	}
 	/**
@@ -50,13 +50,13 @@ public class RichiestaDeleteGenerica extends Richiesta {
 	/**
 	 * @return the idFeed
 	 */
-	public long getIdFeed() {
+	public String getIdFeed() {
 		return idFeed;
 	}
 	/**
 	 * @param idFeed the idFeed to set
 	 */
-	public void setIdFeed(long idFeed) {
+	public void setIdFeed(String idFeed) {
 		this.idFeed = idFeed;
 	}
 	/**
@@ -74,13 +74,13 @@ public class RichiestaDeleteGenerica extends Richiesta {
 	/**
 	 * @return the idUtente
 	 */
-	public long getIdUtente() {
+	public String getIdUtente() {
 		return idUtente;
 	}
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(long idUtente) {
+	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
 	

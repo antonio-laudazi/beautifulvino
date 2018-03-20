@@ -11,6 +11,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Azienda.EventoAzienda;
 import com.marte5.modello2.Azienda.VinoAzienda;
 import com.marte5.modello.Esito;
 import com.marte5.modello2.Evento;
@@ -59,34 +60,41 @@ public class getAziendaGen implements RequestHandler<RichiestaGetGenerica, Rispo
 			
 			azienda = mapper.load(Azienda.class, idAzienda);
 			
-			List<Evento> eventiAzienda = azienda.getEventiAzienda();//ci sono solo gli id qui
+			List<EventoAzienda> eventiAzienda = azienda.getEventiAziendaInt();//ci sono solo gli id qui
 			List<Evento> eventiCompletiAzienda = new ArrayList<>();
 			
 			if(eventiAzienda != null) {
 				
-				for (Iterator<Evento> iterator = eventiAzienda.iterator(); iterator.hasNext();) {
-					Evento evento = iterator.next();
-					Evento eventoCompleto = new Evento();
-					Evento eventoEstratto = mapper.load(Evento.class, evento.getIdEvento());
+				for (Iterator<EventoAzienda> iterator = eventiAzienda.iterator(); iterator.hasNext();) {
 					
-					if(eventoEstratto != null) {
-						eventoCompleto.setIdEvento(eventoEstratto.getIdEvento());
-						eventoCompleto.setDataEvento(eventoEstratto.getDataEvento());
-						eventoCompleto.setCittaEvento(eventoEstratto.getCittaEvento());
-						eventoCompleto.setTitoloEvento(eventoEstratto.getTitoloEvento());
-						eventoCompleto.setTemaEvento(eventoEstratto.getTemaEvento());
-						eventoCompleto.setPrezzoEvento(eventoEstratto.getPrezzoEvento());
-						eventoCompleto.setUrlFotoEvento(eventoEstratto.getUrlFotoEvento());
+					EventoAzienda evento = iterator.next();
+					String idEventoDB = evento.getIdEvento();
+					long dataEventoDB = evento.getDataEvento();
+					
+					if(idEventoDB != null && !idEventoDB.equals("") && dataEventoDB != 0) {
 						
-						eventoCompleto.setStatoEvento("N");
-						//gestire lo stato dell'evento in base all'associazione con l'utente chiamante
+						Evento eventoCompleto = new Evento();
+						Evento eventoEstratto = mapper.load(Evento.class, evento.getIdEvento(), evento.getDataEvento());
 						
-						eventoCompleto.setLatitudineEvento(eventoEstratto.getLatitudineEvento());
-						eventoCompleto.setLongitudineEvento(eventoEstratto.getLongitudineEvento());
-						eventoCompleto.setNumMaxPartecipantiEvento(eventoEstratto.getNumMaxPartecipantiEvento());
-						eventoCompleto.setNumPostiDisponibiliEvento(eventoEstratto.getNumPostiDisponibiliEvento());
-						
-						eventiCompletiAzienda.add(eventoCompleto);
+						if(eventoEstratto != null) {
+							eventoCompleto.setIdEvento(eventoEstratto.getIdEvento());
+							eventoCompleto.setDataEvento(eventoEstratto.getDataEvento());
+							eventoCompleto.setCittaEvento(eventoEstratto.getCittaEvento());
+							eventoCompleto.setTitoloEvento(eventoEstratto.getTitoloEvento());
+							eventoCompleto.setTemaEvento(eventoEstratto.getTemaEvento());
+							eventoCompleto.setPrezzoEvento(eventoEstratto.getPrezzoEvento());
+							eventoCompleto.setUrlFotoEvento(eventoEstratto.getUrlFotoEvento());
+							
+							eventoCompleto.setStatoEvento("N");
+							//gestire lo stato dell'evento in base all'associazione con l'utente chiamante
+							
+							eventoCompleto.setLatitudineEvento(eventoEstratto.getLatitudineEvento());
+							eventoCompleto.setLongitudineEvento(eventoEstratto.getLongitudineEvento());
+							eventoCompleto.setNumMaxPartecipantiEvento(eventoEstratto.getNumMaxPartecipantiEvento());
+							eventoCompleto.setNumPostiDisponibiliEvento(eventoEstratto.getNumPostiDisponibiliEvento());
+							
+							eventiCompletiAzienda.add(eventoCompleto);
+						}
 					}
 				}
 			}

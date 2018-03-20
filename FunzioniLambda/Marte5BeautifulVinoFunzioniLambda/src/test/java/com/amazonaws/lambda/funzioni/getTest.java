@@ -38,9 +38,9 @@ public class getTest {
 //        input.setDataEvento(1513724400000L);
 //        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
         
-        input.setFunctionName("getVinoGen");
-        input.setIdVino("1513357582823");
-        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+        input.setFunctionName("getAziendaGen");
+        input.setIdAzienda("1520603900300");
+        //input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
         
         //getUtenteGen
 //        input.setFunctionName("getUtenteGen");

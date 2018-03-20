@@ -187,5 +187,4 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     			mapper.save(evento);
     		}
     }
-
 }

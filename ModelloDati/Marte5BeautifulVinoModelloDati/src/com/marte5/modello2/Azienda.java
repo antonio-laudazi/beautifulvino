@@ -429,14 +429,23 @@ public class Azienda {
 	
 	@DynamoDBDocument
 	public static class EventoAzienda{
-		private long idEvento;
+		private String idEvento;
+		private long dataEvento;
 		
 		@DynamoDBAttribute(attributeName="idEvento")
-		public long getIdEvento() {
+		public String getIdEvento() {
 			return idEvento;
 		}
-		public void setIdEvento(long idEvento) {
+		public void setIdEvento(String idEvento) {
 			this.idEvento = idEvento;
+		}
+
+		@DynamoDBAttribute(attributeName="dataEvento")
+		public long getDataEvento() {
+			return dataEvento;
+		}
+		public void setDataEvento(long dataEvento) {
+			this.dataEvento = dataEvento;
 		}
 	}
 

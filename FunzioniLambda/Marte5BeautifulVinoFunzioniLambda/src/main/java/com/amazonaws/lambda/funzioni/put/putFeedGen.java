@@ -1,6 +1,8 @@
 package com.amazonaws.lambda.funzioni.put;
 
 
+import java.util.Date;
+
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -20,7 +22,6 @@ public class putFeedGen implements RequestHandler<RichiestaPutGenerica, Risposta
         context.getLogger().log("Input: " + input);
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
-        String idFeed = FunzioniUtils.getEntitaId();
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
         
         AmazonDynamoDB client = null;
@@ -45,7 +46,25 @@ public class putFeedGen implements RequestHandler<RichiestaPutGenerica, Risposta
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
-	        		feed.setIdFeed(idFeed);
+	        	
+	        		String idFeed = feed.getIdFeed();
+	        		long dataFeed = feed.getDataFeed();
+	        		if(idFeed == null || idFeed.equals("")){
+	        			idFeed = FunzioniUtils.getEntitaId();
+	        			feed.setIdFeed(idFeed);
+	        			if(dataFeed == 0L) {
+	        				feed.setDataFeed((new Date()).getTime());
+	        			}
+	        		} else {
+	        			Feed dbFeed = mapper.load(Feed.class, idFeed, dataFeed);
+	        			if(dbFeed == null) {
+	        				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+	        				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Non esiste su DB un feed con id " + idFeed);
+	        				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Feed NULL");
+	        				risposta.setEsito(esito);
+	        				return risposta;
+	        			}
+	        		}
 		        
 		        try {
 					mapper.save(feed);
@@ -58,10 +77,12 @@ public class putFeedGen implements RequestHandler<RichiestaPutGenerica, Risposta
 					risposta.setEsito(esito);
 					return risposta;
 				}
+		        
+		        risposta.setIdFeed(idFeed);
 	        }
 		}	
         risposta.setEsito(esito);
-        risposta.setIdFeed(idFeed);
+        
         return risposta;
     }
 }
