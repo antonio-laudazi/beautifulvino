@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Feed;
+import com.marte5.modello2.Feed;
 import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
 
@@ -19,7 +19,7 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
         context.getLogger().log("Input: " + input);
         RispostaDeleteGenerica risposta = new RispostaDeleteGenerica();
 
-        long idFeed = input.getIdFeed();
+        String idFeed = input.getIdFeed();
         long dataFeed = input.getDataFeed();
         
         Esito esito = new Esito();
@@ -39,7 +39,7 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idFeed == 0 || dataFeed == 0) {
+			if(idFeed == null || idFeed.equals("") || dataFeed == 0) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdFeed NULL oppure DataFeed NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdFeed NULL oppure DataFeed NULL");
@@ -64,15 +64,20 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        			
 	        			//cancello eventuale immagine del feed
 	        			String immagineFeedUrl = feedDaCancellare.getUrlImmagineFeed();
-	        			if(!immagineFeedUrl.equals("")) {
-	        				esito = FunzioniUtils.cancellaImmagine(immagineFeedUrl);
+	        			if(immagineFeedUrl != null) {
+	        				if(!immagineFeedUrl.equals("")) {
+		        				esito = FunzioniUtils.cancellaImmagine(immagineFeedUrl);
+		        			}
 	        			}
 	        			
 	        			//cancello eventuale immagine header del feed
 	        			String immagineHaderFeedUrl = feedDaCancellare.getUrlImmagineHeaderFeed();
-	        			if(!immagineHaderFeedUrl.equals("")) {
-	        				esito = FunzioniUtils.cancellaImmagine(immagineHaderFeedUrl);
+	        			if(immagineHaderFeedUrl != null) {
+	        				if(!immagineHaderFeedUrl.equals("")) {
+		        				esito = FunzioniUtils.cancellaImmagine(immagineHaderFeedUrl);
+		        			}
 	        			}
+	        			
 	        		}
 	        }
 		}

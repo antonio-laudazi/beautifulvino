@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Evento;
+import com.marte5.modello2.Evento;
 import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
 
@@ -19,7 +19,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
         context.getLogger().log("Input: " + input);
         RispostaDeleteGenerica risposta = new RispostaDeleteGenerica();
 
-        long idEvento = input.getIdEvento();
+        String idEvento = input.getIdEvento();
         long dataEvento = input.getDataEvento();
         
         Esito esito = new Esito();
@@ -41,7 +41,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idEvento == 0 || dataEvento == 0) {
+			if(idEvento == null || idEvento.equals("") || dataEvento == 0) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL oppure DataEvento NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL oppure DataEvento NULL");
@@ -72,8 +72,10 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        			
 	        			//cancello eventuale immagine dell'evento
 	        			String immagineEventoUrl = eventoDaCancellare.getUrlFotoEvento();
-	        			if(!immagineEventoUrl.equals("")) {
-	        				esito = FunzioniUtils.cancellaImmagine(immagineEventoUrl);
+	        			if(immagineEventoUrl != null) {
+	        				if(!immagineEventoUrl.equals("")) {
+		        				esito = FunzioniUtils.cancellaImmagine(immagineEventoUrl);
+		        			}
 	        			}
 	        		}
 	        }

@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello.Azienda;
+import com.marte5.modello2.Azienda;
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
@@ -19,7 +19,7 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
     		context.getLogger().log("Input: " + input);
     		RispostaDeleteGenerica risposta = new RispostaDeleteGenerica();
 
-        long idAzienda = input.getIdAzienda();
+    		String idAzienda = input.getIdAzienda();
         
         Esito esito = FunzioniUtils.getEsitoPositivo();
         
@@ -36,7 +36,7 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idAzienda == 0) {
+			if(idAzienda == null || idAzienda.equals("")) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " idAzienda NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " idAzienda NULL");
@@ -66,10 +66,11 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 	        			
 	        			//cancello eventuale immagine dell'evento
 	        			String immagineAziendaUrl = aziendaDaCancellare.getUrlImmagineAzienda();
-	        			if(!immagineAziendaUrl.equals("")) {
-	        				esito = FunzioniUtils.cancellaImmagine(immagineAziendaUrl);
+	        			if(immagineAziendaUrl != null) {
+	        				if(!immagineAziendaUrl.equals("")) {
+		        				esito = FunzioniUtils.cancellaImmagine(immagineAziendaUrl);
+		        			}
 	        			}
-	        			
 	        		}
 	        }
 		}

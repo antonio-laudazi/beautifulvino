@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello.Utente;
+import com.marte5.modello2.Utente;
 import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
 
@@ -19,7 +19,7 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
     		context.getLogger().log("Input: " + input);
     		RispostaDeleteGenerica risposta = new RispostaDeleteGenerica();
 
-        long idUtente = input.getIdUtente();
+    		String idUtente = input.getIdUtente();
         
         Esito esito = FunzioniUtils.getEsitoPositivo();
         
@@ -38,7 +38,7 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idUtente == 0) {
+			if(idUtente == null || idUtente.equals("")) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdUtente NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdUtente NULL");
@@ -69,8 +69,10 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        			
 	        			//cancello eventuale immagine del feed
 	        			String immagineUtenteUrl = utenteDaCancellare.getUrlFotoUtente();
-	        			if(!immagineUtenteUrl.equals("")) {
-	        				esito = FunzioniUtils.cancellaImmagine(immagineUtenteUrl);
+	        			if(immagineUtenteUrl != null) {
+	        				if(!immagineUtenteUrl.equals("")) {
+		        				esito = FunzioniUtils.cancellaImmagine(immagineUtenteUrl);
+		        			}
 	        			}
 	        		}
 	        }
