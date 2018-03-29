@@ -3,16 +3,19 @@ package com.amazonaws.lambda.funzioni.put;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.codec.binary.Base64;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
@@ -72,16 +75,43 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			
 			//creo un file dal base64 ricevuto
 			byte[] data = Base64.decodeBase64(base64);
+			int imageSize = data.length;
+			float compressionQuality = getCompressionQuality(imageSize);
 			ByteArrayInputStream bis = new ByteArrayInputStream(data);
 			
 			// write the image to a file
 			
 			BufferedImage image = null;
 			try {
+//				image = ImageIO.read(bis);
+//				bis.close();
+//				
+//				File outputfile = File.createTempFile("temp", "temp");
+//				ImageIO.write(image, format, outputfile);
+//				
+//				//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
+//				PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
+//				request.setCannedAcl(CannedAccessControlList.PublicRead);
+//				client.putObject(request);
 				image = ImageIO.read(bis);
+				
+				ImageWriter writer = ImageIO.getImageWritersByFormatName(format).next();
+				
 				bis.close();
 				
 				File outputfile = File.createTempFile("temp", "temp");
+				ImageWriteParam param = writer.getDefaultWriteParam();
+				param.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
+				param.setCompressionQuality(compressionQuality);
+				
+				final ImageOutputStream imgOutStream = ImageIO.createImageOutputStream(new FileOutputStream(outputfile));
+			    try {
+			        writer.setOutput(imgOutStream);
+			        writer.write(null, new IIOImage(image, null, null), param);
+			    } finally {
+			        imgOutStream.close();
+			    }
+				
 				ImageIO.write(image, format, outputfile);
 				
 				//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
@@ -113,5 +143,21 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	private String getBucketName(String tipoEntita) {
 		
 		return "beautifulvino-bucket-immagini";
+	}
+	
+	private float getCompressionQuality(int imageSize) {
+		if(imageSize < 100000) {//immagini piu' piccole di 50 kb
+			return 1f;
+		} else if(imageSize >= 100000 && imageSize < 500000) {
+			return 0.8f;
+		} else if(imageSize >= 500000 && imageSize < 1000000) {
+			return 0.6f;
+		} else if(imageSize >= 1000000 && imageSize < 2000000) {
+			return 0.5f;
+		} else if(imageSize >= 2000000) {
+			return 0.4f;
+		}
+		
+		return 0.4f;
 	}
 }
