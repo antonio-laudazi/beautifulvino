@@ -142,13 +142,6 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			evento.setViniEvento(viniEventoCompleti);
 			
 			//gestione aziende (fornitrice-ospitante)
-			String idAziendaFornitrice = evento.getAziendaFornitriceEventoInt().getIdAzienda();
-			if(idAziendaFornitrice != null && !idAziendaFornitrice.equals("")) {
-				Azienda aziendaFornitrice = mapper.load(Azienda.class, idAziendaFornitrice);
-				if(aziendaFornitrice != null) {
-					evento.setAziendaFornitriceEvento(aziendaFornitrice);
-				}
-			}
 			String idAziendaOspitante = evento.getAziendaOspitanteEventoInt().getIdAzienda();
 			if(idAziendaOspitante != null && !idAziendaOspitante.equals("")) {
 				Azienda aziendaOspitante = mapper.load(Azienda.class, idAziendaOspitante);

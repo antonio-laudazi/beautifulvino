@@ -11,6 +11,8 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
@@ -39,7 +41,15 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         if(splitted.length > 1) {
         		base64 = splitted[1];
         }
-        
+        String format = "";
+        splitted = splitted[0].split("/");
+        if (splitted.length > 1 ) {
+        	format = splitted[1];
+        }
+        splitted = format.split(";");
+        if (splitted.length > 1 ) {
+        	format = splitted[0];
+        }
         String tipoEntita = input.getTipoEntita();
         String filename =  idImmagine + "_" + input.getFilename();
         
@@ -49,7 +59,8 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         AmazonS3 client = null;
         
         try {
-        		client = AmazonS3ClientBuilder.standard().build();
+        
+        		client = AmazonS3ClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
@@ -71,10 +82,10 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 				bis.close();
 				
 				File outputfile = File.createTempFile("temp", "temp");
-				ImageIO.write(image, "jpg", outputfile);
+				ImageIO.write(image, format, outputfile);
 				
 				//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
-				PutObjectRequest request = new PutObjectRequest(bucketName, filename, outputfile);
+				PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
 				request.setCannedAcl(CannedAccessControlList.PublicRead);
 				client.putObject(request);
 			} catch (IOException e) {

@@ -2,15 +2,20 @@ package com.amazonaws.lambda.funzioni.delete;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello2.Feed;
 import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
+import com.marte5.modello2.Evento;
+import com.marte5.modello2.Feed;
+import com.marte5.modello2.Feed.EventoFeed;
+import com.marte5.modello2.Feed.VinoFeed;
+import com.marte5.modello2.Vino;
 
 public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, RispostaDeleteGenerica> {
 
@@ -28,7 +33,7 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -56,8 +61,23 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	    				risposta.setEsito(esito);
 	    				return risposta;
 	        		} else {
-	        			//caricato l'evento, lo vado a cancellare
-	        			
+	        			//cancello il collegamento col i vini
+	        			VinoFeed vinofeed = feedDaCancellare.getVinoFeedInt();
+	        			if (vinofeed != null) {	        					        		
+		        				Vino vinoDaCanc = mapper.load(Vino.class, vinofeed.getIdVino());
+		        				vinoDaCanc.setAziendaVinoInt(null);
+		        				mapper.save(vinoDaCanc);
+	        			}
+	        			//cancello il collegamento con gli eventi
+	        		    EventoFeed eventofeed = feedDaCancellare.getEventoFeedInt();
+	        			if (eventofeed != null) {	        					        		
+		        				Evento eventoDaCanc = mapper.load(Evento.class, eventofeed.getIdEvento());
+		        				//non c'è il collegamento con i feed da cancellare
+		        				mapper.save(eventoDaCanc);
+	        			}
+	        			//non trovo aziendaFeed nella classe feed e nella classe connect
+	        			//non è stata implementata??
+	        			//caricato il feed, lo vado a cancellare	        			
 	        			try {
 						mapper.delete(feedDaCancellare);
 					} catch (Exception e) {

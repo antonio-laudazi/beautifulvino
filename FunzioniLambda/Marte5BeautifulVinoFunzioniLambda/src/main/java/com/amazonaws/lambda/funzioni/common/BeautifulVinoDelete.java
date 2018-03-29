@@ -17,6 +17,7 @@ public class BeautifulVinoDelete implements RequestHandler<RichiestaDeleteGeneri
 	private final static String FUNCTION_NAME_DELETE_EVENTO = "deleteEventoGen";
 	private final static String FUNCTION_NAME_DELETE_FEED = "deleteFeedGen";
 	private final static String FUNCTION_NAME_DELETE_UTENTE = "deleteUtenteGen";
+	private final static String FUNCTION_NAME_DELETE_VINO = "deleteVinoGen";
 	
 	private static final String PACKAGE_NAME_GET = "com.amazonaws.lambda.funzioni.delete.";
 	
@@ -58,7 +59,7 @@ public class BeautifulVinoDelete implements RequestHandler<RichiestaDeleteGeneri
     		funzioni.add(FUNCTION_NAME_DELETE_FEED);
     		funzioni.add(FUNCTION_NAME_DELETE_UTENTE);
     		funzioni.add(FUNCTION_NAME_DELETE_EVENTO);
-    		
+    		funzioni.add(FUNCTION_NAME_DELETE_VINO);
     		return funzioni.contains(nomeFunzione);
     }
 }

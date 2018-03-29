@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.transactions.Transaction;
@@ -32,7 +33,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -94,24 +95,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        		evento.setAziendaOspitanteEventoInt(aziendaVinoOspitante);
 	        		}
 	        		
-	        		//FORNITRICE
-	        		Azienda toLoadFornitrice = new Azienda();
-	        		toLoadFornitrice.setIdAzienda(evento.getAziendaFornitriceEvento().getIdAzienda());
-	        		Azienda aziendaFornitrice = transaction.load(toLoadFornitrice);
-	        		//Azienda azienda = mapper.load(Azienda.class, vino.getAziendaVino().getIdAzienda());
-	        		if(aziendaFornitrice == null) {
-	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda il cui Id è associato al vino inviato non esiste");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda il cui Id è associato al vino inviato non esiste");
-	    				risposta.setEsito(esito);
-	    				transaction.rollback();
-	    				return risposta;
-	        		}
-	        		if(evento.getAziendaFornitriceEventoInt() == null){
-		        		AziendaEvento aziendaVinoFornitrice = new AziendaEvento();
-		        		aziendaVinoFornitrice.setIdAzienda(aziendaFornitrice.getIdAzienda());
-		        		evento.setAziendaFornitriceEventoInt(aziendaVinoFornitrice);
-	        		}
+
 	        		
 	        		//gestione vini
 	        		List<VinoEvento> viniEvento = evento.getViniEventoInt();
