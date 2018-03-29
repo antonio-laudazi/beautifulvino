@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -28,6 +29,10 @@ import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
 public class putImageGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
+	public static final String IMAGE_TYPE_JPG = "jpg";
+	public static final String IMAGE_TYPE_JPEG = "jpeg";
+	public static final String IMAGE_TYPE_PNG = "png";
+	
     @Override
     public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
     	
@@ -47,12 +52,20 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         String format = "";
         splitted = splitted[0].split("/");
         if (splitted.length > 1 ) {
-        	format = splitted[1];
+        		format = splitted[1];
         }
         splitted = format.split(";");
         if (splitted.length > 1 ) {
-        	format = splitted[0];
+        		format = splitted[0];
         }
+        
+        if(!isImageTypeAccepted(format)) {
+        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage - Tipo di immagine " + format + " non supportato. Sono accettati solo jpg, jpeg e png");
+			risposta.setEsito(esito);
+			return risposta;
+        }
+        
         String tipoEntita = input.getTipoEntita();
         String filename =  idImmagine + "_" + input.getFilename();
         
@@ -79,24 +92,10 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			float compressionQuality = getCompressionQuality(imageSize);
 			ByteArrayInputStream bis = new ByteArrayInputStream(data);
 			
-			// write the image to a file
-			
 			BufferedImage image = null;
 			try {
-//				image = ImageIO.read(bis);
-//				bis.close();
-//				
-//				File outputfile = File.createTempFile("temp", "temp");
-//				ImageIO.write(image, format, outputfile);
-//				
-//				//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
-//				PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
-//				request.setCannedAcl(CannedAccessControlList.PublicRead);
-//				client.putObject(request);
 				image = ImageIO.read(bis);
-				
 				ImageWriter writer = ImageIO.getImageWritersByFormatName(format).next();
-				
 				bis.close();
 				
 				File outputfile = File.createTempFile("temp", "temp");
@@ -118,6 +117,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 				PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
 				request.setCannedAcl(CannedAccessControlList.PublicRead);
 				client.putObject(request);
+				
 			} catch (IOException e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
@@ -159,5 +159,15 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 		}
 		
 		return 0.4f;
+	}
+	
+	private boolean isImageTypeAccepted(String imageType) {
+		ArrayList<String> tipi = new ArrayList<>();
+		
+		tipi.add(IMAGE_TYPE_JPEG);
+		tipi.add(IMAGE_TYPE_JPG);
+		tipi.add(IMAGE_TYPE_PNG);
+		
+		return tipi.contains(imageType.toLowerCase());
 	}
 }
