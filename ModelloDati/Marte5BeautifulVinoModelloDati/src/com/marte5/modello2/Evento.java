@@ -39,7 +39,6 @@ public class Evento {
 	private Badge badgeEvento;
 	private Provincia provinciaEvento;
 	private Azienda aziendaOspitanteEvento;
-	private Azienda aziendaFornitriceEvento;
 	private List<Utente> iscrittiEvento;
 	private List<Vino> viniEvento;
 	private BadgeEvento badgeEventoInt;
@@ -313,19 +312,6 @@ public class Evento {
 		this.aziendaOspitanteEvento = aziendaOspitanteEvento;
 	}
 	
-	/**
-	 * @return the aziendaEvento
-	 */
-	@DynamoDBIgnore
-	public Azienda getAziendaFornitriceEvento() {
-		return aziendaFornitriceEvento;
-	}
-	/**
-	 * @param aziendaEvento the aziendaEvento to set
-	 */
-	public void setAziendaFornitriceEvento(Azienda aziendaFornitriceEvento) {
-		this.aziendaFornitriceEvento = aziendaFornitriceEvento;
-	}
 	
 	/**
 	 * @return the viniEvento

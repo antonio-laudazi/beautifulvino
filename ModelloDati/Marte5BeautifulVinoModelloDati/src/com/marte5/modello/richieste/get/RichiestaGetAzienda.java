@@ -31,14 +31,14 @@ public class RichiestaGetAzienda extends Richiesta {
 	/**
 	 * @return the idUtente
 	 */
-	public long getIdUtente() {
+	public String getIdUtente() {
 		return idUtente;
 	}
 
 	/**
 	 * @param idUtente the idUtente to set
 	 */
-	public void setIdUtente(long idUtente) {
+	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
 	}
 	

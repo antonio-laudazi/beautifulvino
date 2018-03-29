@@ -40,6 +40,7 @@ public class Azienda {
 	private List<VinoAzienda> viniAziendaInt;
 	private int numEventiAzienda;
 	private int numViniAzienda;
+	private boolean active;
 	
 	//@DynamoDBAttribute(attributeName="")
 	
@@ -56,6 +57,7 @@ public class Azienda {
 	public void setIdAzienda(String idAzienda) {
 		this.idAzienda = idAzienda;
 	}
+
 	/**
 	 * @return the zonaAzienda
 	 */
@@ -68,6 +70,19 @@ public class Azienda {
 	 */
 	public void setZonaAzienda(String zonaAzienda) {
 		this.zonaAzienda = zonaAzienda;
+	}
+	/**
+	 * @return the activeFlag
+	 */
+	@DynamoDBAttribute(attributeName="active")
+	public boolean getActive() {
+		return active;
+	}
+	/**
+	 * @param active the active flag to set
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	/**
 	 * @return the nomeAzienda

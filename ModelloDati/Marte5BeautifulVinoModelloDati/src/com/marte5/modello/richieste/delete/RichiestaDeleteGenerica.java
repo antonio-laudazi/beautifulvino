@@ -10,6 +10,7 @@ public class RichiestaDeleteGenerica extends Richiesta {
 	private String idFeed;
 	private long dataFeed;
 	private String idUtente;
+	private String idVino;
 	
 	/**
 	 * @return the idAzienda
@@ -84,4 +85,16 @@ public class RichiestaDeleteGenerica extends Richiesta {
 		this.idUtente = idUtente;
 	}
 	
+	/**
+	 * @return the idVino
+	 */
+	public String getIdVino() {
+		return idVino;
+	}
+	/**
+	 * @param idVino the idVino to set
+	 */
+	public void setIdVino(String idVino) {
+		this.idVino = idVino;
+	}
 }
