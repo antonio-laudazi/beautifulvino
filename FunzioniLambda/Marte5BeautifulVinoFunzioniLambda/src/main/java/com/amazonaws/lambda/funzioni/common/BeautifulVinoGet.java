@@ -29,6 +29,7 @@ public class BeautifulVinoGet implements RequestHandler<RichiestaGetGenerica, Ri
 	private final static String FUNCTION_NAME_GET_VINI = "getViniGen";
 	private final static String FUNCTION_NAME_GET_VINO = "getVinoGen";
 	private final static String FUNCTION_NAME_GET_VINIEVENTO = "getViniEventoGen";
+	private final static String FUNCTION_NAME_GET_PRESENZAUTENTE = "getPresenzaUtente";
 	
 	
 	private static final String PACKAGE_NAME_GET = "com.amazonaws.lambda.funzioni.get.";
@@ -82,6 +83,8 @@ public class BeautifulVinoGet implements RequestHandler<RichiestaGetGenerica, Ri
     		funzioni.add(FUNCTION_NAME_GET_VINO);
     		funzioni.add(FUNCTION_NAME_GET_VINIEVENTO);
     		funzioni.add(FUNCTION_NAME_GET_EVENTI_UTENTE);
+    		funzioni.add(FUNCTION_NAME_GET_PRESENZAUTENTE);
+    		
     		
     		return funzioni.contains(nomeFunzione);
     		

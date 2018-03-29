@@ -45,6 +45,8 @@ public class RispostaGetGenerica extends Risposta {
 	private Vino vino;
 	
 	private Token token;
+	
+	private int utentePresente;
 
 	/**
 	 * @return the azienda
@@ -296,5 +298,19 @@ public class RispostaGetGenerica extends Risposta {
 	 */
 	public void setBadges(List<Badge> badges) {
 		this.badges = badges;
+	}
+
+	/**
+	 * @return the utentePresente
+	 */
+	public int getUtentePresente() {
+		return utentePresente;
+	}
+
+	/**
+	 * @param utentePresente the utentePresente to set
+	 */
+	public void setUtentePresente(int utentePresente) {
+		this.utentePresente = utentePresente;
 	}
 }
