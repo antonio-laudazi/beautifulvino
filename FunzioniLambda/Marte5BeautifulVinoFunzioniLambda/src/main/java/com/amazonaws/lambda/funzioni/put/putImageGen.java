@@ -1,11 +1,15 @@
 package com.amazonaws.lambda.funzioni.put;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -17,12 +21,16 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.googlecode.pngtastic.core.PngImage;
+import com.googlecode.pngtastic.core.PngOptimizer;
+
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
@@ -75,8 +83,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         AmazonS3 client = null;
         
         try {
-        
-        		client = AmazonS3ClientBuilder.standard().build();
+        		client = AmazonS3ClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
@@ -91,18 +98,62 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			int imageSize = data.length;
 			float compressionQuality = getCompressionQuality(imageSize);
 			ByteArrayInputStream bis = new ByteArrayInputStream(data);
-			
-			BufferedImage image = null;
+			File outputfile;
 			try {
+				outputfile = File.createTempFile("temp", "temp");
+			} catch (IOException e1) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
+				esito.setTrace(e1.getMessage());
+				risposta.setEsito(esito);
+				return risposta;
+			}
+			
+			if (format.equalsIgnoreCase("png")) {
+				try {				
+					PngImage image = new PngImage(bis);
+					bis.close();
+					// optimize
+					PngOptimizer optimizer = new PngOptimizer();
+					System.out.println("dimensione" + image.getHeight() + "  "+ image.getWidth());
+					PngImage optimizedImage = optimizer.optimize(image, true, new Integer(9));
+					System.out.println("dimensione" + optimizedImage.getHeight() + "  " + optimizedImage.getWidth());
+					// export the optimized image to a new file
+					ByteArrayOutputStream optimizedBytes = new ByteArrayOutputStream();
+					optimizedImage.writeDataOutputStream(optimizedBytes);
+					
+					ByteArrayInputStream bais = new ByteArrayInputStream(optimizedBytes.toByteArray());
+					optimizedBytes.close();
+					BufferedImage imout = ImageIO.read(bais);
+			        bais.close();
+			        ImageIO.write(imout, format, outputfile);
+			    } catch (IOException e) {
+			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
+					esito.setTrace(e.getMessage());
+					risposta.setEsito(esito);
+					return risposta;
+			    }catch(Exception e1){
+			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
+					esito.setTrace(e1.getMessage());
+					risposta.setEsito(esito);
+					return risposta;
+			    }
+				
+			}else {
+				//l'immagine è un jpg
+				try {
+				BufferedImage image = null;
 				image = ImageIO.read(bis);
-				ImageWriter writer = ImageIO.getImageWritersByFormatName(format).next();
+				System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
+				Iterator<ImageWriter>writers = ImageIO.getImageWritersByFormatName(format);
+				ImageWriter writer = writers.next();
 				bis.close();
 				
-				File outputfile = File.createTempFile("temp", "temp");
 				ImageWriteParam param = writer.getDefaultWriteParam();
 				param.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
 				param.setCompressionQuality(compressionQuality);
-				
 				final ImageOutputStream imgOutStream = ImageIO.createImageOutputStream(new FileOutputStream(outputfile));
 			    try {
 			        writer.setOutput(imgOutStream);
@@ -110,31 +161,21 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			    } finally {
 			        imgOutStream.close();
 			    }
-				
-				ImageIO.write(image, format, outputfile);
-				
-				//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
-				PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
-				request.setCannedAcl(CannedAccessControlList.PublicRead);
-				client.putObject(request);
-				
-			} catch (IOException e) {
-				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
-				esito.setTrace(e.getMessage());
-				risposta.setEsito(esito);
-				return risposta;
-			} catch (Exception e) {
-				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage");
-				esito.setTrace(e.getMessage());
-				risposta.setEsito(esito);
-				return risposta;
-			} finally {
-				
-			}
+			    System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
+				ImageIO.write(image, format, outputfile);	
+				}catch (Exception e) {
+					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
+					esito.setTrace(e.getMessage());
+					risposta.setEsito(esito);
+					return risposta;
+				}
 	    }
-        
+		//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
+		PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
+		request.setCannedAcl(CannedAccessControlList.PublicRead);
+		client.putObject(request);
+        }
         risposta.setEsito(esito);
         risposta.setImageUrl(FunzioniUtils.AMAZON_S3_BASE_URL + bucketName + "/" + filename);
         return risposta;

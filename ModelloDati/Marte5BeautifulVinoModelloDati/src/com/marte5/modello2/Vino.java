@@ -28,6 +28,7 @@ public class Vino {
 	private String urlLogoVino;
 	private String urlImmagineVino;
 	private String statoVino;
+	private float prezzoVino;
 	private int acquistabileVino;
 	private Azienda aziendaVino;
 	private List<Evento> eventiVino;
@@ -35,6 +36,7 @@ public class Vino {
 	private AziendaVino aziendaVinoInt;
 	private List<EventoVino> eventiVinoInt;
 	private List<UtenteVino> utentiVinoInt;
+	
 	
 	/**
 	 * @return the idVino
@@ -49,6 +51,7 @@ public class Vino {
 	public void setIdVino(String idVino) {
 		this.idVino = idVino;
 	}
+	
 	/**
 	 * @return the nomeVino
 	 */
@@ -61,6 +64,20 @@ public class Vino {
 	 */
 	public void setNomeVino(String nomeVino) {
 		this.nomeVino = nomeVino;
+	}
+	
+	/**
+	 * @return the prezzoVino
+	 */
+	@DynamoDBAttribute(attributeName="prezzoVino")
+	public float getPrezzoVino() {
+		return prezzoVino;
+	}
+	/**
+	 * @param nomeVino the nomeVino to set
+	 */
+	public void setPrezzoVino(float prezzoVino) {
+		this.prezzoVino = prezzoVino;
 	}
 	
 	
