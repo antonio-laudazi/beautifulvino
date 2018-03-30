@@ -33,11 +33,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Marte5BeautifulVinoModelloDati"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/JAVA_MAIL/javamail-1.4.5/mail.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/JJWT/jjwt-0.7.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/JJWT/jackson-databind-2.8.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/JJWT/jackson-annotations-2.8.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/JJWT/jackson-core-2.8.2.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/dynamodb-transactions-master"/>
+	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JAVA_MAIL/javamail1_4_5.zip"/>
+	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-annotations-2.8.0.jar"/>
+	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-databind-2.8.2.jar"/>
+	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jjwt-0.7.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dynamodb-transactions"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
