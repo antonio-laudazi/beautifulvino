@@ -35,6 +35,7 @@ public class Feed {
 	private VinoFeed vinoFeedInt;
 	private Evento eventoFeed;
 	private EventoFeed eventoFeedInt;
+	private AziendaFeed aziendaFeedInt;
 	private String testoFeed;
 	private String visualizzaButtonFeed;
 	
@@ -300,6 +301,67 @@ public class Feed {
 	}
 	
 	@DynamoDBDocument
+	public static class AziendaFeed{
+		
+		private String idAzienda;
+		private String nomeAzienda;
+		private String cittaAzienda;
+		private boolean active;
+		/**
+		 * @return the idAzienda
+		 */
+		@DynamoDBAttribute(attributeName="idAzienda")
+		public String getIdEvento() {
+			return idAzienda;
+		}
+		/**
+		 * @param idAzienda the idAzienda to set
+		 */
+		public void setIdAzienda(String idAzienda) {
+			this.idAzienda = idAzienda;
+		}
+		/**
+		 * @return the dataEvento
+		 */
+		@DynamoDBAttribute(attributeName="nomeAzienda")
+		public String getNomeAzienda() {
+			return nomeAzienda;
+		}
+		/**
+		 * @param idEvento the idEvento to set
+		 */
+		public void setNomeAzienda (String nomeAzienda) {
+			this.nomeAzienda = nomeAzienda;
+		}
+		/**
+		 * @return the dataEvento
+		 */
+		@DynamoDBAttribute(attributeName="cittaAzienda")
+		public String getCittaAzienda() {
+			return cittaAzienda;
+		}
+		/**
+		 * @param idEvento the idEvento to set
+		 */
+		public void setCittaAzienda (String cittaAzienda) {
+			this.cittaAzienda = cittaAzienda;
+		}
+		/**
+		 * @return the active flag
+		 */
+		@DynamoDBAttribute(attributeName="active")
+		public boolean getActive() {
+			return active;
+		}
+		/**
+		 * @param active the activeFlag to set
+		 */
+		public void setActive (boolean active) {
+			this.active = active;
+		}
+	}
+	
+	@DynamoDBDocument
 	public static class VinoFeed{
 		private String idVino;
 		private String nomeVino;
@@ -489,6 +551,19 @@ public class Feed {
 	 */
 	public void setVinoFeedInt(VinoFeed vinoFeedInt) {
 		this.vinoFeedInt = vinoFeedInt;
+	}
+	/**
+	 * @return the aziendaFeedInt
+	 */
+	@DynamoDBAttribute(attributeName="aziendaFeed")
+	public AziendaFeed getAziendaFeedInt() {
+		return aziendaFeedInt;
+	}
+	/**
+	 * @param aziendaFeedInt the vinoFeedInt to set
+	 */
+	public void setVinoFeedInt(AziendaFeed aziendaFeedInt) {
+		this.aziendaFeedInt = aziendaFeedInt;
 	}
 	/**
 	 * @return the dataEntitaHeaderFeed
