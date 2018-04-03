@@ -562,7 +562,7 @@ public class Feed {
 	/**
 	 * @param aziendaFeedInt the vinoFeedInt to set
 	 */
-	public void setVinoFeedInt(AziendaFeed aziendaFeedInt) {
+	public void setAziendaFeedInt(AziendaFeed aziendaFeedInt) {
 		this.aziendaFeedInt = aziendaFeedInt;
 	}
 	/**
