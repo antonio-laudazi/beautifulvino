@@ -69,7 +69,6 @@ public class putFeedGen implements RequestHandler<RichiestaPutGenerica, Risposta
 		        try {
 					mapper.save(feed);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Evento " + input.getFeed().getIdFeed());
