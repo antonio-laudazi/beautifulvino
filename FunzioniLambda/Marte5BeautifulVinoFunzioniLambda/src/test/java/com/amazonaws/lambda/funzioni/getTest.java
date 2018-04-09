@@ -26,17 +26,18 @@ public class getTest {
 //        input.setIdEvento(1513789129406L);
 //        input.setDataEvento(1513724400000L);
         
-//        input.setFunctionName("getUtenteGen");
-//        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+        input.setFunctionName("getUtenteGen");
+        input.setIdUtente("1522320091366");
+        input.setIdUtenteLog("1521197385816");
         
         /*	"functionName":"getViniEventoGen",
 	"idEvento":"1513789129406",
 	"dataEvento": 1513724400000*/
         
-        input.setFunctionName("getEventoGen");
-        input.setIdEvento("1522929948616");
-        input.setDataEvento(1530828000000L);
-        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
+//        input.setFunctionName("getEventoGen");
+//        input.setIdEvento("1522929948616");
+//        input.setDataEvento(1530828000000L);
+//        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
         
 //        input.setFunctionName("getAziendaGen");
 //        input.setIdAzienda("1520603900300");
