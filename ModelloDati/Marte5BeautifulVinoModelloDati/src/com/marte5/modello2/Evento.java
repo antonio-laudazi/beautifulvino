@@ -47,7 +47,7 @@ public class Evento {
 	private AziendaEvento aziendaFornitriceEventoInt;
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
-	
+	private List<Azienda> aziendeViniEvento;
 	/**
 	 * @return the idEvento
 	 */
@@ -90,6 +90,19 @@ public class Evento {
 		this.cittaEvento = cittaEvento;
 	}
 	
+	/**
+	 * @return the aziende vini evento
+	 */
+	@DynamoDBAttribute(attributeName="aziendeViniEvento")
+	public List<Azienda> getAziendeViniEvento() {
+		return aziendeViniEvento;
+	}
+	/**
+	 * @param cittaEvento the aziende vini evento to set
+	 */
+	public void setAziendeViniEvento(List<Azienda> aziendeViniEvento) {
+		this.aziendeViniEvento = aziendeViniEvento;
+	}
 	/**
 	 * @return the titoloEvento
 	 */

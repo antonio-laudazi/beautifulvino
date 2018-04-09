@@ -156,7 +156,7 @@ public class FunzioniUtils {
 		
 		for (Iterator<Vino> iterator = vini.iterator(); iterator.hasNext();) {
 			Vino vino = iterator.next();
-			Azienda aziendaVino = vino.getAziendaVino();
+			AziendaVino aziendaVino = vino.getAziendaVinoInt();
 			
 			Azienda nuovaAzienda = new Azienda();
 			nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
@@ -169,10 +169,11 @@ public class FunzioniUtils {
 			List<Vino> viniAziendaNuova = new ArrayList<>();
 			for (Iterator<Vino> iterator2 = vini.iterator(); iterator2.hasNext();) {
 				Vino vino = iterator2.next();
-				if(vino.getAziendaVino().getIdAzienda().equals(azienda.getIdAzienda())) {
+				if(vino.getAziendaVinoInt().getIdAzienda().equals(azienda.getIdAzienda())) {
 					viniAziendaNuova.add(vino);
 				}
 			}
+			azienda.setViniAzienda(viniAziendaNuova);
 			aziende2.add(azienda);
 		}
 		return aziende2;

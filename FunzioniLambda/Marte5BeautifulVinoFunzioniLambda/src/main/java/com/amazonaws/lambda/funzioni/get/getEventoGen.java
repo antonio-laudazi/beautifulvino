@@ -6,20 +6,21 @@ import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.marte5.modello.Esito;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
-import com.marte5.modello.Esito;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Vino;
-import com.marte5.modello.richieste.get.RichiestaGetGenerica;
-import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
 public class getEventoGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
@@ -47,7 +48,7 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEvento ");
@@ -127,19 +128,17 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				for (Iterator<VinoEvento> iterator = viniEvento.iterator(); iterator.hasNext();) {
 					VinoEvento vinoEvento = iterator.next();
 					Vino vinoEventoDB = mapper.load(Vino.class, vinoEvento.getIdVino());
-					Vino vinoEventoCompleto = new Vino();
+
 					
-					vinoEventoCompleto.setIdVino(vinoEventoDB.getIdVino());
-					vinoEventoCompleto.setNomeVino(vinoEventoDB.getNomeVino());
-					vinoEventoCompleto.setInfoVino(vinoEventoDB.getInfoVino());
-					vinoEventoCompleto.setInBreveVino(vinoEventoDB.getInBreveVino());
-					vinoEventoCompleto.setUrlLogoVino(vinoEventoDB.getUrlLogoVino());
-					vinoEventoCompleto.setUvaggioVino(vinoEventoDB.getUvaggioVino());
-					
-					viniEventoCompleti.add(vinoEventoCompleto);
+					viniEventoCompleti.add(vinoEventoDB);
 				}
 			}
+			List<Azienda> ViniAzienda = null;
+			if (viniEvento != null) {
+				ViniAzienda = FunzioniUtils.riordinaViniAzienda(viniEventoCompleti);
+			}
 			evento.setViniEvento(viniEventoCompleti);
+			evento.setAziendeViniEvento(ViniAzienda);
 			
 			//gestione aziende (fornitrice-ospitante)
 			String idAziendaOspitante = evento.getAziendaOspitanteEventoInt().getIdAzienda();
