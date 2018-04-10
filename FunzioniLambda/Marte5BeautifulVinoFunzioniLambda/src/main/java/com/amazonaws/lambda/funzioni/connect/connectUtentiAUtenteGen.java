@@ -75,7 +75,7 @@ public class connectUtentiAUtenteGen implements RequestHandler<RichiestaConnectG
 			if (utentiAttualmenteAssociati == null) {
 				utentiAttualmenteAssociati = new ArrayList<>(); 
 			}
-			if(stato == "A") {
+			if(stato.equals("A")) {
 //				List<Utente> utentiNuovi = utentiAttualmenteAssociati;
 //				for (Iterator<Utente> iterator = utentiAttualmenteAssociati.iterator(); iterator.hasNext();) {
 //					Utente utentePresente = iterator.next();
@@ -104,7 +104,7 @@ public class connectUtentiAUtenteGen implements RequestHandler<RichiestaConnectG
 						utentiAttualmenteAssociati.add(uu);
 					}
 					utente.setUtentiUtenteInt(utentiAttualmenteAssociati);		
-			} else if (stato == "D") {
+			} else if (stato.equals("D")) {
 //				for (Iterator<Utente> iterator = utentiAttualmenteAssociati.iterator(); iterator.hasNext();) {
 //					Utente utentePresente = iterator.next();
 //					for (Iterator<Utente> iterator2 = utentiDaAssociare.iterator(); iterator2.hasNext();) {
