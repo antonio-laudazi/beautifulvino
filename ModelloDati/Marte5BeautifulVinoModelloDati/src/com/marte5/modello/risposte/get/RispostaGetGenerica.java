@@ -14,6 +14,7 @@ import com.marte5.modello.risposte.Risposta;
 
 public class RispostaGetGenerica extends Risposta {
 
+	private String stato;
 	private Azienda azienda;
 	private List<Evento> eventiAzienda;
 	private List<Vino> viniAzienda;
@@ -60,6 +61,19 @@ public class RispostaGetGenerica extends Risposta {
 	 */
 	public void setAzienda(Azienda azienda) {
 		this.azienda = azienda;
+	}
+	/**
+	 * @return the stato
+	 */
+	public String getStato() {
+		return stato;
+	}
+
+	/**
+	 * @param stato the stato to set
+	 */
+	public void setStato(String stato) {
+		this.stato = stato;
 	}
 
 	/**

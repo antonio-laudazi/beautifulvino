@@ -4,6 +4,7 @@ import com.marte5.modello.richieste.Richiesta;
 
 public class RichiestaGetGenerica extends Richiesta {
 
+	private String idUtenteLog;
 	private String idAzienda;
 	private String idUtente;
 	
@@ -43,6 +44,18 @@ public class RichiestaGetGenerica extends Richiesta {
 	 */
 	public void setIdAzienda(String idAzienda) {
 		this.idAzienda = idAzienda;
+	}
+	/**
+	 * @return the idUtenteLog
+	 */
+	public String getIdUtenteLog() {
+		return idUtenteLog;
+	}
+	/**
+	 * @param idUtenteLog the idUtenteLog to set
+	 */
+	public void setIdUtenteLog(String idUtenteLog) {
+		this.idUtenteLog = idUtenteLog;
 	}
 	/**
 	 * @return the idUtente

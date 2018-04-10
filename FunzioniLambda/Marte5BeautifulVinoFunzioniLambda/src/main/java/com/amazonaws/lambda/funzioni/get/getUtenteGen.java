@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -19,6 +20,7 @@ import com.marte5.modello2.Evento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Utente.BadgeUtente;
 import com.marte5.modello2.Utente.EventoUtente;
+import com.marte5.modello2.Utente.UtenteUtente;
 import com.marte5.modello2.Utente.VinoUtente;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
@@ -39,14 +41,14 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
     		
     		String idUtente = input.getIdUtente();
         Utente utente = new Utente();
-    		
+    	
         Esito esito = FunzioniUtils.getEsitoPositivo();
         esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
         
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
@@ -118,16 +120,28 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				}
 				utente.setBadgeUtente(badgesCompleti);
 			}
-
+			//recupero associazione fra utente loggato e l'utente richiesto
+			String idUtenteLog = input.getIdUtenteLog();
+			if (idUtenteLog != null) {
+				Utente utenteLog = mapper.load(Utente.class, idUtenteLog);
+				if (utenteLog != null) {
+					List<UtenteUtente> listaUtenti = utenteLog.getUtentiUtenteInt();
+					risposta.setStato("D");
+					for (UtenteUtente u : listaUtenti) {
+						if (u.getIdUtente().equals(utente.getIdUtente())) {
+							risposta.setStato("A");
+						}
+					}
+				}
+			}
+			
 			List<VinoUtente> vini = utente.getViniUtenteInt();
 			List<Azienda> aziendeConvertite = new ArrayList<>();
 			if(vini != null) {
 				aziendeConvertite = FunzioniUtils.riordinaViniAzienda_Utente(vini, mapper);
 			}
-			utente.setAziendeUtente(aziendeConvertite);
-			
-		}
-        
+			utente.setAziendeUtente(aziendeConvertite);		
+		}     
         risposta.setEsito(esito);
         risposta.setUtente(utente);
         return risposta;

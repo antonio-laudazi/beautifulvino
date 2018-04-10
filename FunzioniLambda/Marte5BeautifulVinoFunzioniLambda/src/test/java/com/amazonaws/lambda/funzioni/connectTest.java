@@ -12,7 +12,7 @@ import com.amazonaws.lambda.funzioni.common.BeautifulVinoConnect;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
 import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
-import com.marte5.modello2.Badge;
+import com.marte5.modello2.Utente;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
@@ -32,10 +32,15 @@ public class connectTest {
 //        input.setFunctionName("connectBadgeAUtenteGen");
 //        input.setIdUtente("b6118563-1486-4448-8994-c121b60534ea");
         
-        input.setFunctionName("connectViniAUtenteGen");
-        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
-        input.setIdVino("1513240022473");
-        input.setStatoVino("A");
+        input.setFunctionName("connectUtentiAUtenteGen");
+        input.setIdUtente("1521197385816");
+        List<Utente> utenti = new ArrayList<>();
+        Utente u =new Utente();
+        u.setIdUtente("1522320091366");
+        utenti.add(u);
+        input.setUtenti(utenti);
+        input.setStatoVariazione("A");
+        
         
         /*"functionName":"connectViniAUtenteGen",
 	"idVino":"1513240022473",

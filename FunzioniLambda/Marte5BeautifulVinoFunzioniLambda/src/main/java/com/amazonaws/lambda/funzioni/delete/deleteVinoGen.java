@@ -62,8 +62,8 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 		        	Vino vinoDaCancellare = mapper.load(Vino.class, idVino );
 	        		if(vinoDaCancellare == null) {
 	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Feed con id: " + idVino + " non trovato sul database");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Feed con id: " + idVino + " non trovato sul database");
+	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " vino con id: " + idVino + " non trovato sul database");
+	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " vino con id: " + idVino + " non trovato sul database");
 	    				risposta.setEsito(esito);
 	    				return risposta;
 	        		} else {
