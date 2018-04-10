@@ -17,7 +17,7 @@ public class RichiestaConnectGenerica extends Richiesta {
 	private long dataEvento;
 	private String statoEvento;
 	private String statoVino;
-	private String statoVariazione;
+	private String statoUtente;
 	private List<Vino> viniAzienda;
 	private List<Utente> utenti;
 	private String idAzienda;
@@ -120,16 +120,16 @@ public class RichiestaConnectGenerica extends Richiesta {
 		this.utenti = utenti;
 	}
 	/**
-	 * @return the statoVariazione
+	 * @return the statoUtente
 	 */
-	public String getStatoVariazione() {
-		return statoVariazione;
+	public String getStatoUtente() {
+		return statoUtente;
 	}
 	/**
-	 * @param statoVariazione the statoVariazione to set
+	 * @param statoUtente the statoUtente to set
 	 */
-	public void setStatoVariazione(String statoVariazione) {
-		this.statoVariazione = statoVariazione;
+	public void setStatoUtente(String statoUtente) {
+		this.statoUtente = statoUtente;
 	}
 	/**
 	 * @return the dataEvento
