@@ -33,7 +33,7 @@ public class deleteEventoTest {
 
     @Test
     public void testdeleteEvento() {
-        deleteEvento handler = new deleteEvento();
+        deleteEventoGen handler = new deleteEventoGen();
         Context ctx = createContext();
 
         String output = handler.handleRequest(input, ctx);

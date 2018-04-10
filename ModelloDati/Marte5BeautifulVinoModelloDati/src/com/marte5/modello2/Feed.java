@@ -311,7 +311,7 @@ public class Feed {
 		 * @return the idAzienda
 		 */
 		@DynamoDBAttribute(attributeName="idAzienda")
-		public String getIdEvento() {
+		public String getIdAzienda() {
 			return idAzienda;
 		}
 		/**
@@ -562,7 +562,7 @@ public class Feed {
 	/**
 	 * @param aziendaFeedInt the vinoFeedInt to set
 	 */
-	public void setVinoFeedInt(AziendaFeed aziendaFeedInt) {
+	public void setAziendaFeedInt(AziendaFeed aziendaFeedInt) {
 		this.aziendaFeedInt = aziendaFeedInt;
 	}
 	/**

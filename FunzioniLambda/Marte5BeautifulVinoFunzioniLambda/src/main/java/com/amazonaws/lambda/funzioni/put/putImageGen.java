@@ -1,13 +1,11 @@
 package com.amazonaws.lambda.funzioni.put;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -75,7 +73,15 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         }
         
         String tipoEntita = input.getTipoEntita();
-        String filename =  idImmagine + "_" + input.getFilename();
+        String rawFilename = input.getFilename();
+        
+        String cleanFilename = rawFilename;
+        if(rawFilename.contains(".")) {
+        	String[] splittedFilename = rawFilename.split(".");
+            cleanFilename = splittedFilename[0];//elimino qualsiasi cosa ci sia dopo un eventuale punto
+        }
+        
+        String filename =  idImmagine + "_" + cleanFilename + "." + format;
         
         //controlli sui dati ricevuti
         String bucketName = getBucketName(tipoEntita);
@@ -172,7 +178,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 				}
 	    }
 		//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
-		PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
+		PutObjectRequest request = new PutObjectRequest(bucketName, filename, outputfile);
 		request.setCannedAcl(CannedAccessControlList.PublicRead);
 		client.putObject(request);
         }

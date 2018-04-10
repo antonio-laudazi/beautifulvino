@@ -316,7 +316,6 @@ public class FunzioniUtils {
 				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
 				aziende1.add(nuovaAzienda);
 			}
-			
 		}
 		
 		for (Iterator<Azienda> iterator = aziende1.iterator(); iterator.hasNext();) {

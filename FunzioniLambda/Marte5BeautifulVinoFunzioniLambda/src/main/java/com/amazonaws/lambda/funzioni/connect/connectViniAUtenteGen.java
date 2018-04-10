@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+//
+//import javax.mail.*;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeMessage;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
@@ -205,19 +205,19 @@ public class connectViniAUtenteGen implements RequestHandler<RichiestaConnectGen
 			
 			//NELLE PROPERTIES CERCO SE DEVO MANDARE LA MAIL
 			com.marte5.modello2.Properties prop = mapper.load(com.marte5.modello2.Properties.class, com.marte5.modello2.Properties.PROPERTY_KEY_SENDMAIL);
-			if(prop != null && prop.getPropertyValue().equals("S")) {
-				try {
-					inviaMailAcquisto();
-				} catch (UnsupportedEncodingException | MessagingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Errore nell'invio della mail per l'acquisto");
-					esito.setTrace(e.getMessage());
-					risposta.setEsito(esito);
-					return risposta;
-				}
-			}
+//			if(prop != null && prop.getPropertyValue().equals("S")) {
+//				try {
+//					inviaMailAcquisto();
+//				} catch (UnsupportedEncodingException | MessagingException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+//					esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Errore nell'invio della mail per l'acquisto");
+//					esito.setTrace(e.getMessage());
+//					risposta.setEsito(esito);
+//					return risposta;
+//				}
+//			}
 			
 			try {
 				mapper.save(utente);
@@ -278,51 +278,51 @@ public class connectViniAUtenteGen implements RequestHandler<RichiestaConnectGen
 		mapper.save(vino);
 	}
 	
-	private void inviaMailAcquisto() throws UnsupportedEncodingException, MessagingException {
-		
-		Properties props = System.getProperties();
-	    	props.put("mail.transport.protocol", "smtp");
-	    	props.put("mail.smtp.port", PORT); 
-	    	props.put("mail.smtp.starttls.enable", "true");
-	    	props.put("mail.smtp.auth", "true");
-	
-	        // Create a Session object to represent a mail session with the specified properties. 
-	    	Session session = Session.getDefaultInstance(props);
-
-        // Create a message with the specified information. 
-        MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(FROM,FROMNAME));
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
-        msg.setSubject(SUBJECT);
-        msg.setContent(BODY,"text/html");
-        
-        // Add a configuration set header. Comment or delete the 
-        // next line if you are not using a configuration set
-        msg.setHeader("X-SES-CONFIGURATION-SET", CONFIGSET);
-            
-        // Create a transport.
-        Transport transport = session.getTransport();
-                    
-        // Send the message.
-        try
-        {
-            System.out.println("Sending...");
-            
-            // Connect to Amazon SES using the SMTP username and password you specified above.
-            transport.connect(HOST, SMTP_USERNAME, SMTP_PASSWORD);
-        	
-            // Send the email.
-            transport.sendMessage(msg, msg.getAllRecipients());
-            System.out.println("Email sent!");
-        }
-        catch (Exception ex) {
-            System.out.println("The email was not sent.");
-            System.out.println("Error message: " + ex.getMessage());
-        }
-        finally
-        {
-            // Close and terminate the connection.
-            transport.close();
-        }
-	} 
+//	private void inviaMailAcquisto() throws UnsupportedEncodingException, MessagingException {
+//		
+//		Properties props = System.getProperties();
+//	    	props.put("mail.transport.protocol", "smtp");
+//	    	props.put("mail.smtp.port", PORT); 
+//	    	props.put("mail.smtp.starttls.enable", "true");
+//	    	props.put("mail.smtp.auth", "true");
+//	
+//	        // Create a Session object to represent a mail session with the specified properties. 
+//	    	Session session = Session.getDefaultInstance(props);
+//
+//        // Create a message with the specified information. 
+//        MimeMessage msg = new MimeMessage(session);
+//        msg.setFrom(new InternetAddress(FROM,FROMNAME));
+//        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
+//        msg.setSubject(SUBJECT);
+//        msg.setContent(BODY,"text/html");
+//        
+//        // Add a configuration set header. Comment or delete the 
+//        // next line if you are not using a configuration set
+//        msg.setHeader("X-SES-CONFIGURATION-SET", CONFIGSET);
+//            
+//        // Create a transport.
+//        Transport transport = session.getTransport();
+//                    
+//        // Send the message.
+//        try
+//        {
+//            System.out.println("Sending...");
+//            
+//            // Connect to Amazon SES using the SMTP username and password you specified above.
+//            transport.connect(HOST, SMTP_USERNAME, SMTP_PASSWORD);
+//        	
+//            // Send the email.
+//            transport.sendMessage(msg, msg.getAllRecipients());
+//            System.out.println("Email sent!");
+//        }
+//        catch (Exception ex) {
+//            System.out.println("The email was not sent.");
+//            System.out.println("Error message: " + ex.getMessage());
+//        }
+//        finally
+//        {
+//            // Close and terminate the connection.
+//            transport.close();
+//        }
+//	} 
 }

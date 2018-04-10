@@ -70,32 +70,39 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        			//cancello il collegamento con l'azienda
 	        			AziendaEvento aziendaEvento = eventoDaCancellare.getAziendaOspitanteEventoInt();
 	        			if (aziendaEvento != null) {	        					        		
-	        					Azienda aziendaDaCanc = mapper.load(Azienda.class, aziendaEvento.getIdAzienda());
-	        					List<EventoAzienda> listaEventiAzienda = aziendaDaCanc.getEventiAziendaInt();
-	    	        			if (listaEventiAzienda != null) {
-	    		        			EventoAzienda vcanc = null; 
-	    		        			for (EventoAzienda a : listaEventiAzienda) {
-	    		        				if (a.getIdEvento().equals(eventoDaCancellare.getIdEvento()) ) {
-	    		        					vcanc = a;	        					
-	    		        				}
-	    		        			}
-	    		        			if (vcanc != null) listaEventiAzienda.remove(vcanc);
-	    	        			}
+        					Azienda aziendaDaCanc = mapper.load(Azienda.class, aziendaEvento.getIdAzienda());
+        					if(aziendaDaCanc != null) {
+        						List<EventoAzienda> listaEventiAzienda = aziendaDaCanc.getEventiAziendaInt();
+		    	        			if (listaEventiAzienda != null) {
+		    		        			EventoAzienda vcanc = null; 
+		    		        			for (EventoAzienda a : listaEventiAzienda) {
+		    		        				if (a.getIdEvento().equals(eventoDaCancellare.getIdEvento()) ) {
+		    		        					vcanc = a;	        					
+		    		        				}
+		    		        			}
+		    		        			if (vcanc != null) listaEventiAzienda.remove(vcanc);
+		    	        			}
+        					}
+        					
 	        			}
 	        			//cancello il collegamento con i vini
 	        			List<VinoEvento> listaVini = eventoDaCancellare.getViniEventoInt();
 	        			if (listaVini != null) {
 		        			for (VinoEvento ev : listaVini) {
 		        				Vino vinoDaCanc = mapper.load(Vino.class, ev.getIdVino());
-		        				List<EventoVino> listaViniEvento = vinoDaCanc.getEventiVinoInt();
-		        				EventoVino vecanc = null;
-		        				for (EventoVino v : listaViniEvento) {
-			        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
-			        					vecanc = v;
+		        				if(vinoDaCanc != null) {
+		        					List<EventoVino> listaViniEvento = vinoDaCanc.getEventiVinoInt();
+			        				EventoVino vecanc = null;
+			        				if(listaViniEvento != null) {
+			        					for (EventoVino v : listaViniEvento) {
+					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+					        					vecanc = v;
+					        				}
+				        				}
+			        					if (vecanc != null)listaViniEvento.remove(vecanc);
 			        				}
+			        				mapper.save(vinoDaCanc);
 		        				}
-		        				if (vecanc != null)listaViniEvento.remove(vecanc);
-		        				mapper.save(vinoDaCanc);
 		        			}
 	        			}
 	        			//cancello il collegamento con gli utenti
@@ -103,15 +110,17 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        			if (listaUtenti != null) {
 		        			for (UtenteEvento ev : listaUtenti) {
 		        				Utente utenteDaCanc = mapper.load(Utente.class, ev.getIdUtente());
-		        				List<EventoUtente> listaUtenteEvento = utenteDaCanc.getEventiUtenteInt();
-		        				EventoUtente vucanc = null;
-		        				for (EventoUtente v : listaUtenteEvento) {
-			        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
-			        					vucanc = v;
+		        				if(utenteDaCanc != null) {
+		        					List<EventoUtente> listaUtenteEvento = utenteDaCanc.getEventiUtenteInt();
+			        				EventoUtente vucanc = null;
+			        				for (EventoUtente v : listaUtenteEvento) {
+				        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+				        					vucanc = v;
+				        				}
 			        				}
+			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
+			        				mapper.save(utenteDaCanc);
 		        				}
-		        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
-		        				mapper.save(utenteDaCanc);
 		        			}
 	        			}
 	        			//caricato l'evento, lo vado a cancellare
