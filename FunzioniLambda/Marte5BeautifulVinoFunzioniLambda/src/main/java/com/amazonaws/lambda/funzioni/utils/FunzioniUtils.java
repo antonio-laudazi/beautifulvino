@@ -315,7 +315,9 @@ public class FunzioniUtils {
 				Azienda nuovaAzienda = new Azienda();
 				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
 				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				aziende1.add(nuovaAzienda);
+				if(!contains(aziende1, nuovaAzienda)) {
+					aziende1.add(nuovaAzienda);
+				}
 			}
 		}
 		
@@ -345,6 +347,16 @@ public class FunzioniUtils {
 		return aziende2;
 	}
 	
+	public static boolean contains(List<Azienda> aziende, Azienda azienda) {
+		for (Iterator<Azienda> i = aziende.iterator(); i.hasNext();) {
+			Azienda a = i.next();
+			if(a.getIdAzienda().equals(azienda.getIdAzienda())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static String getIdAziendaFromVino(String idVino, DynamoDBMapper mapper) {
 		Vino vino = mapper.load(Vino.class, idVino);
 		if(vino != null) {
@@ -358,4 +370,5 @@ public class FunzioniUtils {
 			return "";
 		}
 	}
+	
 }

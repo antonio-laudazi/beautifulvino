@@ -40,6 +40,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
     		RispostaGetGenerica risposta = new RispostaGetGenerica();
     		
     		String idUtente = input.getIdUtente();
+    		String idUtentePadre = input.getIdUtentePadre();
         Utente utente = new Utente();
     	
         Esito esito = FunzioniUtils.getEsitoPositivo();
@@ -140,7 +141,23 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			if(vini != null) {
 				aziendeConvertite = FunzioniUtils.riordinaViniAzienda_Utente(vini, mapper);
 			}
-			utente.setAziendeUtente(aziendeConvertite);		
+			utente.setAziendeUtente(aziendeConvertite);
+			
+			utente.setStatoUtente("D");
+			if(idUtentePadre != null) {
+				Utente utentePadre = mapper.load(Utente.class, idUtentePadre);
+				if(utentePadre != null) {
+					List<Utente> utentiSeguiti = utentePadre.getUtentiUtente();
+					if(utentiSeguiti != null) {
+						for(Utente u : utentiSeguiti) {
+							if(u.getIdUtente().equals(idUtente)) {
+								utente.setStatoUtente("A");
+							}
+						}
+					}
+				}
+			}
+			
 		}     
         risposta.setEsito(esito);
         risposta.setUtente(utente);
