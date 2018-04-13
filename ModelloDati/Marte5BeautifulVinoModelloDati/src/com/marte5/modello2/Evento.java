@@ -428,6 +428,7 @@ public class Evento {
 	@DynamoDBDocument
 	public static class AziendaEvento{
 		private String idAzienda;
+		private String infoAzienda;
 
 		/**
 		 * @return the idAzienda
@@ -435,6 +436,20 @@ public class Evento {
 		@DynamoDBAttribute(attributeName="idAzienda")
 		public String getIdAzienda() { return idAzienda; }
 		public void setIdAzienda(String idAzienda) { this.idAzienda = idAzienda; }
+		
+		/**
+		 * @return the infoAzienda
+		 */
+		@DynamoDBAttribute(attributeName="infoAzienda")
+		public String getInfoAzienda() {
+			return infoAzienda;
+		}
+		/**
+		 * @param infoAzienda the infoAzienda to set
+		 */
+		public void setInfoAzienda(String infoAzienda) {
+			this.infoAzienda = infoAzienda;
+		}
 	}
 	
 	@DynamoDBDocument

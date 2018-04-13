@@ -92,6 +92,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        		if(evento.getAziendaOspitanteEventoInt() == null){
 		        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
 		        		aziendaVinoOspitante.setIdAzienda(aziendaOspitante.getIdAzienda());
+		        		aziendaVinoOspitante.setInfoAzienda(aziendaOspitante.getInfoAzienda());
 		        		evento.setAziendaOspitanteEventoInt(aziendaVinoOspitante);
 	        		}
 	        		

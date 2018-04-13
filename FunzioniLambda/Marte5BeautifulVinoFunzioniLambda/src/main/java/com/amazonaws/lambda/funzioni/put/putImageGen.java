@@ -1,5 +1,7 @@
 package com.amazonaws.lambda.funzioni.put;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -131,6 +133,9 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					ByteArrayInputStream bais = new ByteArrayInputStream(optimizedBytes.toByteArray());
 					optimizedBytes.close();
 					BufferedImage imout = ImageIO.read(bais);
+					if(imout.getWidth() > 1100) {
+						imout = resize(imout, (int)getYResizeFactor(imout.getWidth(), 1100) * imout.getHeight(), 1100);
+					}
 			        bais.close();
 			        ImageIO.write(imout, format, outputfile);
 			    } catch (IOException e) {
@@ -168,6 +173,10 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			        imgOutStream.close();
 			    }
 			    System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
+			    if(image.getWidth() > 1100) {
+			    		image = resize(image, (int)getYResizeFactor(image.getWidth(), 1100) * image.getHeight(), 1100);
+				}
+			    
 				ImageIO.write(image, format, outputfile);	
 				}catch (Exception e) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
@@ -216,5 +225,18 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 		tipi.add(IMAGE_TYPE_PNG);
 		
 		return tipi.contains(imageType.toLowerCase());
+	}
+	
+	private static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
+	
+	private float getYResizeFactor(float x, float max) {
+		return (max / x);
 	}
 }
