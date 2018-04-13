@@ -36,7 +36,7 @@ public class connectUtentiAUtenteGen implements RequestHandler<RichiestaConnectG
         
         String idUtente = input.getIdUtente();
 		List<Utente> utentiDaAssociare = input.getUtenti();
-		String stato = input.getStatoVariazione();//A = aggiungi, D = togli
+		String stato = input.getStatoUtente();//A = aggiungi, D = togli 
 		
 		AmazonDynamoDB client = null;
 		try {
