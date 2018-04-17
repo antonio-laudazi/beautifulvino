@@ -48,6 +48,7 @@ public class Evento {
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
 	private List<Azienda> aziendeViniEvento;
+	private String orarioEvento;
 	/**
 	 * @return the idEvento
 	 */
@@ -88,6 +89,20 @@ public class Evento {
 	 */
 	public void setCittaEvento(String cittaEvento) {
 		this.cittaEvento = cittaEvento;
+	}
+	
+	/**
+	 * @return the orario
+	 */
+	@DynamoDBAttribute(attributeName="orarioEvento")
+	public String getOrarioEvento() {
+		return orarioEvento;
+	}
+	/**
+	 * @param orarioEvento the orarioEvento to set
+	 */
+	public void setOrarioEvento(String orarioEvento) {
+		this.orarioEvento = orarioEvento;
 	}
 	
 	/**

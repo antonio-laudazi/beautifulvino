@@ -20,7 +20,6 @@ public class Vino {
 	private String nomeVino;
 	private int annoVino;
 	private String inBreveVino;
-	private String descrizioneVino;
 	private String infoVino;
 	private String uvaggioVino;
 	private String regioneVino;
@@ -132,19 +131,6 @@ public class Vino {
 	 */
 	public void setStatoVino(String statoVino) {
 		this.statoVino = statoVino;
-	}
-	/**
-	 * @return the descrizioneVino
-	 */
-	@DynamoDBAttribute(attributeName="descrizioneVino")
-	public String getDescrizioneVino() {
-		return descrizioneVino;
-	}
-	/**
-	 * @param descrizioneVino the descrizioneVino to set
-	 */
-	public void setDescrizioneVino(String descrizioneVino) {
-		this.descrizioneVino = descrizioneVino;
 	}
 	/**
 	 * @return the uvaggioVino
