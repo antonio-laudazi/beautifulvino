@@ -52,10 +52,10 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		if(client != null) {
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
-			if(idEvento == null || idEvento.equals("") || dataEvento == 0) {
+			if(idEvento == null || idEvento.equals("") ) {
 	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL oppure DataEvento NULL");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL oppure DataEvento NULL");
+				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL ");
+				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " IdEvento NULL ");
 				risposta.setEsito(esito);
 				return risposta;
 	        } else {
