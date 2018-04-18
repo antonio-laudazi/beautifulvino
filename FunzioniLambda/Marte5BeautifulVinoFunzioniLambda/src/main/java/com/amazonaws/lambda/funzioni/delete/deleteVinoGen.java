@@ -86,15 +86,17 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        			if (listaEventi != null) {
 		        			for (EventoVino ev : listaEventi) {
 		        				Evento eventoDaCanc = mapper.load(Evento.class, ev.getIdEvento());
-		        				List<VinoEvento> listaViniEvento = eventoDaCanc.getViniEventoInt();
-		        				VinoEvento vecanc = null;
-		        				for (VinoEvento v : listaViniEvento) {
-			        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino())) {
-			        					vecanc = v;
+		        				if (eventoDaCanc != null) {
+			        				List<VinoEvento> listaViniEvento = eventoDaCanc.getViniEventoInt();
+			        				VinoEvento vecanc = null;
+			        				for (VinoEvento v : listaViniEvento) {
+				        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino())) {
+				        					vecanc = v;
+				        				}
 			        				}
+			        				if (vecanc != null)listaViniEvento.remove(vecanc);
+			        				mapper.save(eventoDaCanc);
 		        				}
-		        				if (vecanc != null)listaViniEvento.remove(vecanc);
-		        				mapper.save(eventoDaCanc);
 		        			}
 	        			}
 	        			//cancello il collegamento con gli utenti

@@ -29,7 +29,7 @@ public class getFeedGen implements RequestHandler<RichiestaGetGenerica, Risposta
     
     private RispostaGetGenerica getRisposta(RichiestaGetGenerica input) {
     	
-    		RispostaGetGenerica risposta = new RispostaGetGenerica();
+    	RispostaGetGenerica risposta = new RispostaGetGenerica();
 		String idUltimoFeed = input.getIdUltimoFeed();
 		long dataUltimoFeed = input.getDataUltimoFeed();
 		String elencoCompleto = input.getElencoCompleto();

@@ -77,11 +77,13 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 	        			if (listaEventi != null) {
 		        			for (EventoAzienda ev : listaEventi) {
 		        				Evento eventoDaCanc = mapper.load(Evento.class, ev.getIdEvento());
-		        				//devo cancellare l'evento???		  
-		        				AziendaEvento aziendaOsp = eventoDaCanc.getAziendaOspitanteEventoInt();
-		        				if (aziendaOsp.getIdAzienda() == aziendaDaCancellare.getIdAzienda() ) {	        				
-		        					eventoDaCanc.setAziendaOspitanteEventoInt(null);
-		        					mapper.save(eventoDaCanc);
+		        					//devo cancellare l'evento???
+			        				if (eventoDaCanc != null) {
+			        				AziendaEvento aziendaOsp = eventoDaCanc.getAziendaOspitanteEventoInt();
+			        				if (aziendaOsp.getIdAzienda() == aziendaDaCancellare.getIdAzienda() ) {	        				
+			        					eventoDaCanc.setAziendaOspitanteEventoInt(null);
+			        					mapper.save(eventoDaCanc);
+			        				}
 		        				}
 		        			}
 	        			}
