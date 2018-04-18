@@ -19,10 +19,9 @@ public class delTest {
 	        // TODO: set up your sample input object here.
 	        input = new RichiestaDeleteGenerica();
 
-	        
-	        input.setFunctionName("deleteVinoGen");
-	        input.setIdVino("1522056905360");
-
+	        input.setFunctionName("deleteEventoGen");
+	        input.setIdEvento("1522315486942");
+	        input.setDataEvento(1520809200000L);
 	    }
 
 	    private Context createContext() {

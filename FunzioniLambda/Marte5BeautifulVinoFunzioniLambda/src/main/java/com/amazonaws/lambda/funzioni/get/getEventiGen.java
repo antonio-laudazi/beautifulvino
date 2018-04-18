@@ -9,7 +9,9 @@ import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.datamodeling.ScanResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -38,6 +40,8 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
     		long dataUltimoEvento = input.getDataUltimoEvento();
     		String idUtente = input.getIdUtente();
     		
+    		String elencoCompleto = input.getElencoCompleto();
+    		
     		Esito esito = FunzioniUtils.getEsitoPositivo();
     		esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
         
@@ -57,6 +61,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
+			//DynamoDBQueryExpression<Evento> qexpr = new DynamoDBQueryExpression();
 
 			if(idUtente == null || idUtente.equals("")) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
@@ -72,17 +77,18 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 		        return risposta;
 			}
 			
-			//ottengo il numero totale di elementi, esclusa la paginazione
 			scannedCount = mapper.count(Evento.class, expr);
-			expr.withLimit(12);
-			//qexpr.withLimit(5);
+			if(!(elencoCompleto != null && elencoCompleto.equalsIgnoreCase("S"))) {
+				expr.withLimit(12);
+				//qexpr.withLimit(12);
+			}
 			
 			if((idUltimoEvento != "" || !idUltimoEvento.equals(null)) && dataUltimoEvento != 0) {
 				//configuro la paginazione
 				
 				Map<String, AttributeValue> exclusiveStartKey = new HashMap<>();
 				AttributeValue av1 = new AttributeValue();
-				av1.setN("" + idUltimoEvento);
+				av1.setS("" + idUltimoEvento);
 				AttributeValue av2 = new AttributeValue();
 				av2.setN("" + dataUltimoEvento);
 				exclusiveStartKey.put("idEvento", av1);

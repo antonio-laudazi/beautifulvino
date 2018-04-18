@@ -36,6 +36,7 @@ public class Utente {
 	private String condivisioneBadge;
 	private String condivisioneEventi;
 	private String condivisioneVini;
+	private String statoUtente;
 	private List<Evento> eventiUtente;
 	private List<Azienda> aziendeUtente;
 	private List<Badge> badgeUtente;
@@ -580,5 +581,19 @@ public class Utente {
 		public void setIdUtente(String idUtente) {
 			this.idUtente = idUtente;
 		}
+	}
+
+	/**
+	 * @return the statoUtente
+	 */
+	@DynamoDBAttribute(attributeName="statoUtente")
+	public String getStatoUtente() {
+		return statoUtente;
+	}
+	/**
+	 * @param statoUtente the statoUtente to set
+	 */
+	public void setStatoUtente(String statoUtente) {
+		this.statoUtente = statoUtente;
 	}
 }

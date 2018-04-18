@@ -75,7 +75,8 @@ public class connectUtentiAUtenteGen implements RequestHandler<RichiestaConnectG
 			if (utentiAttualmenteAssociati == null) {
 				utentiAttualmenteAssociati = new ArrayList<>(); 
 			}
-			if(stato.equals("A")) {
+			
+			if(stato != null && stato.equals("A")) {
 //				List<Utente> utentiNuovi = utentiAttualmenteAssociati;
 //				for (Iterator<Utente> iterator = utentiAttualmenteAssociati.iterator(); iterator.hasNext();) {
 //					Utente utentePresente = iterator.next();

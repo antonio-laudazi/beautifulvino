@@ -311,7 +311,7 @@ public class Feed {
 		 * @return the idAzienda
 		 */
 		@DynamoDBAttribute(attributeName="idAzienda")
-		public String getIdEvento() {
+		public String getIdAzienda() {
 			return idAzienda;
 		}
 		/**

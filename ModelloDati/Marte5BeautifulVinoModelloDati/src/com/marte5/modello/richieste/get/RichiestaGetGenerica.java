@@ -5,6 +5,7 @@ import com.marte5.modello.richieste.Richiesta;
 public class RichiestaGetGenerica extends Richiesta {
 
 	private String idUtenteLog;
+	private String idUtentePadre;
 	private String idAzienda;
 	private String idUtente;
 	
@@ -260,5 +261,17 @@ public class RichiestaGetGenerica extends Richiesta {
 	 */
 	public void setElencoCompleto(String elencoCompleto) {
 		this.elencoCompleto = elencoCompleto;
+	}
+	/**
+	 * @return the idUtentePadre
+	 */
+	public String getIdUtentePadre() {
+		return idUtentePadre;
+	}
+	/**
+	 * @param idUtentePadre the idUtentePadre to set
+	 */
+	public void setIdUtentePadre(String idUtentePadre) {
+		this.idUtentePadre = idUtentePadre;
 	}
 }
