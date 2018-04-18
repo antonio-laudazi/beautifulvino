@@ -40,8 +40,5 @@
 	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/JJWT/jackson-core-2.8.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dynamodb-transactions-master"/>
 	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/pngtastic-1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/org.json-20130603.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/httpcomponents-client-4.5.5/lib/httpclient-4.5.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/osiris/Documents/librerieJava/httpcomponents-client-4.5.5/lib/gson-2.6.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
