@@ -1,13 +1,13 @@
 package com.amazonaws.lambda.funzioni.put;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -30,7 +30,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.googlecode.pngtastic.core.PngImage;
 import com.googlecode.pngtastic.core.PngOptimizer;
-
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
@@ -115,9 +114,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					bis.close();
 					// optimize
 					PngOptimizer optimizer = new PngOptimizer();
-					System.out.println("dimensione" + image.getHeight() + "  "+ image.getWidth());
 					PngImage optimizedImage = optimizer.optimize(image, true, new Integer(9));
-					System.out.println("dimensione" + optimizedImage.getHeight() + "  " + optimizedImage.getWidth());
 					// export the optimized image to a new file
 					ByteArrayOutputStream optimizedBytes = new ByteArrayOutputStream();
 					optimizedImage.writeDataOutputStream(optimizedBytes);
@@ -126,6 +123,21 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					optimizedBytes.close();
 					BufferedImage imout = ImageIO.read(bais);
 			        bais.close();
+			        System.out.println("dimensione " + imout.getWidth() + " " + imout.getHeight() );
+			        if (imout.getWidth() > imout.getHeight()) {
+					    if(imout.getWidth() > 1100) {
+					    	float w = getYResizeFactor(imout.getWidth(), 1100) * imout.getHeight();
+					    	int wi = Math.round(w);
+					    	imout = resize(imout, wi , 1100);
+					    }
+				    }else {
+				    	if(imout.getHeight() > 1100) {
+					    	float w = getYResizeFactor(imout.getHeight(), 1100) * imout.getWidth();
+					    	int wi = Math.round(w);
+					    	imout = resize(imout, 1100 , wi);
+					    }
+				    }
+			        System.out.println("dimensione " + imout.getWidth() + " " + imout.getHeight() );
 			        ImageIO.write(imout, format, outputfile);
 			    } catch (IOException e) {
 			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
@@ -160,6 +172,20 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			        writer.write(null, new IIOImage(image, null, null), param);
 			    } finally {
 			        imgOutStream.close();
+			    }
+			    System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
+			    if (image.getWidth() > image.getHeight()) {
+				    if(image.getWidth() > 1100) {
+				    	float w = getYResizeFactor(image.getWidth(), 1100) * image.getHeight();
+				    	int wi = Math.round(w);
+				    	image = resize(image, wi , 1100);
+				    }
+			    }else {
+			    	if(image.getHeight() > 1100) {
+				    	float w = getYResizeFactor(image.getHeight(), 1100) * image.getWidth();
+				    	int wi = Math.round(w);
+				    	image = resize(image, 1100 , wi);
+				    }
 			    }
 			    System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
 				ImageIO.write(image, format, outputfile);	
@@ -210,5 +236,19 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 		tipi.add(IMAGE_TYPE_PNG);
 		
 		return tipi.contains(imageType.toLowerCase());
+	}
+	
+	private static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+	}
+
+	
+	private float getYResizeFactor(float x, float max) {
+		return (max / x);
 	}
 }

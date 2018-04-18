@@ -40,7 +40,7 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			Utente utente = input.getUtente();
 			Utente utenteDaSalvare = new Utente();
 			if(utente == null) {
-	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+	        	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Utente NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Utente NULL");
 				risposta.setEsito(esito);

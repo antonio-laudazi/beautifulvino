@@ -4,20 +4,19 @@ import java.util.ArrayList;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello2.Azienda;
-import com.marte5.modello2.Azienda.VinoAzienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello2.Vino;
-import com.marte5.modello2.Vino.AziendaVino;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
+import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Azienda.VinoAzienda;
+import com.marte5.modello2.Vino;
+import com.marte5.modello2.Vino.AziendaVino;
 
 public class putVinoGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
@@ -35,7 +34,7 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -86,29 +85,12 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 		        } 
 		        	idVinoRisposta = idVino;
 	        		vino.setIdVino(idVino);
-		        
-	        		//controlli sull'azienda associata al vino
-	        		if(vino.getAziendaVino().getIdAzienda() == null || vino.getAziendaVino().getIdAzienda().equals("")) {
-	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda associata al vino che si vuole inserire è priva di Id");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda associata al vino che si vuole inserire è priva di Id");
-	    				risposta.setEsito(esito);
-	    				transaction.rollback();
-	    				return risposta;
-	        		}
 	        		
 	        		Azienda toLoad = new Azienda();
 	        		toLoad.setIdAzienda(vino.getAziendaVino().getIdAzienda());
 	        		Azienda azienda = transaction.load(toLoad);
 	        		//Azienda azienda = mapper.load(Azienda.class, vino.getAziendaVino().getIdAzienda());
-	        		if(azienda == null) {
-	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda il cui Id è associato al vino inviato non esiste");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda il cui Id è associato al vino inviato non esiste");
-	    				risposta.setEsito(esito);
-	    				transaction.rollback();
-	    				return risposta;
-	        		}
+
 	        		if(vino.getAziendaVinoInt() == null){
 	        			
 		        		AziendaVino aziendaVino = new AziendaVino();

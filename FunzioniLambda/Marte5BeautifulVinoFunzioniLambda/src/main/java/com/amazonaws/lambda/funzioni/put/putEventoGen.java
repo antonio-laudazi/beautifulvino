@@ -33,7 +33,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -81,14 +81,6 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        		Azienda toLoadOspitante = new Azienda();
 	        		toLoadOspitante.setIdAzienda(evento.getAziendaOspitanteEvento().getIdAzienda());
 	        		Azienda aziendaOspitante = transaction.load(toLoadOspitante);
-	        		if(aziendaOspitante == null) {
-	        			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-	    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda il cui Id è associato al vino inviato non esiste");
-	    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " L'azienda il cui Id è associato al vino inviato non esiste");
-	    				risposta.setEsito(esito);
-	    				transaction.rollback();
-	    				return risposta;
-	        		}
 	        		if(evento.getAziendaOspitanteEventoInt() == null){
 		        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
 		        		aziendaVinoOspitante.setIdAzienda(aziendaOspitante.getIdAzienda());
@@ -106,7 +98,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    					if(idVino != null && !idVino.equals("")){
 	    						Vino vinoToLoad = new Vino();
 	    						vinoToLoad.setIdVino(idVino);
-	    						Vino vino = (Vino)transaction.load(vinoToLoad);
+	    						Vino vino = transaction.load(vinoToLoad);
 	    						if(vino != null) {
 	    							List<Evento> eventiVino = vino.getEventiVino();
 	    							if(eventiVino == null) {
