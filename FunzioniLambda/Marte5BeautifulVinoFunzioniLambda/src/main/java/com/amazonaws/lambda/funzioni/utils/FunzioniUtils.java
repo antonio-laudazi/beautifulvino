@@ -225,14 +225,15 @@ public class FunzioniUtils {
 		
 		for (Iterator<VinoUtente> iterator = vini.iterator(); iterator.hasNext();) {
 			VinoUtente vinoUtente = iterator.next();
-			
-			Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
-			
-			if(vino != null) {
-				Azienda nuovaAzienda = new Azienda();
-				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				aziende1.add(nuovaAzienda);
+			if (vinoUtente.getIdVino()!= null){
+				Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
+				
+				if(vino != null) {
+					Azienda nuovaAzienda = new Azienda();
+					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+					aziende1.add(nuovaAzienda);
+				}
 			}
 			
 		}
