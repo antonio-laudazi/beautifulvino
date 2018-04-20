@@ -79,7 +79,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        		//gestione aziende
 	        		//OSPITANTE
 	        		Azienda toLoadOspitante = new Azienda();
-	        		if (evento.getAziendaOspitanteEvento() != null) {
+	        		if (evento.getAziendaOspitanteEvento() != null && evento.getAziendaOspitanteEvento().getIdAzienda() != null) {
 		        		toLoadOspitante.setIdAzienda(evento.getAziendaOspitanteEvento().getIdAzienda());
 		        		Azienda aziendaOspitante = transaction.load(toLoadOspitante);
 		        		if(evento.getAziendaOspitanteEventoInt() == null){
