@@ -78,11 +78,11 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 				return risposta;
 	        } else {
 		        	String idVino = vino.getIdVino();
-		        	
+		        	boolean newVino = false;
 		        	if(idVino == null || idVino.equals("")) {
-	        			//insert
+	        			newVino = true;
 		        		idVino = FunzioniUtils.getEntitaId();
-		        } 
+		            } 
 		        	idVinoRisposta = idVino;
 	        		vino.setIdVino(idVino);
 	        		
@@ -92,7 +92,6 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 	        		//Azienda azienda = mapper.load(Azienda.class, vino.getAziendaVino().getIdAzienda());
 
 	        		if(vino.getAziendaVinoInt() == null){
-	        			
 		        		AziendaVino aziendaVino = new AziendaVino();
 		        		aziendaVino.setIdAzienda(azienda.getIdAzienda());
 		        		aziendaVino.setNomeAzienda(azienda.getNomeAzienda());
@@ -113,14 +112,16 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 				}
 		        
 		        // a questo punto dovrei inserire il vino tra quelli della lista dell'azienda
-		        VinoAzienda vinoPerAzienda = new VinoAzienda();
-		        	vinoPerAzienda.setIdVino(vino.getIdVino());
-		        	vinoPerAzienda.setNomeVino(vino.getNomeVino());
-		        	vinoPerAzienda.setAnnoVino(vino.getAnnoVino());
-		        	if(azienda.getViniAziendaInt() == null) {
-		        		azienda.setViniAziendaInt(new ArrayList<VinoAzienda>());
-		        	}
-		        azienda.getViniAziendaInt().add(vinoPerAzienda);
+		        if (newVino) {
+			        VinoAzienda vinoPerAzienda = new VinoAzienda();
+			        	vinoPerAzienda.setIdVino(vino.getIdVino());
+			        	vinoPerAzienda.setNomeVino(vino.getNomeVino());
+			        	vinoPerAzienda.setAnnoVino(vino.getAnnoVino());
+			        	if(azienda.getViniAziendaInt() == null) {
+			        		azienda.setViniAziendaInt(new ArrayList<VinoAzienda>());
+			        	}
+			        azienda.getViniAziendaInt().add(vinoPerAzienda);
+		        }
 		        try {
 		        		transaction.save(azienda);
 				} catch (Exception e) {
