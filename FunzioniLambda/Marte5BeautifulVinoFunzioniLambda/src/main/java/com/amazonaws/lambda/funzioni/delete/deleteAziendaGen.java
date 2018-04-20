@@ -67,9 +67,11 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 	        			if (listaVini != null) {
 		        			for (VinoAzienda av : listaVini) {
 		        				Vino vinoDaCanc = mapper.load(Vino.class, av.getIdVino());
-		        				vinoDaCanc.setAziendaVinoInt(null);
-		        				//Dovrei cancellare il vino???
-		        				mapper.save(vinoDaCanc);
+		        				if (vinoDaCanc != null) {
+			        				vinoDaCanc.setAziendaVinoInt(null);
+			        				//Dovrei cancellare il vino???
+			        				mapper.save(vinoDaCanc);
+		        				}
 		        			}
 	        			}
 	        			//cancello il collegamento con gli eventi
@@ -80,7 +82,7 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 		        					//devo cancellare l'evento???
 			        				if (eventoDaCanc != null) {
 			        				AziendaEvento aziendaOsp = eventoDaCanc.getAziendaOspitanteEventoInt();
-			        				if (aziendaOsp.getIdAzienda() == aziendaDaCancellare.getIdAzienda() ) {	        				
+			        				if (aziendaOsp != null && aziendaOsp.getIdAzienda() == aziendaDaCancellare.getIdAzienda() ) {	        				
 			        					eventoDaCanc.setAziendaOspitanteEventoInt(null);
 			        					mapper.save(eventoDaCanc);
 			        				}
@@ -91,15 +93,13 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 	        			//cancello l'azienda
 						mapper.delete(aziendaDaCancellare);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_CANCELLAZIONE);
 		    				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + " Eccezione nell'operazione interna di salvataggio");
 		    				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_CANCELLAZIONE + e.getMessage());
 		    				risposta.setEsito(esito);
 		    				return risposta;
-					}
-	        			
+					}    			
 	        			//cancello eventuale immagine dell'evento
 	        			String immagineAziendaUrl = aziendaDaCancellare.getUrlImmagineAzienda();
 	        			if(immagineAziendaUrl != null) {

@@ -70,17 +70,19 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        			//cancello il collegamneto con l'azienda
 	        			AziendaVino aziendaVino = vinoDaCancellare.getAziendaVinoInt();
 	        			Azienda aziendaVinoCanc = mapper.load(Azienda.class,aziendaVino.getIdAzienda());
-	        			List<VinoAzienda> listaViniAzienda = aziendaVinoCanc.getViniAziendaInt();
-	        			if (listaViniAzienda != null) {
-		        			VinoAzienda vcanc = null; 
-		        			for (VinoAzienda v : listaViniAzienda) {
-		        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino()) ) {
-		        					vcanc = v;	        					
-		        				}
-		        			}
-		        			if (vcanc != null) listaViniAzienda.remove(vcanc);
+	        			if (aziendaVinoCanc != null) {
+		        			List<VinoAzienda> listaViniAzienda = aziendaVinoCanc.getViniAziendaInt();
+		        			if (listaViniAzienda != null) {
+			        			VinoAzienda vcanc = null; 
+			        			for (VinoAzienda v : listaViniAzienda) {
+			        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino()) ) {
+			        					vcanc = v;	        					
+			        				}
+			        			}
+			        			if (vcanc != null) listaViniAzienda.remove(vcanc);
+		        			}	        			
+		        			mapper.save(aziendaVinoCanc);
 	        			}
-	        			mapper.save(aziendaVinoCanc);
 	        			//cancello il collegamneto con gli eventi
 	        			List<EventoVino> listaEventi = vinoDaCancellare.getEventiVinoInt();
 	        			if (listaEventi != null) {
@@ -89,9 +91,11 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 		        				if (eventoDaCanc != null) {
 			        				List<VinoEvento> listaViniEvento = eventoDaCanc.getViniEventoInt();
 			        				VinoEvento vecanc = null;
-			        				for (VinoEvento v : listaViniEvento) {
-				        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino())) {
-				        					vecanc = v;
+			        				if (listaViniEvento != null) {
+				        				for (VinoEvento v : listaViniEvento) {
+					        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino())) {
+					        					vecanc = v;
+					        				}
 				        				}
 			        				}
 			        				if (vecanc != null)listaViniEvento.remove(vecanc);
@@ -106,9 +110,11 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 		        				Utente utenteDaCanc = mapper.load(Utente.class, u.getIdUtente());
 		        				List<VinoUtente> listaViniUtente = utenteDaCanc.getViniUtenteInt();
 		        				VinoUtente vucanc = null;
-		        				for (VinoUtente v : listaViniUtente) {
-			        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino())) {
-			        					vucanc = v;
+		        				if (listaViniUtente != null) {
+			        				for (VinoUtente v : listaViniUtente) {
+				        				if (v.getIdVino().equals(vinoDaCancellare.getIdVino())) {
+				        					vucanc = v;
+				        				}
 			        				}
 		        				}
 		        				if (vucanc != null)listaViniUtente.remove(vucanc);
@@ -141,7 +147,6 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        	
 	        }
 	        risposta.setEsito(esito);
-	        // TODO: implement your handler
 	        return risposta;
 	}
 

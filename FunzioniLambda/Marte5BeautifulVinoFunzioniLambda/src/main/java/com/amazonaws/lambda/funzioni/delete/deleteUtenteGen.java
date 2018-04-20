@@ -72,9 +72,11 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 		        				if (eventoDaCanc != null) { 
 			        				List<UtenteEvento> listaUtenteEvento = eventoDaCanc.getIscrittiEventoInt();
 			        				UtenteEvento vucanc = null;
-			        				for (UtenteEvento v : listaUtenteEvento) {
-				        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
-				        					vucanc = v;
+			        				if (listaUtenteEvento != null) {
+				        				for (UtenteEvento v : listaUtenteEvento) {
+					        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
+					        					vucanc = v;
+					        				}
 				        				}
 			        				}
 			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
@@ -107,9 +109,11 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 			        				if (vinoDaCanc != null) {
 			        				List<UtenteVino> listaUtenteVino = vinoDaCanc.getUtentiVinoInt();
 			        				UtenteVino vucanc = null;
-			        				for (UtenteVino v : listaUtenteVino) {
-				        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
-				        					vucanc = v;
+			        				if (listaUtenteVino != null) {
+				        				for (UtenteVino v : listaUtenteVino) {
+					        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
+					        					vucanc = v;
+					        				}
 				        				}
 			        				}
 			        				if (vucanc != null)listaUtenteVino.remove(vucanc);
@@ -125,9 +129,11 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 		        				if (utenteDaCanc != null) {
 			        				List<UtenteUtente> listaUtenteUtente = utenteDaCanc.getUtentiUtenteInt();
 			        				UtenteUtente vucanc = null;
-			        				for (UtenteUtente v : listaUtenteUtente) {
-				        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
-				        					vucanc = v;
+			        				if (listaUtenteUtente != null) {
+				        				for (UtenteUtente v : listaUtenteUtente) {
+					        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
+					        					vucanc = v;
+					        				}
 				        				}
 			        				}
 			        				if (vucanc != null)listaUtenteUtente.remove(vucanc);

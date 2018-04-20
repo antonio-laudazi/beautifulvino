@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -75,10 +76,12 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        					List<EventoAzienda> listaEventiAzienda = aziendaDaCanc.getEventiAziendaInt();
 	    	        			if (listaEventiAzienda != null) {
 	    		        			EventoAzienda vcanc = null; 
-	    		        			for (EventoAzienda a : listaEventiAzienda) {
-	    		        				if (a.getIdEvento().equals(eventoDaCancellare.getIdEvento()) ) {
-	    		        					vcanc = a;	        					
-	    		        				}
+	    		        			if (listaEventiAzienda != null) {
+		    		        			for (EventoAzienda a : listaEventiAzienda) {
+		    		        				if (a.getIdEvento().equals(eventoDaCancellare.getIdEvento()) ) {
+		    		        					vcanc = a;	        					
+		    		        				}
+		    		        			}
 	    		        			}
 	    		        			if (vcanc != null) listaEventiAzienda.remove(vcanc);
 	    	        			}
@@ -92,9 +95,11 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		        				if (vinoDaCanc != null) {
 			        				List<EventoVino> listaViniEvento = vinoDaCanc.getEventiVinoInt();
 			        				EventoVino vecanc = null;
-			        				for (EventoVino v : listaViniEvento) {
-				        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
-				        					vecanc = v;
+			        				if (listaViniEvento != null) {
+				        				for (EventoVino v : listaViniEvento) {
+					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+					        					vecanc = v;
+					        				}
 				        				}
 			        				}
 			        				if (vecanc != null)listaViniEvento.remove(vecanc);
@@ -110,9 +115,11 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		        				if (utenteDaCanc != null) {
 			        				List<EventoUtente> listaUtenteEvento = utenteDaCanc.getEventiUtenteInt();
 			        				EventoUtente vucanc = null;
-			        				for (EventoUtente v : listaUtenteEvento) {
-				        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
-				        					vucanc = v;
+			        				if (listaUtenteEvento != null) {
+				        				for (EventoUtente v : listaUtenteEvento) {
+					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+					        					vucanc = v;
+					        				}
 				        				}
 			        				}
 			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
@@ -145,7 +152,6 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		}
         
 		risposta.setEsito(esito);
-        // TODO: implement your handler
         return risposta;
     }
 }

@@ -157,11 +157,12 @@ public class FunzioniUtils {
 		for (Iterator<Vino> iterator = vini.iterator(); iterator.hasNext();) {
 			Vino vino = iterator.next();
 			AziendaVino aziendaVino = vino.getAziendaVinoInt();
-			
-			Azienda nuovaAzienda = new Azienda();
-			nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
-			nuovaAzienda.setNomeAzienda(aziendaVino.getNomeAzienda());
-			aziende1.add(nuovaAzienda);
+			if (aziendaVino != null) {
+				Azienda nuovaAzienda = new Azienda();
+				nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
+				nuovaAzienda.setNomeAzienda(aziendaVino.getNomeAzienda());
+				aziende1.add(nuovaAzienda);
+			}
 		}
 		
 		for (Iterator<Azienda> iterator = aziende1.iterator(); iterator.hasNext();) {
@@ -169,8 +170,10 @@ public class FunzioniUtils {
 			List<Vino> viniAziendaNuova = new ArrayList<>();
 			for (Iterator<Vino> iterator2 = vini.iterator(); iterator2.hasNext();) {
 				Vino vino = iterator2.next();
-				if(vino.getAziendaVinoInt().getIdAzienda().equals(azienda.getIdAzienda())) {
-					viniAziendaNuova.add(vino);
+				if (vino.getAziendaVinoInt() != null) {
+					if(vino.getAziendaVinoInt().getIdAzienda().equals(azienda.getIdAzienda())) {
+						viniAziendaNuova.add(vino);
+					}
 				}
 			}
 			azienda.setViniAzienda(viniAziendaNuova);
@@ -187,9 +190,11 @@ public class FunzioniUtils {
 			VinoEvento vino = iterator.next();
 			
 			Azienda nuovaAzienda = new Azienda();
-			nuovaAzienda.setIdAzienda(vino.getIdAziendaVino());
-			nuovaAzienda.setNomeAzienda(vino.getNomeAziendaVino());
-			aziende1.add(nuovaAzienda);
+			if (vino.getIdAziendaVino()!= null && vino.getNomeAziendaVino() != null) {
+				nuovaAzienda.setIdAzienda(vino.getIdAziendaVino());
+				nuovaAzienda.setNomeAzienda(vino.getNomeAziendaVino());
+				aziende1.add(nuovaAzienda);
+			}
 		}
 		
 		for (Iterator<Azienda> iterator = aziende1.iterator(); iterator.hasNext();) {

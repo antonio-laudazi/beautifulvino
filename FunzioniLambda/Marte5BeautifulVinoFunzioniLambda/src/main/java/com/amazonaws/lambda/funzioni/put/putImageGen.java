@@ -203,7 +203,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 		client.putObject(request);
         }
         risposta.setEsito(esito);
-        risposta.setImageUrl(FunzioniUtils.AMAZON_S3_BASE_URL + bucketName + "/" + filename);
+        risposta.setImageUrl(FunzioniUtils.AMAZON_S3_BASE_URL + bucketName + "/" + filename + "." + format);
         return risposta;
     }
 
