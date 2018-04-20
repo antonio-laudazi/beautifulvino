@@ -158,10 +158,12 @@ public class FunzioniUtils {
 			Vino vino = iterator.next();
 			AziendaVino aziendaVino = vino.getAziendaVinoInt();
 			if (aziendaVino != null) {
+				if (aziendaVino.getIdAzienda() != null) {
 				Azienda nuovaAzienda = new Azienda();
 				nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
 				nuovaAzienda.setNomeAzienda(aziendaVino.getNomeAzienda());
 				aziende1.add(nuovaAzienda);
+				}
 			}
 		}
 		
@@ -229,10 +231,12 @@ public class FunzioniUtils {
 				Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
 				
 				if(vino != null) {
-					Azienda nuovaAzienda = new Azienda();
-					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-					aziende1.add(nuovaAzienda);
+					if (vino.getAziendaVinoInt() != null) {
+						Azienda nuovaAzienda = new Azienda();
+						nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+						nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+						aziende1.add(nuovaAzienda);
+					}
 				}
 			}
 			
@@ -274,10 +278,12 @@ public class FunzioniUtils {
 			Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
 			
 			if(vino != null) {
-				Azienda nuovaAzienda = new Azienda();
-				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				aziende1.add(nuovaAzienda);
+				if (vino.getAziendaVinoInt() != null) {
+					Azienda nuovaAzienda = new Azienda();
+					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+					aziende1.add(nuovaAzienda);
+				}
 			}
 			
 		}
@@ -318,11 +324,13 @@ public class FunzioniUtils {
 			Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
 			
 			if(vino != null) {
-				Azienda nuovaAzienda = new Azienda();
-				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				if(!contains(aziende1, nuovaAzienda)) {
-					aziende1.add(nuovaAzienda);
+				if (vino.getAziendaVinoInt()!= null) {
+					Azienda nuovaAzienda = new Azienda();
+					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+					if(!contains(aziende1, nuovaAzienda)) {
+						aziende1.add(nuovaAzienda);
+					}
 				}
 			}
 		}

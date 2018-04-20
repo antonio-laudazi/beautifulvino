@@ -79,15 +79,16 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        		//gestione aziende
 	        		//OSPITANTE
 	        		Azienda toLoadOspitante = new Azienda();
-	        		toLoadOspitante.setIdAzienda(evento.getAziendaOspitanteEvento().getIdAzienda());
-	        		Azienda aziendaOspitante = transaction.load(toLoadOspitante);
-	        		if(evento.getAziendaOspitanteEventoInt() == null){
-		        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
-		        		aziendaVinoOspitante.setIdAzienda(aziendaOspitante.getIdAzienda());
-		        		aziendaVinoOspitante.setInfoAzienda(aziendaOspitante.getInfoAzienda());
-		        		evento.setAziendaOspitanteEventoInt(aziendaVinoOspitante);
+	        		if (evento.getAziendaOspitanteEvento() != null) {
+		        		toLoadOspitante.setIdAzienda(evento.getAziendaOspitanteEvento().getIdAzienda());
+		        		Azienda aziendaOspitante = transaction.load(toLoadOspitante);
+		        		if(evento.getAziendaOspitanteEventoInt() == null){
+			        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
+			        		aziendaVinoOspitante.setIdAzienda(aziendaOspitante.getIdAzienda());
+			        		aziendaVinoOspitante.setInfoAzienda(aziendaOspitante.getInfoAzienda());
+			        		evento.setAziendaOspitanteEventoInt(aziendaVinoOspitante);
+		        		}
 	        		}
-	        		
 
 	        		
 	        		//gestione vini
