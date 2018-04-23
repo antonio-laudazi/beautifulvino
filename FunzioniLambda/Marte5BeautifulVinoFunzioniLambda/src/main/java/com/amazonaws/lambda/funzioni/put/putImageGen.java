@@ -153,11 +153,18 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					return risposta;
 			    }
 				
-			}else {
+			}else if (format.equalsIgnoreCase("jpg") || format.equalsIgnoreCase("jpeg")){
 				//l'immagine è un jpg
 				try {
-				BufferedImage image = null;
-				image = ImageIO.read(bis);
+					
+				BufferedImage firstImage = null;
+				firstImage = ImageIO.read(bis);
+				
+				BufferedImage image = new BufferedImage(firstImage.getWidth(),
+		        firstImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+				
+				System.out.println(image.getType());
+				
 				System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
 				Iterator<ImageWriter>writers = ImageIO.getImageWritersByFormatName(format);
 				ImageWriter writer = writers.next();
@@ -196,6 +203,11 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					risposta.setEsito(esito);
 					return risposta;
 				}
+	    }else {
+	    	esito.setMessage("è possibile caricare solo png e jpg");
+	    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+	    	risposta.setEsito(esito);
+			return risposta;
 	    }
 		//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
 		PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);

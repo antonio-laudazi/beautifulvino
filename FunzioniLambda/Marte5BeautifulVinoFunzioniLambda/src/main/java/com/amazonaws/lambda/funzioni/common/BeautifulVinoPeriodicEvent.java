@@ -3,6 +3,7 @@ package com.amazonaws.lambda.funzioni.common;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -24,7 +25,7 @@ import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Evento.VinoEvento;
 
-public class BeautifulVinoPeriodicEvent implements RequestHandler<Integer, String> {
+public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Object>, String> {
 	
 	private static final String SMTP_HOST_NAME = "out.virgilio.it";
     private static final int SMTP_HOST_PORT = 465;//465,587,25
@@ -32,7 +33,7 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Integer, Strin
     private static final String SMTP_AUTH_PWD  = "biscotti";
     
 	@Override
-	public String handleRequest(Integer input, Context context) {
+	public String handleRequest(Map<String,Object> input, Context context) {
 		RichiestaGetGenerica rg = new RichiestaGetGenerica();
 		BeautifulVinoGet g = new BeautifulVinoGet();
 		rg.setFunctionName("getEventiGen");
