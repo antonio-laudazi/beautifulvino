@@ -160,8 +160,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 				BufferedImage firstImage = null;
 				firstImage = ImageIO.read(bis);
 				
-				BufferedImage image = new BufferedImage(firstImage.getWidth(),
-		        firstImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+				BufferedImage image = new BufferedImage(firstImage.getWidth(),firstImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 				
 				System.out.println(image.getType());
 				
@@ -252,7 +251,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	
 	private static BufferedImage resize(BufferedImage img, int height, int width) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resized.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
