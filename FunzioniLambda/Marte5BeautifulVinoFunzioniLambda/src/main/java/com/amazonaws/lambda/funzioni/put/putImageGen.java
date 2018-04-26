@@ -82,7 +82,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         AmazonS3 client = null;
         
         try {
-        		client = AmazonS3ClientBuilder.standard().build();
+        		client = AmazonS3ClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
@@ -156,11 +156,23 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			}else if (format.equalsIgnoreCase("jpg") || format.equalsIgnoreCase("jpeg")){
 				//l'immagine è un jpg
 				try {
-					
+				
+//					Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+//			        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+//			        Graphics2D g2d = resized.createGraphics();
+//			        g2d.drawImage(tmp, 0, 0, null);
+//			        g2d.dispose();
+//			        return resized;
 				BufferedImage firstImage = null;
 				firstImage = ImageIO.read(bis);
 				
+				System.out.println(firstImage.getType()); 
 				BufferedImage image = new BufferedImage(firstImage.getWidth(),firstImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = image.createGraphics();
+				
+				
+		        g.drawImage(firstImage, 0, 0, null);
+		        g.dispose();
 				
 				System.out.println(image.getType());
 				

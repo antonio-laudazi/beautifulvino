@@ -44,8 +44,8 @@ public class getTest {
 //        input.setIdUtente("1ba3b3c5-2b98-46c5-a670-c5eb25131a11");
         
         input.setFunctionName("getEventiGen");
-//        input.setIdUltimoEvento("1520605230123");
-//        input.setDataUltimoEvento(1523283131000L);
+        input.setIdUltimoEvento("1524731541545");
+        input.setDataUltimoEvento(1544259360000L);
         input.setIdUtente("b2011f52-37bf-4f05-adfa-c8bfa4e7f02e");
         
         

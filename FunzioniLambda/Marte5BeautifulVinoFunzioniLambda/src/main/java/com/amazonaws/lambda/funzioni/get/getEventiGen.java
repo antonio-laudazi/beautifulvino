@@ -1,5 +1,6 @@
 package com.amazonaws.lambda.funzioni.get;
 
+import java.nio.file.attribute.AttributeView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,16 +88,25 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			
 			if((idUltimoEvento != "" || !idUltimoEvento.equals(null)) && dataUltimoEvento != 0) {
 				//configuro la paginazione
-				
-				Map<String, AttributeValue> exclusiveStartKey = new HashMap<>();
+				Map<String, AttributeValue> attribute = new HashMap<>();
 				AttributeValue av1 = new AttributeValue();
-				av1.setS("" + idUltimoEvento);
-				AttributeValue av2 = new AttributeValue();
-				av2.setN("" + dataUltimoEvento);
-				exclusiveStartKey.put("idEvento", av1);
-				exclusiveStartKey.put("dataEvento", av2);
+				av1.setS(dataUltimoEvento);
 				
-				expr.setExclusiveStartKey(exclusiveStartKey);
+				attribute.put("dataEvento", av1);
+				expr.set(attribute);
+				
+				String filter = "idEvento = " + "id";		
+				expr.setFilterExpression(filter);
+				
+//				Map<String, AttributeValue> exclusiveStartKey = new HashMap<>();
+//				AttributeValue av1 = new AttributeValue();
+//				av1.setS("a");
+//				AttributeValue av2 = new AttributeValue();
+//				av2.setN("" + dataUltimoEvento);
+//				exclusiveStartKey.put("orarioEvento", av1);
+//				exclusiveStartKey.put("dataEvento", av2);
+//				
+//				expr.setExclusiveStartKey(exclusiveStartKey);
 				//qexpr.setExclusiveStartKey(exclusiveStartKey);
 			}
 			//ottengo la 'pagina'
