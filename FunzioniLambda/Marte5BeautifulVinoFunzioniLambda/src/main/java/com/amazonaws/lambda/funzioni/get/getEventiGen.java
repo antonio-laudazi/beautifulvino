@@ -50,7 +50,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
         AmazonDynamoDB client = null;
         int scannedCount = 0;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi ");
@@ -62,6 +62,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			DynamoDBScanExpression expr = new DynamoDBScanExpression();
+			expr.withIndexName("orarioEvento-dataEvento-index");
 			//DynamoDBQueryExpression<Evento> qexpr = new DynamoDBQueryExpression();
 
 			if(idUtente == null || idUtente.equals("")) {
