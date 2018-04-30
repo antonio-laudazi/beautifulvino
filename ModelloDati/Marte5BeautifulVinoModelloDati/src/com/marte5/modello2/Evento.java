@@ -50,7 +50,8 @@ public class Evento {
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
 	private List<Azienda> aziendeViniEvento;
-	private String orarioEvento;
+	private String orarioEvento; //non è l'orario (l'orario è presente nella data), questa variabile serve come 
+								//partition key per l'ordinamento degli eventi, è sempre uguale ad "a"
 	/**
 	 * @return the idEvento
 	 */
