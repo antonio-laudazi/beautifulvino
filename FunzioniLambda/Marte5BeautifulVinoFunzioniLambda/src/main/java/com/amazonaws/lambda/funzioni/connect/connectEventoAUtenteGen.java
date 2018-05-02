@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.amazonaws.lambda.funzioni.common.BeautifulVinoAcquista;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
+import com.marte5.modello.richieste.acquista.RichiestaAcquistaGenerica;
+import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
+import com.marte5.modello.risposte.Risposta;
+import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Utente.EventoUtente;
-import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
-import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
 
 public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectGenerica, RispostaConnectGenerica> {
 
@@ -25,13 +29,13 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     public RispostaConnectGenerica handleRequest(RichiestaConnectGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
         
-        RispostaConnectGenerica risposta = getRisposta(input);
+        RispostaConnectGenerica risposta = getRisposta(input, context);
 
         // TODO: implement your handler
         return risposta;
     }
     
-    private RispostaConnectGenerica getRisposta(RichiestaConnectGenerica input) {
+    private RispostaConnectGenerica getRisposta(RichiestaConnectGenerica input, Context context) {
     		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
     		Utente utente = null;
     		Evento evento = null;
@@ -44,7 +48,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		
         AmazonDynamoDB client = null;
     		try {
-    			client = AmazonDynamoDBClientBuilder.standard().build();
+    			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
     		} catch (Exception e1) {
     			// TODO Auto-generated catch block
     			e1.printStackTrace();
@@ -55,16 +59,15 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		if(client != null) {
     			DynamoDBMapper mapper = new DynamoDBMapper(client);
     			evento = mapper.load(Evento.class, idEvento, dataEvento);
-    			
-    			if(idEvento == null || idEvento.equals("")) {
+    			if(evento == null) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idEvento nullo, non posso procedere");
+    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " evento non trovato sul DB, non posso procedere");
     		        risposta.setEsito(esito);
     		        return risposta;
     			}
-    			if(dataEvento == 0L) {
+    			if(idEvento == null || idEvento.equals("")) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " dataEvento nulla, non posso procedere");
+    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idEvento nullo, non posso procedere");
     		        risposta.setEsito(esito);
     		        return risposta;
     			}
@@ -125,7 +128,12 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         					daRimuovere.setStatoEvento(statoEvento);
         					eventiUtente.add(daRimuovere);
         				}
-        				//email
+    					Esito out = sendMail(utente.getIdUtente(), utente.getNomeUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+    					if (out.getCodice() != 100) {
+    						esito = out;
+    	    		        risposta.setEsito(esito);
+    	    		        return risposta;
+    					}
     				}
     				
     			} else {
@@ -138,12 +146,18 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 	    		        return risposta;
     				} else {
     					//6
+    					Esito out =sendMail(utente.getIdUtente(), utente.getNomeUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+    					if (out.getCodice() != 100) {
+    						esito = out;
+    	    		        risposta.setEsito(esito);
+    	    		        return risposta;
+    					}
     					EventoUtente eu = new EventoUtente();
     					eu.setIdEvento(idEvento);
     					eu.setStatoEvento(statoEvento);
     					eu.setDataEvento(dataEvento);
     					eventiUtente.add(eu);
-    					//email
+    					
     					//se lo stato è "Aquistato" devo aggiungere un utente agli utenti iscritti all'evento
     				}
     			}
@@ -186,5 +200,16 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     			evento.setIscrittiEventoInt(utentiIscritti);
     			mapper.save(evento);
     		}
+    }
+    private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num, Context context) {
+    	RichiestaAcquistaGenerica r = new RichiestaAcquistaGenerica();
+		BeautifulVinoAcquista c = new BeautifulVinoAcquista();
+		r.setIdUtente(idU);
+		r.setNomeUtente(nomeU);
+		r.setIdEvento(idE);
+		r.setNomeEvento(nomeE);
+		r.setNumeroPartecipanti(num);
+		Risposta out = c.handleRequest(r, context);
+		return out.getEsito();
     }
 }

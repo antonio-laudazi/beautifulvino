@@ -18,6 +18,7 @@ import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
+import com.marte5.modello2.Evento.AziendaEvento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Vino;
@@ -141,14 +142,16 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			evento.setAziendeViniEvento(ViniAzienda);
 			
 			//gestione aziende (fornitrice-ospitante)
-			String idAziendaOspitante = evento.getAziendaOspitanteEventoInt().getIdAzienda();
-			if(idAziendaOspitante != null && !idAziendaOspitante.equals("")) {
-				Azienda aziendaOspitante = mapper.load(Azienda.class, idAziendaOspitante);
-				if(aziendaOspitante != null) {
-					evento.setAziendaOspitanteEvento(aziendaOspitante);
+			AziendaEvento ae = evento.getAziendaOspitanteEventoInt();
+			if (ae != null) {
+				String idAziendaOspitante = evento.getAziendaOspitanteEventoInt().getIdAzienda();
+				if(idAziendaOspitante != null && !idAziendaOspitante.equals("")) {
+					Azienda aziendaOspitante = mapper.load(Azienda.class, idAziendaOspitante);
+					if(aziendaOspitante != null) {
+						evento.setAziendaOspitanteEvento(aziendaOspitante);
+					}
 				}
 			}
-			
 			//gestione Badge
 			com.marte5.modello2.Evento.BadgeEvento badgeEvento = evento.getBadgeEventoInt();
 			if(badgeEvento != null) {

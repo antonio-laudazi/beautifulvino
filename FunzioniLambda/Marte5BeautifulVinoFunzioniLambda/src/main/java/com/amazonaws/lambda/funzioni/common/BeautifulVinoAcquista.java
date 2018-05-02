@@ -34,9 +34,10 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
         String nomeE = input.getNomeEvento();
         String idE = input.getIdEvento();
         int num = input.getNumeroPartecianti();
-        
+        if (nomeU == null) nomeU = "utente senza nome";
+        if (nomeE == null) nomeE = "evento senza nome";
         if (nomeU != null && idU != null && nomeE != null && idE != null) {
-	        String testo = "l'utente " + nomeU + " (id:" + idU +") ha acquistato l'evento " + nomeE + " (id: " + idE + ")./n Numero partecipanti " + num;
+	        String testo = "l'utente " + nomeU + " (id:" + idU +") ha acquistato l'evento " + nomeE + " (id: " + idE + ").\n Numero partecipanti " + num;
 	        String oggetto = "Acquisto evento " + nomeE;
 	        sendMail(testo, oggetto);
         }else {

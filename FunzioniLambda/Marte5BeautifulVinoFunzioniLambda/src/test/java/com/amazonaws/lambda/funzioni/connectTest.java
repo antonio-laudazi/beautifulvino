@@ -32,15 +32,22 @@ public class connectTest {
 //        input.setFunctionName("connectBadgeAUtenteGen");
 //        input.setIdUtente("b6118563-1486-4448-8994-c121b60534ea");
         
-        input.setFunctionName("connectUtentiAUtenteGen");
-        input.setIdUtente("1521197385816");
-        List<Utente> utenti = new ArrayList<>();
-        Utente u =new Utente();
-        u.setIdUtente("1522320091366");
-        utenti.add(u);
-        input.setUtenti(utenti);
-        input.setStatoVariazione("A");
+        input.setFunctionName("connectEventoAUtenteGen");
+        input.setIdUtente("1522320091366");
+        input.setIdEvento("1525095919469");
+        input.setStatoEvento("A");
+        input.setDataEvento( 0l);
+        input.setNumeroPartecipanti(1);
         
+//        {
+//        	  "idEvento" : "1524471967673",
+//        	  "functionName" : "connectEventoAUtenteGen",
+//        	  "nomeUtente" : "eu-central-1:85bcc1cc-39b2-451d-b5ca-12b52936dd21",
+//        	  "idUtente" : "eu-central-1:85bcc1cc-39b2-451d-b5ca-12b52936dd21",
+//        	  "statoEvento" : "A",
+//        	  "dataEvento" : 1525194000000,
+//        	  "numeroPartecipanti" : 1
+//        	}
         
         /*"functionName":"connectViniAUtenteGen",
 	"idVino":"1513240022473",
