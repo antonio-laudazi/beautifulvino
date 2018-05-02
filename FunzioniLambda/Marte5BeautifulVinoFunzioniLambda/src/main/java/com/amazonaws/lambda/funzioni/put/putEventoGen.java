@@ -3,6 +3,7 @@ package com.amazonaws.lambda.funzioni.put;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amazonaws.lambda.funzioni.get.getProvinceGen;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.regions.Regions;
@@ -82,12 +83,20 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        		if (evento.getAziendaOspitanteEvento() != null && evento.getAziendaOspitanteEvento().getIdAzienda() != null) {
 		        		toLoadOspitante.setIdAzienda(evento.getAziendaOspitanteEvento().getIdAzienda());
 		        		Azienda aziendaOspitante = transaction.load(toLoadOspitante);
-		        		if(evento.getAziendaOspitanteEventoInt() == null){
-			        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
-			        		aziendaVinoOspitante.setIdAzienda(aziendaOspitante.getIdAzienda());
-			        		aziendaVinoOspitante.setInfoAzienda(aziendaOspitante.getInfoAzienda());
-			        		evento.setAziendaOspitanteEventoInt(aziendaVinoOspitante);
-		        		}
+		        		if (aziendaOspitante != null) {
+			        		if(evento.getAziendaOspitanteEventoInt() == null){
+				        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
+				        		aziendaVinoOspitante.setIdAzienda(aziendaOspitante.getIdAzienda());
+				        		aziendaVinoOspitante.setInfoAzienda(aziendaOspitante.getInfoAzienda());
+				        		evento.setAziendaOspitanteEventoInt(aziendaVinoOspitante);
+			        		}
+			        		if (evento.getIndirizzoEvento() == null) evento.setIndirizzoEvento(aziendaOspitante.getIndirizzoAzienda());
+			        		if (evento.getTelefonoEvento() == null) evento.setTelefonoEvento(aziendaOspitante.getTelefonoAzienda());
+			        		if (evento.getEmailEvento() == null) evento.setEmailEvento(aziendaOspitante.getEmailAzienda());
+			        		if (evento.getLatitudineEvento() == 0) evento.setLatitudineEvento(aziendaOspitante.getLatitudineAzienda());
+			        		if (evento.getLongitudineEvento() == 0) evento.setLongitudineEvento(aziendaOspitante.getLongitudineAzienda());
+			        		if (evento.getCittaEvento() == null) evento.setCittaEvento(aziendaOspitante.getCittaAzienda());
+			        	}
 	        		}
 
 	        		
