@@ -32,8 +32,9 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     }
     
     private RispostaConnectGenerica getRisposta(RichiestaConnectGenerica input) {
-    	RispostaConnectGenerica risposta = new RispostaConnectGenerica();
-
+    		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
+    		Utente utente = null;
+    		Evento evento = null;
     		Esito esito = FunzioniUtils.getEsitoPositivo();
     		
     		String idUtente = input.getIdUtente();
@@ -53,6 +54,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		}
     		if(client != null) {
     			DynamoDBMapper mapper = new DynamoDBMapper(client);
+    			evento = mapper.load(Evento.class, idEvento, dataEvento);
     			
     			if(idEvento == null || idEvento.equals("")) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
@@ -79,7 +81,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		        return risposta;
     			}
     			
-    			Utente utente = mapper.load(Utente.class, idUtente);
+    			utente = mapper.load(Utente.class, idUtente);
     			if(utente == null) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
     		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " utente non trovato sul DB, non posso procedere");
@@ -123,6 +125,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         					daRimuovere.setStatoEvento(statoEvento);
         					eventiUtente.add(daRimuovere);
         				}
+        				//email
     				}
     				
     			} else {
@@ -140,7 +143,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     					eu.setStatoEvento(statoEvento);
     					eu.setDataEvento(dataEvento);
     					eventiUtente.add(eu);
-    					
+    					//email
     					//se lo stato è "Aquistato" devo aggiungere un utente agli utenti iscritti all'evento
     				}
     			}
@@ -150,9 +153,8 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     			
     			try {
     				mapper.save(utente);
-    				addUtenteIscritto(idEvento, dataEvento, idUtente, mapper);
+    				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, mapper);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Errore nell'aggiunta dell'evento tra i preferiti dell'utente ");
@@ -164,9 +166,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         return risposta;
     }
     
-    private void addUtenteIscritto(String idEvento, long dataEvento, String idUtente, DynamoDBMapper mapper) {
-    	
-    		Evento evento = mapper.load(Evento.class, idEvento, dataEvento);
+    private void addUtenteIscritto(String idEvento, long dataEvento, String idUtente,Evento evento, DynamoDBMapper mapper) {
     		if(evento != null) {
     			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
     			if(utentiIscritti == null) {

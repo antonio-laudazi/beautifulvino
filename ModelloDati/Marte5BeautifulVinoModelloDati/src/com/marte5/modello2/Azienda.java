@@ -22,7 +22,6 @@ public class Azienda {
 	private String zonaAzienda;
 	private String nomeAzienda;
 	private String infoAzienda;
-	private String descrizioneAzienda;
 	private String cittaAzienda;
 	private String regioneAzienda;
 	private String indirizzoAzienda;
@@ -109,19 +108,6 @@ public class Azienda {
 	 */
 	public void setInfoAzienda(String infoAzienda) {
 		this.infoAzienda = infoAzienda;
-	}
-	/**
-	 * @return the descrizioneAzienda
-	 */
-	@DynamoDBAttribute(attributeName="descrizioneAzienda")
-	public String getDescrizioneAzienda() {
-		return descrizioneAzienda;
-	}
-	/**
-	 * @param descrizioneAzienda the descrizioneAzienda to set
-	 */
-	public void setDescrizioneAzienda(String descrizioneAzienda) {
-		this.descrizioneAzienda = descrizioneAzienda;
 	}
 	/**
 	 * @return the luogoAzienda
