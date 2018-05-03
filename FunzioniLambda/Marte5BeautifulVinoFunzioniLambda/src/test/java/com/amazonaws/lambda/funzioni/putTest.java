@@ -32,9 +32,10 @@ public class putTest {
         
         input.setFunctionName("putEventoGen");
         Evento evento = new Evento();
-        evento.setDataEvento(12345L);
+        evento.setIdEvento("1525352690661");
+      evento.setDataEvento(11111110L);
    //     evento.setCittaEvento("a");
-    //    evento.setTitoloEvento("i");
+        evento.setTitoloEvento("i");
 //        evento.setTemaEvento("e");
 //        evento.setPrezzoEvento(10);
 //        evento.setTestoEvento("e");

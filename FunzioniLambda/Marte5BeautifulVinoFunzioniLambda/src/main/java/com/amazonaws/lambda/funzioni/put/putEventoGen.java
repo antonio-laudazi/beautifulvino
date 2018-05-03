@@ -34,7 +34,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         
         String idEventoRisposta = "";
         Esito esito = FunzioniUtils.getEsitoPositivo(); //inizializzo l'esito a POSITIVO. In caso di problemi sovrascrivo
-        
+        boolean flagOld = false;
         AmazonDynamoDB client = null;
 		try {
 			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
@@ -76,6 +76,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        	if(idEvento == null || idEvento.equals("")) {
 	        			//insert
 		        		idEvento = FunzioniUtils.getEntitaId();
+		        		flagOld = true;
 		        } 
 		        	idEventoRisposta = idEvento;
 		        	evento.setIdEvento(idEvento);
@@ -116,6 +117,15 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    							if(eventiVino == null) {
 	    								eventiVino = new ArrayList<EventoVino>();
 	    							}
+	    							if (flagOld == false && evento.getDataEvento() == evento.getOldDate()) {
+		    							EventoVino dop = null;
+		    							for (EventoVino e : eventiVino) {
+		    								if (e.getIdEvento().equals(evento.getIdEvento())) {
+		    									dop = e;
+		    								}
+		    							}
+		    							eventiVino.remove(dop);
+	    							}
 	    							EventoVino ev = new EventoVino();
 	    							ev.setIdEvento(evento.getIdEvento());
 	    							ev.setDataEvento(evento.getDataEvento());
@@ -139,12 +149,15 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 					transaction.rollback();
 					return risposta;
 				}
-		        if (evento.getOldDate() != evento.getDataEvento()) {
+		        if (evento.getOldDate() != evento.getDataEvento() && flagOld == false) {
         			RichiestaDeleteGenerica rd = new RichiestaDeleteGenerica();
+        			rd.setFunctionName("deleteEventoGen");
+        			rd.setIdEvento(evento.getIdEvento());
         			BeautifulVinoDelete d = new BeautifulVinoDelete();
         			RispostaDeleteGenerica out = null;
         			try {
         				 out = d.handleRequest(rd, context);
+        				 System.out.println("tutto ok" + out.getEsito().getMessage());
         			}catch (Exception e) {
 						System.out.println("tutto ok" + out.getEsito().getMessage());
 					}	

@@ -40,7 +40,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -97,7 +97,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 			        				EventoVino vecanc = null;
 			        				if (listaViniEvento != null) {
 				        				for (EventoVino v : listaViniEvento) {
-					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento()) && v.getDataEvento() == eventoDaCancellare.getDataEvento()) {
 					        					vecanc = v;
 					        				}
 				        				}

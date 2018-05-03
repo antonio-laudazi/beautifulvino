@@ -251,12 +251,13 @@ public class FunzioniUtils {
 				if(!idAzienda.equals("")) {
 					Vino vinoNuovo = new Vino();
 					if(idAzienda.equals(azienda.getIdAzienda())) {
-						vinoNuovo.setIdVino(vino.getIdVino());
-						vinoNuovo.setNomeVino(vino.getNomeVino());
-						vinoNuovo.setStatoVino(vino.getStatoVino());
-						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
-						vinoNuovo.setInBreveVino(vino.getInBreveVino());
-						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
+						vinoNuovo = mapper.load(Vino.class, vino.getIdVino());
+//						vinoNuovo.setIdVino(vino.getIdVino());
+//						vinoNuovo.setNomeVino(vino.getNomeVino());
+//						vinoNuovo.setStatoVino(vino.getStatoVino());
+//						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
+//						vinoNuovo.setInBreveVino(vino.getInBreveVino());
+//						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
 						viniAziendaNuova.add(vinoNuovo);
 					}
 				}
