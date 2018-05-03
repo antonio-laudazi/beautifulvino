@@ -15,6 +15,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello.Esito;
+import com.marte5.modello2.Vino.EventoVino;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
 import com.marte5.modello2.Evento.VinoEvento;
@@ -76,7 +77,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        } 
 		        	idEventoRisposta = idEvento;
 		        	evento.setIdEvento(idEvento);
-		        
+		            
 	        		//gestione aziende
 	        		//OSPITANTE
 	        		Azienda toLoadOspitante = new Azienda();
@@ -111,12 +112,15 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    						vinoToLoad.setIdVino(idVino);
 	    						Vino vino = transaction.load(vinoToLoad);
 	    						if(vino != null) {
-	    							List<Evento> eventiVino = vino.getEventiVino();
+	    							List<EventoVino> eventiVino = vino.getEventiVinoInt();
 	    							if(eventiVino == null) {
-	    								eventiVino = new ArrayList<Evento>();
+	    								eventiVino = new ArrayList<EventoVino>();
 	    							}
-	    							eventiVino.add(evento);
-	    							vino.setEventiVino(eventiVino);
+	    							EventoVino ev = new EventoVino();
+	    							ev.setIdEvento(evento.getIdEvento());
+	    							ev.setDataEvento(evento.getDataEvento());
+	    							eventiVino.add(ev);
+	    							vino.setEventiVinoInt(eventiVino);
 	    							transaction.save(vino);
 	    						}
 	    					}
