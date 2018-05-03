@@ -48,7 +48,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		
         AmazonDynamoDB client = null;
     		try {
-    			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+    			client = AmazonDynamoDBClientBuilder.standard().build();
     		} catch (Exception e1) {
     			// TODO Auto-generated catch block
     			e1.printStackTrace();
