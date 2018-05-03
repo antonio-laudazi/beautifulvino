@@ -128,7 +128,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         					daRimuovere.setStatoEvento(statoEvento);
         					eventiUtente.add(daRimuovere);
         				}
-    					Esito out = sendMail(utente.getIdUtente(), utente.getNomeUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+    					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
     					if (out.getCodice() != 100) {
     						esito = out;
     	    		        risposta.setEsito(esito);
@@ -146,7 +146,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 	    		        return risposta;
     				} else {
     					//6
-    					Esito out =sendMail(utente.getIdUtente(), utente.getNomeUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+    					Esito out =sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
     					if (out.getCodice() != 100) {
     						esito = out;
     	    		        risposta.setEsito(esito);

@@ -32,24 +32,24 @@ public class putTest {
         
         input.setFunctionName("putEventoGen");
         Evento evento = new Evento();
-        evento.setDataEvento(1511342922747L);
-        evento.setCittaEvento("a");
-        evento.setTitoloEvento("provaK2");
-        evento.setTemaEvento("e");
-        evento.setPrezzoEvento(10);
-        evento.setTestoEvento("e");
-        evento.setLatitudineEvento(1);
-        evento.setLongitudineEvento(2);
-        evento.setIndirizzoEvento("e");
-        evento.setTelefonoEvento("e");
-        evento.setEmailEvento("e");
-        evento.setNumMaxPartecipantiEvento(10);
-        evento.setOrarioEvento("5");
-        ProvinciaEvento provincia = new ProvinciaEvento();
-        provincia.setNomeProvincia("Livorno");
-        provincia.setSiglaProvincia("LI");
-        provincia.setIdProvincia("1513783245483");
-        evento.setProvinciaEventoInt(provincia);        
+        evento.setDataEvento(12345L);
+   //     evento.setCittaEvento("a");
+    //    evento.setTitoloEvento("i");
+//        evento.setTemaEvento("e");
+//        evento.setPrezzoEvento(10);
+//        evento.setTestoEvento("e");
+//        evento.setLatitudineEvento(1);
+//        evento.setLongitudineEvento(2);
+//        evento.setIndirizzoEvento("e");
+//        evento.setTelefonoEvento("e");
+//        evento.setEmailEvento("e");
+//        evento.setNumMaxPartecipantiEvento(10);
+//        evento.setOrarioEvento("5");
+//        ProvinciaEvento provincia = new ProvinciaEvento();
+//        provincia.setNomeProvincia("Livorno");
+//        provincia.setSiglaProvincia("LI");
+//        provincia.setIdProvincia("1513783245483");
+//        evento.setProvinciaEventoInt(provincia);        
         
         
 //        Azienda aziendaOspitante = new Azienda();
@@ -57,14 +57,14 @@ public class putTest {
 //        evento.setAziendaOspitanteEvento(aziendaOspitante);
         
         
-        VinoEvento vinoEvento = new VinoEvento();
-        vinoEvento.setIdVino("1520606560866");
-        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
-        listaVini.add(vinoEvento);
-        evento.setViniEventoInt(listaVini);
-        input.setEvento(evento);
+//        VinoEvento vinoEvento = new VinoEvento();
+//        vinoEvento.setIdVino("1520606560866");
+//        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
+//        listaVini.add(vinoEvento);
+//        evento.setViniEventoInt(listaVini);
+      input.setEvento(evento);
       
-        input.setFunctionName("putEventoGen");
+
 //        Provincia provincia = new Provincia();
 //        
 //        provincia.setNomeProvincia("Livorno");

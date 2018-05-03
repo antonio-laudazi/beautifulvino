@@ -48,7 +48,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 		AmazonDynamoDB client = null;
 		int scannedCount = 0;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(

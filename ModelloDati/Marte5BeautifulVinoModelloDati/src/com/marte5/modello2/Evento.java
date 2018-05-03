@@ -50,8 +50,8 @@ public class Evento {
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
 	private List<Azienda> aziendeViniEvento;
-	private String orarioEvento; //non è l'orario (l'orario è presente nella data), questa variabile serve come 
-								//partition key per l'ordinamento degli eventi, è sempre uguale ad "a"
+	private String orarioEvento; //inutile
+	private long oldDate;
 	/**
 	 * @return the idEvento
 	 */
@@ -78,6 +78,20 @@ public class Evento {
 	 */
 	public void setDataEvento(long dataEvento) {
 		this.dataEvento = dataEvento;
+	}
+	
+	/**
+	 * @return the oldDate
+	 */
+	@DynamoDBRangeKey(attributeName="oldDate")
+	public long getOldDate() {
+		return oldDate;
+	}
+	/**
+	 * @param oldDate the oldDate to set
+	 */
+	public void setOldDate(long oldDate) {
+		this.oldDate = oldDate;
 	}
 	
 	/**

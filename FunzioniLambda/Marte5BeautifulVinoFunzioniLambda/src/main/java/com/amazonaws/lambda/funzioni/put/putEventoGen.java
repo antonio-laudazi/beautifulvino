@@ -3,7 +3,7 @@ package com.amazonaws.lambda.funzioni.put;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.amazonaws.lambda.funzioni.get.getProvinceGen;
+import com.amazonaws.lambda.funzioni.common.BeautifulVinoDelete;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.regions.Regions;
@@ -13,15 +13,17 @@ import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.marte5.modello2.Azienda;
 import com.marte5.modello.Esito;
-import com.marte5.modello2.Vino.EventoVino;
+import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
+import com.marte5.modello.richieste.put.RichiestaPutGenerica;
+import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
+import com.marte5.modello.risposte.put.RispostaPutGenerica;
+import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Vino;
-import com.marte5.modello.richieste.put.RichiestaPutGenerica;
-import com.marte5.modello.risposte.put.RispostaPutGenerica;
+import com.marte5.modello2.Vino.EventoVino;
 
 public class putEventoGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
@@ -98,9 +100,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		if (evento.getLongitudineEvento() == 0) evento.setLongitudineEvento(aziendaOspitante.getLongitudineAzienda());
 			        		if (evento.getCittaEvento() == null) evento.setCittaEvento(aziendaOspitante.getCittaAzienda());
 			        	}
-	        		}
-
-	        		
+	        		}        		
 	        		//gestione vini
 	        		List<VinoEvento> viniEvento = evento.getViniEventoInt();
 	        		//per ogni vino associato a questo evento devo associare questo evento al vino
@@ -139,6 +139,16 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 					transaction.rollback();
 					return risposta;
 				}
+		        if (evento.getOldDate() != evento.getDataEvento()) {
+        			RichiestaDeleteGenerica rd = new RichiestaDeleteGenerica();
+        			BeautifulVinoDelete d = new BeautifulVinoDelete();
+        			RispostaDeleteGenerica out = null;
+        			try {
+        				 out = d.handleRequest(rd, context);
+        			}catch (Exception e) {
+						System.out.println("tutto ok" + out.getEsito().getMessage());
+					}	
+        		}
 	        }
 	        transaction.commit();
 		}	
