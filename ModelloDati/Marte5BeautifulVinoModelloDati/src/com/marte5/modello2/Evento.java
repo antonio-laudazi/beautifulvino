@@ -83,7 +83,7 @@ public class Evento {
 	/**
 	 * @return the oldDate
 	 */
-	@DynamoDBRangeKey(attributeName="oldDate")
+	@DynamoDBAttribute(attributeName="oldDate")
 	public long getOldDate() {
 		return oldDate;
 	}
