@@ -84,6 +84,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		    		        			}
 	    		        			}
 	    		        			if (vcanc != null) listaEventiAzienda.remove(vcanc);
+	    		        			mapper.save(vcanc);
 	    	        			}
         					}
 	        			}

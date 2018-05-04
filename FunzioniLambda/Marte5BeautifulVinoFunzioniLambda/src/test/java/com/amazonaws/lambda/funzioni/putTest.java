@@ -57,7 +57,6 @@ public class putTest {
         aziendaOspitante.setIdAzienda("1522417292119");
         evento.setAziendaOspitanteEvento(aziendaOspitante);
         
-        
 //        VinoEvento vinoEvento = new VinoEvento();
 //        vinoEvento.setIdVino("1520606560866");
 //        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
