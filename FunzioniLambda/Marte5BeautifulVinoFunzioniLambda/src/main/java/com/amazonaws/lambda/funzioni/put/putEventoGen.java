@@ -100,8 +100,11 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		if (evento.getLatitudineEvento() == 0) evento.setLatitudineEvento(aziendaOspitante.getLatitudineAzienda());
 			        		if (evento.getLongitudineEvento() == 0) evento.setLongitudineEvento(aziendaOspitante.getLongitudineAzienda());
 			        		if (evento.getCittaEvento() == null) evento.setCittaEvento(aziendaOspitante.getCittaAzienda());
+		
+			        		
 			        	}
-	        		}        		
+	        		}
+	        		
 	        		//gestione vini
 	        		List<VinoEvento> viniEvento = evento.getViniEventoInt();
 	        		//per ogni vino associato a questo evento devo associare questo evento al vino
