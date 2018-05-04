@@ -122,7 +122,9 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 			        		azienda.setViniAziendaInt(new ArrayList<VinoAzienda>());
 			        	}
 			        azienda.getViniAziendaInt().add(vinoPerAzienda);
-		        }else if (azienda != null && vino.getOldIdAzienda().equals(azienda.getIdAzienda())) {
+		        }else if (azienda != null && vino.getOldIdAzienda() != null &&
+		        		!vino.getOldIdAzienda().equals("") && 
+		        		vino.getOldIdAzienda().equals(azienda.getIdAzienda())) {
 		        	Azienda toLoadOld = new Azienda();
 	        		toLoad.setIdAzienda(vino.getOldIdAzienda());
 	        		Azienda aziendaOld = transaction.load(toLoadOld);

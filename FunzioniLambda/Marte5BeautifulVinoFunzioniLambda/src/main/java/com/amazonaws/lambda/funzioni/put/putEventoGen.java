@@ -38,7 +38,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         boolean flagOld = false;
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -113,10 +113,11 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		ea.setUrlFotoEvento(ea.getUrlFotoEvento());
 			        		List<EventoAzienda> lea = new ArrayList<>();
 			        		//se è stata modificata l'azienda cancello il collegamento nella azienda vecchia
-			        		if (evento.getOldIdAzineda() != null && aziendaOspitante.getIdAzienda()!= null
-			        				&& !aziendaOspitante.getIdAzienda().equals(evento.getOldIdAzineda())) {
+			        		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") 
+			        				&& aziendaOspitante.getIdAzienda()!= null
+			        				&& !aziendaOspitante.getIdAzienda().equals(evento.getOldIdAzienda())) {
 			        			Azienda aziendaOldToLoad = new Azienda ();
-			        			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzineda());
+			        			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzienda());
 			        			Azienda aziendaVecchia = transaction.load(aziendaOldToLoad);
 			        			if (aziendaVecchia != null) {
 			        				lea = aziendaVecchia.getEventiAziendaInt();

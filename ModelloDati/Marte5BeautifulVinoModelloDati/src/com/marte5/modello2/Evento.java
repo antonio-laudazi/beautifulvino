@@ -348,7 +348,7 @@ public class Evento {
 	 * @return the oldIdAzineda
 	 */
 	@DynamoDBAttribute(attributeName="oldIdAzienda")
-	public String getOldIdAzineda() {
+	public String getOldIdAzienda() {
 		return oldIdAzienda;
 	}
 	/**
