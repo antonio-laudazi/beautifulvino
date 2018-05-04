@@ -52,7 +52,7 @@ public class Evento {
 	private List<Azienda> aziendeViniEvento;
 	private String orarioEvento; //inutile
 	private long oldDate;
-	private String oldIdAzineda;
+	private String oldIdAzienda;
 	/**
 	 * @return the idEvento
 	 */
@@ -349,13 +349,13 @@ public class Evento {
 	 */
 	@DynamoDBAttribute(attributeName="oldIdAzienda")
 	public String getOldIdAzineda() {
-		return oldIdAzineda;
+		return oldIdAzienda;
 	}
 	/**
 	 * @param oldIdAzineda the oldIdAzineda to set
 	 */
-	public void setOldIdAzineda(String oldIdAzineda) {
-		this.oldIdAzineda = oldIdAzineda;
+	public void setOldIdAzienda(String oldIdAzienda) {
+		this.oldIdAzienda = oldIdAzienda;
 	}
 	
 	/**
