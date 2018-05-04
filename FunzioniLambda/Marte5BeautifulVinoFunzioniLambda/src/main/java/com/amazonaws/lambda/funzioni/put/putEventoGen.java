@@ -19,6 +19,7 @@ import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Azienda.EventoAzienda;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
 import com.marte5.modello2.Evento.VinoEvento;
@@ -37,7 +38,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         boolean flagOld = false;
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -100,8 +101,28 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		if (evento.getLatitudineEvento() == 0) evento.setLatitudineEvento(aziendaOspitante.getLatitudineAzienda());
 			        		if (evento.getLongitudineEvento() == 0) evento.setLongitudineEvento(aziendaOspitante.getLongitudineAzienda());
 			        		if (evento.getCittaEvento() == null) evento.setCittaEvento(aziendaOspitante.getCittaAzienda());
-		
 			        		
+			        		//creo il collegamento all'evento nell'azienda
+			        		EventoAzienda ea = new EventoAzienda();
+			        		ea.setCittaEvento(evento.getCittaEvento());
+			        		ea.setDataEvento(evento.getDataEvento());
+			        		ea.setIdEvento(evento.getIdEvento());
+			        		ea.setTemaEvento(ea.getTemaEvento());
+			        		ea.setTitoloEvento(ea.getTitoloEvento());
+			        		ea.setPrezzoEvento(ea.getPrezzoEvento());
+			        		ea.setUrlFotoEvento(ea.getUrlFotoEvento());
+			        		List<EventoAzienda> lea = new ArrayList<>();
+			        		if (aziendaOspitante.getEventiAziendaInt() != null) {
+			        			lea = aziendaOspitante.getEventiAziendaInt();
+			        			EventoAzienda daCanc = null;
+			        			for (EventoAzienda e : lea) {
+			        				if (e.getIdEvento() == ea.getIdEvento()) daCanc = e;
+			        			}
+			        			if (daCanc != null) lea.remove(daCanc);
+			        		}
+			        		lea.add(ea);
+			        		aziendaOspitante.setEventiAziendaInt(lea);
+			        		transaction.save(aziendaOspitante);
 			        	}
 	        		}
 	        		
@@ -143,7 +164,6 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        try {
 		        		transaction.save(evento);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Evento " + input.getEvento().getIdEvento());
