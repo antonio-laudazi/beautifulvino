@@ -1,6 +1,7 @@
 package com.amazonaws.lambda.funzioni.put;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
@@ -121,6 +122,22 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 			        		azienda.setViniAziendaInt(new ArrayList<VinoAzienda>());
 			        	}
 			        azienda.getViniAziendaInt().add(vinoPerAzienda);
+		        }else if (azienda != null && vino.getOldIdAzienda().equals(azienda.getIdAzienda())) {
+		        	Azienda toLoadOld = new Azienda();
+	        		toLoad.setIdAzienda(vino.getOldIdAzienda());
+	        		Azienda aziendaOld = transaction.load(toLoadOld);
+	        		List<VinoAzienda> lv = aziendaOld.getViniAziendaInt();
+	        		if (lv != null) {
+	        			VinoAzienda daCanc = null;
+		        		for (VinoAzienda ev : lv) {
+		        			if (ev.getIdVino().equals(vino.getIdVino())){
+		        				daCanc = ev;
+		        			}
+		        		}
+		        		if (daCanc != null) lv.remove(daCanc);
+		        		aziendaOld.setViniAziendaInt(lv);
+		        		transaction.save(aziendaOld);
+	        		}
 		        }
 		        try {
 		        		transaction.save(azienda);

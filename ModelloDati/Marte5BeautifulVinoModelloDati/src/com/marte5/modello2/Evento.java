@@ -52,6 +52,7 @@ public class Evento {
 	private List<Azienda> aziendeViniEvento;
 	private String orarioEvento; //inutile
 	private long oldDate;
+	private String oldIdAzineda;
 	/**
 	 * @return the idEvento
 	 */
@@ -341,6 +342,20 @@ public class Evento {
 	 */
 	public void setIscrittiEvento(List<Utente> iscrittiEvento) {
 		this.iscrittiEvento = iscrittiEvento;
+	}
+	
+	/**
+	 * @return the oldIdAzineda
+	 */
+	@DynamoDBAttribute(attributeName="oldIdAzienda")
+	public String getOldIdAzineda() {
+		return oldIdAzineda;
+	}
+	/**
+	 * @param oldIdAzineda the oldIdAzineda to set
+	 */
+	public void setOldIdAzineda(String oldIdAzineda) {
+		this.oldIdAzineda = oldIdAzineda;
 	}
 	
 	/**

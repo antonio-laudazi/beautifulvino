@@ -112,11 +112,33 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		ea.setPrezzoEvento(ea.getPrezzoEvento());
 			        		ea.setUrlFotoEvento(ea.getUrlFotoEvento());
 			        		List<EventoAzienda> lea = new ArrayList<>();
+			        		//se è stata modificata l'azienda cancello il collegamento nella azienda vecchia
+			        		if (evento.getOldIdAzineda() != null && aziendaOspitante.getIdAzienda()!= null
+			        				&& !aziendaOspitante.getIdAzienda().equals(evento.getOldIdAzineda())) {
+			        			Azienda aziendaOldToLoad = new Azienda ();
+			        			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzineda());
+			        			Azienda aziendaVecchia = transaction.load(aziendaOldToLoad);
+			        			if (aziendaVecchia != null) {
+			        				lea = aziendaVecchia.getEventiAziendaInt();
+				        			EventoAzienda daCanc = null;
+				        			if (lea != null) {
+					        			for (EventoAzienda e : lea) {
+					        				if (e.getIdEvento() == ea.getIdEvento()) daCanc = e;
+					        			}
+				        			}
+				        			if (daCanc != null) lea.remove(daCanc);
+				        			if (lea != null) aziendaVecchia.setEventiAziendaInt(lea);
+				        			transaction.save(aziendaVecchia);
+			        			}
+			        			
+			        		}
 			        		if (aziendaOspitante.getEventiAziendaInt() != null) {
 			        			lea = aziendaOspitante.getEventiAziendaInt();
 			        			EventoAzienda daCanc = null;
-			        			for (EventoAzienda e : lea) {
-			        				if (e.getIdEvento() == ea.getIdEvento()) daCanc = e;
+			        			if (lea != null) {
+				        			for (EventoAzienda e : lea) {
+				        				if (e.getIdEvento() == ea.getIdEvento()) daCanc = e;
+				        			}
 			        			}
 			        			if (daCanc != null) lea.remove(daCanc);
 			        		}
@@ -176,14 +198,10 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         			RichiestaDeleteGenerica rd = new RichiestaDeleteGenerica();
         			rd.setFunctionName("deleteEventoGen");
         			rd.setIdEvento(evento.getIdEvento());
+        			rd.setDataEvento(evento.getOldDate());
         			BeautifulVinoDelete d = new BeautifulVinoDelete();
-        			RispostaDeleteGenerica out = null;
-        			try {
-        				 out = d.handleRequest(rd, context);
-        				 System.out.println("tutto ok" + out.getEsito().getMessage());
-        			}catch (Exception e) {
-						System.out.println("tutto ok" + out.getEsito().getMessage());
-					}	
+        			RispostaDeleteGenerica risp = d.handleRequest(rd, context);
+        			System.out.println("esito cancellazione evento duplicato" + risp.getEsito().getMessage());
         		}
 	        }
 	        transaction.commit();

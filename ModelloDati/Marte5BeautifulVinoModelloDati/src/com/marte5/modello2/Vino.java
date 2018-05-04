@@ -35,7 +35,7 @@ public class Vino {
 	private AziendaVino aziendaVinoInt;
 	private List<EventoVino> eventiVinoInt;
 	private List<UtenteVino> utentiVinoInt;
-	
+	private String oldIdAzienda; 
 	
 	/**
 	 * @return the idVino
@@ -92,6 +92,19 @@ public class Vino {
 	 */
 	public void setInBreveVino(String inBreveVino) {
 		this.inBreveVino = inBreveVino;
+	}
+	/**
+	 * @return the oldIdAzienda
+	 */
+	@DynamoDBAttribute(attributeName="oldIdAzienda")
+	public String getOldIdAzienda() {
+		return oldIdAzienda;
+	}
+	/**
+	 * @param oldIdAzienda the oldIdAzienda to set
+	 */
+	public void setOldIdAzienda(String oldIdAzienda) {
+		this.oldIdAzienda = oldIdAzienda;
 	}
 	/**
 	 * @return the infoVino

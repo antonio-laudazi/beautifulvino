@@ -32,8 +32,11 @@ public class putTest {
         
         input.setFunctionName("putEventoGen");
         Evento evento = new Evento();
-        evento.setIdEvento("1525352690661");
+        evento.setIdEvento("1525436548222");
+        
       evento.setDataEvento(11111110L);
+      evento.setOldDate(1536357600000L);
+      evento.setOldIdAzineda("1513241364518");
    //     evento.setCittaEvento("a");
         evento.setTitoloEvento("i");
 //        evento.setTemaEvento("e");
@@ -54,7 +57,8 @@ public class putTest {
         
         
         Azienda aziendaOspitante = new Azienda();
-        aziendaOspitante.setIdAzienda("1522417292119");
+        aziendaOspitante.setIdAzienda("1513240316515");
+        
         evento.setAziendaOspitanteEvento(aziendaOspitante);
         
 //        VinoEvento vinoEvento = new VinoEvento();
