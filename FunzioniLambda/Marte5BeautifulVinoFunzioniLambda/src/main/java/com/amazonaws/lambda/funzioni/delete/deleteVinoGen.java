@@ -40,7 +40,7 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        
 	        AmazonDynamoDB client = null;
 	        try {
-				client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+				client = AmazonDynamoDBClientBuilder.standard().build();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -69,7 +69,8 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        		} else {
 	        			//cancello il collegamneto con l'azienda
 	        			AziendaVino aziendaVino = vinoDaCancellare.getAziendaVinoInt();
-	        			Azienda aziendaVinoCanc = mapper.load(Azienda.class,aziendaVino.getIdAzienda());
+	        			Azienda aziendaVinoCanc = null;
+	        			if (aziendaVino != null) aziendaVinoCanc = mapper.load(Azienda.class,aziendaVino.getIdAzienda());
 	        			if (aziendaVinoCanc != null) {
 		        			List<VinoAzienda> listaViniAzienda = aziendaVinoCanc.getViniAziendaInt();
 		        			if (listaViniAzienda != null) {

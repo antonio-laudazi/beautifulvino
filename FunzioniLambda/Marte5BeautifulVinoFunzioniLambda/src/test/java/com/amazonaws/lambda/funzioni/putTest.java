@@ -15,6 +15,7 @@ import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Evento;
+import com.marte5.modello2.Vino;
 import com.marte5.modello2.Evento.ProvinciaEvento;
 
 
@@ -30,15 +31,15 @@ public class putTest {
         // TODO: set up your sample input object here.
         input = new RichiestaPutGenerica();
         
-        input.setFunctionName("putEventoGen");
-        Evento evento = new Evento();
-        evento.setIdEvento("1525436548222");
-        
-      evento.setDataEvento(11111110L);
-      evento.setOldDate(1536357600000L);
-      evento.setOldIdAzineda("1513241364518");
-   //     evento.setCittaEvento("a");
-        evento.setTitoloEvento("i");
+//        input.setFunctionName("putEventoGen");
+//        Evento evento = new Evento();
+//        evento.setIdEvento("1513240316515");
+//        
+//      evento.setDataEvento(11111110L);
+//      evento.setOldDate(1536357600000L);
+//      evento.setOldIdAzineda("1513240316515");
+//   //     evento.setCittaEvento("a");
+//        evento.setTitoloEvento("i");
 //        evento.setTemaEvento("e");
 //        evento.setPrezzoEvento(10);
 //        evento.setTestoEvento("e");
@@ -56,17 +57,17 @@ public class putTest {
 //        evento.setProvinciaEventoInt(provincia);        
         
         
-        Azienda aziendaOspitante = new Azienda();
-        aziendaOspitante.setIdAzienda("1513240316515");
-        
-        evento.setAziendaOspitanteEvento(aziendaOspitante);
-        
-//        VinoEvento vinoEvento = new VinoEvento();
-//        vinoEvento.setIdVino("1520606560866");
-//        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
-//        listaVini.add(vinoEvento);
-//        evento.setViniEventoInt(listaVini);
-      input.setEvento(evento);
+//        Azienda aziendaOspitante = new Azienda();
+//        aziendaOspitante.setIdAzienda("1513240316515");
+//        
+//        evento.setAziendaOspitanteEvento(aziendaOspitante);
+//        
+////        VinoEvento vinoEvento = new VinoEvento();
+////        vinoEvento.setIdVino("1520606560866");
+////        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
+////        listaVini.add(vinoEvento);
+////        evento.setViniEventoInt(listaVini);
+//      input.setEvento(evento);
       
 
 //        Provincia provincia = new Provincia();
@@ -87,17 +88,17 @@ public class putTest {
 //        utente.setUsernameUtente("Concetta Maria");
 //        input.setUtente(utente);
 //        
-//        Vino vino = new Vino();
-//        
-//        vino.setAnnoVino(2);
-//        vino.setDescrizioneVino("AAAAAAAAAAAAAAAAA");
-//        
-//        Azienda azienda = new Azienda();
-//        azienda.setIdAzienda("1522056860834");
-//        vino.setAziendaVino(azienda);
-//        vino.setInBreveVino("SSSSSSSSS");
-//        input.setFunctionName("putVinoGen");
-//        input.setVino(vino);
+        Vino vino = new Vino();
+        
+        vino.setAnnoVino(2);
+        
+        Azienda azienda = new Azienda();
+        azienda.setIdAzienda("1513240316515");
+        vino.setAziendaVino(azienda);
+        vino.setInBreveVino("SSSSSSSSS");
+        vino.setOldIdAzienda("1521548170718");
+        input.setFunctionName("putVinoGen");
+        input.setVino(vino);
 //          input.setFilename("testImagefile");
 //		  input.setTipoEntita("");
 //		  input.setFunctionName("putImageGen"); 

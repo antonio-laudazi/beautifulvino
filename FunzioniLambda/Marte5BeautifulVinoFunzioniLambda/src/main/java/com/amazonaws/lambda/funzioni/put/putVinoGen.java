@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.transactions.Transaction;
@@ -49,7 +50,6 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 				TransactionManager.verifyOrCreateTransactionTable(client, "BV_Transactions", 10L, 10L, 10L * 60L);
 				TransactionManager.verifyOrCreateTransactionImagesTable(client, "BV_TransactionImages", 10L, 10L, 10L * 60L);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Problemi con la gestione della transazione ");
 				esito.setTrace(e1.getMessage());
@@ -70,39 +70,31 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 				risposta.setEsito(esito);
 				transaction.rollback();
 				return risposta;
-	        } else if(vino.getAziendaVino() == null){
-	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Il vino che si vuole inserire non ha un'azienda associata");
-				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Il vino che si vuole inserire non ha un'azienda associata");
-				risposta.setEsito(esito);
-				transaction.rollback();
-				return risposta;
 	        } else {
 		        	String idVino = vino.getIdVino();
-		        	boolean newVino = false;
 		        	if(idVino == null || idVino.equals("")) {
-	        			newVino = true;
 		        		idVino = FunzioniUtils.getEntitaId();
 		            } 
 		        	idVinoRisposta = idVino;
 	        		vino.setIdVino(idVino);
-	        		
-	        		Azienda toLoad = new Azienda();
-	        		toLoad.setIdAzienda(vino.getAziendaVino().getIdAzienda());
-	        		Azienda azienda = transaction.load(toLoad);
-	        		//Azienda azienda = mapper.load(Azienda.class, vino.getAziendaVino().getIdAzienda());
-
-	        		if(vino.getAziendaVinoInt() == null){
-		        		AziendaVino aziendaVino = new AziendaVino();
-		        		aziendaVino.setIdAzienda(azienda.getIdAzienda());
-		        		aziendaVino.setNomeAzienda(azienda.getNomeAzienda());
-		        		vino.setAziendaVinoInt(aziendaVino);
+	        		Azienda toLoad = null;
+	        		Azienda azienda = null;
+	        		if (vino.getAziendaVino()!= null) {
+		        		toLoad = new Azienda();
+		        		toLoad.setIdAzienda(vino.getAziendaVino().getIdAzienda());
+		        		azienda = transaction.load(toLoad);
+		        		//Azienda azienda = mapper.load(Azienda.class, vino.getAziendaVino().getIdAzienda());
+	
+		        		if(vino.getAziendaVinoInt() == null){
+			        		AziendaVino aziendaVino = new AziendaVino();
+			        		aziendaVino.setIdAzienda(azienda.getIdAzienda());
+			        		aziendaVino.setNomeAzienda(azienda.getNomeAzienda());
+			        		vino.setAziendaVinoInt(aziendaVino);
+		        		}
 	        		}
-	        		
 		        try {
 		        		transaction.save(vino);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getVino().getIdVino());
@@ -110,10 +102,10 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 					risposta.setEsito(esito);
 					transaction.rollback();
 					return risposta;
-				}
-		        
+				}		        
 		        // a questo punto dovrei inserire il vino tra quelli della lista dell'azienda
-		        if (newVino) {
+		        if (azienda != null) {
+		        	//vino nuovo
 			        VinoAzienda vinoPerAzienda = new VinoAzienda();
 			        	vinoPerAzienda.setIdVino(vino.getIdVino());
 			        	vinoPerAzienda.setNomeVino(vino.getNomeVino());
@@ -122,11 +114,24 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 			        		azienda.setViniAziendaInt(new ArrayList<VinoAzienda>());
 			        	}
 			        azienda.getViniAziendaInt().add(vinoPerAzienda);
-		        }else if (azienda != null && vino.getOldIdAzienda() != null &&
-		        		!vino.getOldIdAzienda().equals("") && 
-		        		vino.getOldIdAzienda().equals(azienda.getIdAzienda())) {
+			        try {
+		        		if (azienda!= null) transaction.save(azienda);
+				} catch (Exception e) {
+					e.printStackTrace();
+					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Problemi nel salvare l'azienda aggiornata col vino inserito");
+					esito.setTrace(e.getMessage());
+					risposta.setEsito(esito);
+					transaction.rollback();
+					return risposta;
+				}
+		        }
+		        if (vino.getOldIdAzienda() != null &&
+		        		!vino.getOldIdAzienda().equals("")) {
+		        	//cambio azienda
 		        	Azienda toLoadOld = new Azienda();
-	        		toLoad.setIdAzienda(vino.getOldIdAzienda());
+		        	System.out.println(vino.getOldIdAzienda());
+	        		toLoadOld.setIdAzienda(vino.getOldIdAzienda());
 	        		Azienda aziendaOld = transaction.load(toLoadOld);
 	        		List<VinoAzienda> lv = aziendaOld.getViniAziendaInt();
 	        		if (lv != null) {
@@ -138,23 +143,21 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 		        		}
 		        		if (daCanc != null) lv.remove(daCanc);
 		        		aziendaOld.setViniAziendaInt(lv);
-		        		transaction.save(aziendaOld);
+		        		try {
+		        			transaction.save(aziendaOld);
+		        		}catch (Exception e) {
+		        			e.printStackTrace();
+							esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+							esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Problemi nel salvare l'azienda vecchia con il vino eliminato");
+							esito.setTrace(e.getMessage());
+							risposta.setEsito(esito);
+							transaction.rollback();
+							return risposta;
+		        		}
 	        		}
 		        }
-		        try {
-		        		transaction.save(azienda);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Problemi nel salvare l'azienda aggiornata col vino inserito");
-					esito.setTrace(e.getMessage());
-					risposta.setEsito(esito);
-					transaction.rollback();
-					return risposta;
-				}
+		       
 	        }
-	        
 	        transaction.commit();
 		}	
         risposta.setEsito(esito);

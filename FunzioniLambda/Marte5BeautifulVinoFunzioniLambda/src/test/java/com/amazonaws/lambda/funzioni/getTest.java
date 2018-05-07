@@ -22,6 +22,8 @@ public class getTest {
     public static void createInput() throws IOException {
         // TODO: set up your sample input object here.
         input = new RichiestaGetGenerica();
+        
+        input.setFunctionName("getFeedGen");
 //        input.setFunctionName("getViniEventoGen");
 //        input.setIdEvento(1513789129406L);
 //        input.setDataEvento(1513724400000L);
@@ -43,10 +45,10 @@ public class getTest {
 //        input.setFunctionName("getUtenteGen");
 //        input.setIdUtente("1ba3b3c5-2b98-46c5-a670-c5eb25131a11");
         
-        input.setFunctionName("getEventiGen");
-//        input.setIdUltimoEvento("1523609733534");
-//        input.setDataUltimoEvento(1524261600000L);
-        input.setIdUtente("b2011f52-37bf-4f05-adfa-c8bfa4e7f02e");
+//        input.setFunctionName("getEventiGen");
+////        input.setIdUltimoEvento("1523609733534");
+////        input.setDataUltimoEvento(1524261600000L);
+//        input.setIdUtente("b2011f52-37bf-4f05-adfa-c8bfa4e7f02e");
         
         
         /*{"functionName":"getUtenteGen","idUtente":"1ba3b3c5-2b98-46c5-a670-c5eb25131a11","idUtentePadre":"1ba3b3c5-2b98-46c5-a670-c5eb25131a11"}*/
