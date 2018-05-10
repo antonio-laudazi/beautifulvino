@@ -33,11 +33,12 @@ public class putTest {
         
 //        input.setFunctionName("putEventoGen");
 //        Evento evento = new Evento();
-//        evento.setIdEvento("1513240316515");
+//        evento.setIdEvento("1525706744683");
 //        
 //      evento.setDataEvento(11111110L);
-//      evento.setOldDate(1536357600000L);
-//      evento.setOldIdAzineda("1513240316515");
+//      evento.setOldDate(11111110L);
+////      evento.setOldDate(1536357600000L);
+//      
 //   //     evento.setCittaEvento("a");
 //        evento.setTitoloEvento("i");
 //        evento.setTemaEvento("e");
@@ -55,10 +56,10 @@ public class putTest {
 //        provincia.setSiglaProvincia("LI");
 //        provincia.setIdProvincia("1513783245483");
 //        evento.setProvinciaEventoInt(provincia);        
-        
-        
+//        evento.setOldIdAzienda("1513239955732");
+//        
 //        Azienda aziendaOspitante = new Azienda();
-//        aziendaOspitante.setIdAzienda("1513240316515");
+//        aziendaOspitante.setIdAzienda("1522417292119");
 //        
 //        evento.setAziendaOspitanteEvento(aziendaOspitante);
 //        
@@ -99,6 +100,7 @@ public class putTest {
         vino.setOldIdAzienda("1521548170718");
         input.setFunctionName("putVinoGen");
         input.setVino(vino);
+        
 //          input.setFilename("testImagefile");
 //		  input.setTipoEntita("");
 //		  input.setFunctionName("putImageGen"); 
