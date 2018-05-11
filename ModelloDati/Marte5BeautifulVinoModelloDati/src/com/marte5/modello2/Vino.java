@@ -349,6 +349,7 @@ public class Vino {
 	/**
 	 * @return the acquistabileVino
 	 */
+	@DynamoDBAttribute(attributeName="acquistabileVino")
 	public int getAcquistabileVino() {
 		return acquistabileVino;
 	}
