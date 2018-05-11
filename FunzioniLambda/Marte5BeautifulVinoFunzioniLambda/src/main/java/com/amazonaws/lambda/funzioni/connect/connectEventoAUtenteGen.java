@@ -128,12 +128,15 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         					daRimuovere.setStatoEvento(statoEvento);
         					eventiUtente.add(daRimuovere);
         				}
-    					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
-    					if (out.getCodice() != 100) {
-    						esito = out;
-    	    		        risposta.setEsito(esito);
-    	    		        return risposta;
-    					}
+        				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
+        					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+        				
+	    					if (out.getCodice() != 100) {
+	    						esito = out;
+	    	    		        risposta.setEsito(esito);
+	    	    		        return risposta;
+	    					}
+        				}
     				}
     				
     			} else {
@@ -146,11 +149,13 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 	    		        return risposta;
     				} else {
     					//6
+    					if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
     					Esito out =sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
-    					if (out.getCodice() != 100) {
-    						esito = out;
-    	    		        risposta.setEsito(esito);
-    	    		        return risposta;
+	    					if (out.getCodice() != 100) {
+	    						esito = out;
+	    	    		        risposta.setEsito(esito);
+	    	    		        return risposta;
+	    					}
     					}
     					EventoUtente eu = new EventoUtente();
     					eu.setIdEvento(idEvento);

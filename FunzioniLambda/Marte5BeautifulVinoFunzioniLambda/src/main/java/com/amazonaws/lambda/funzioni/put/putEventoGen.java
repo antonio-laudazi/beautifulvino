@@ -112,27 +112,8 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		ea.setPrezzoEvento(ea.getPrezzoEvento());
 			        		ea.setUrlFotoEvento(ea.getUrlFotoEvento());
 			        		List<EventoAzienda> lea = new ArrayList<>();
-			        		//se è stata modificata l'azienda cancello il collegamento nella azienda vecchia
-			        		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") 
-			        				&& aziendaOspitante.getIdAzienda()!= null
-			        				&& !aziendaOspitante.getIdAzienda().equals(evento.getOldIdAzienda())) {
-			        			Azienda aziendaOldToLoad = new Azienda ();
-			        			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzienda());
-			        			Azienda aziendaVecchia = transaction.load(aziendaOldToLoad);
-			        			if (aziendaVecchia != null) {
-			        				lea = aziendaVecchia.getEventiAziendaInt();
-				        			EventoAzienda daCanc = null;
-				        			if (lea != null) {
-					        			for (EventoAzienda e : lea) {
-					        				if (e.getIdEvento() == ea.getIdEvento()) daCanc = e;
-					        			}
-				        			}
-				        			if (daCanc != null) lea.remove(daCanc);
-				        			if (lea != null) aziendaVecchia.setEventiAziendaInt(lea);
-				        			transaction.save(aziendaVecchia);
-			        			}
-			        			
-			        		}
+			        		
+			        		//cancello il collegamento vecchio e aggiungo quello nuovo
 			        		if (aziendaOspitante.getEventiAziendaInt() != null) {
 			        			lea = aziendaOspitante.getEventiAziendaInt();
 			        			EventoAzienda daCanc = null;
@@ -206,6 +187,27 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         		}
 	        }
 	        transaction.commit();
+	        //Cancello il vecchio collegamento con l'azienda
+    		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") ) {
+    			Transaction transactionOld = txManager.newTransaction();
+    			Azienda aziendaOldToLoad = new Azienda ();
+    			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzienda());
+    			Azienda aziendaVecchia = transactionOld.load(aziendaOldToLoad);
+    			List<EventoAzienda> leav = new ArrayList<>();
+    			if (aziendaVecchia != null) {
+    				leav = aziendaVecchia.getEventiAziendaInt();
+        			EventoAzienda daCanc = null;
+        			if (leav != null) {
+	        			for (EventoAzienda e : leav) {
+	        				if (e.getIdEvento() == evento.getIdEvento()) daCanc = e;
+	        			}
+        			}
+        			if (daCanc != null) leav.remove(daCanc);
+        			if (leav != null) aziendaVecchia.setEventiAziendaInt(leav);
+        			transactionOld.save(aziendaVecchia);
+    			}			
+    			transactionOld.commit();
+    		}
 		}	
         risposta.setEsito(esito);
         risposta.setIdEvento(idEventoRisposta);
