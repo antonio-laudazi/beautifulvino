@@ -126,13 +126,25 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 					return risposta;
 				}
 		        }
+		        try {
+		        	transaction.commit();
+        		}catch (Exception e) {
+        			e.printStackTrace();
+					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Problemi nel salvare l'azienda vecchia con il vino eliminato");
+					esito.setTrace(e.getMessage());
+					risposta.setEsito(esito);
+					transaction.rollback();
+					return risposta;
+        		}
 		        if (vino.getOldIdAzienda() != null &&
 		        		!vino.getOldIdAzienda().equals("")) {
+		        	Transaction transactionOld = txManager.newTransaction();
 		        	//cambio azienda
 		        	Azienda toLoadOld = new Azienda();
 		        	System.out.println(vino.getOldIdAzienda());
 	        		toLoadOld.setIdAzienda(vino.getOldIdAzienda());
-	        		Azienda aziendaOld = transaction.load(toLoadOld);
+	        		Azienda aziendaOld = transactionOld.load(toLoadOld);
 	        		List<VinoAzienda> lv = aziendaOld.getViniAziendaInt();
 	        		if (lv != null) {
 	        			VinoAzienda daCanc = null;
@@ -144,21 +156,22 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 		        		if (daCanc != null) lv.remove(daCanc);
 		        		aziendaOld.setViniAziendaInt(lv);
 		        		try {
-		        			transaction.save(aziendaOld);
+		        			transactionOld.save(aziendaOld);
+		        			transactionOld.commit();
 		        		}catch (Exception e) {
 		        			e.printStackTrace();
 							esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 							esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Problemi nel salvare l'azienda vecchia con il vino eliminato");
 							esito.setTrace(e.getMessage());
 							risposta.setEsito(esito);
-							transaction.rollback();
+							transactionOld.rollback();
 							return risposta;
 		        		}
 	        		}
 		        }
 		       
 	        }
-	        transaction.commit();
+	        
 		}	
         risposta.setEsito(esito);
         risposta.setIdVino(idVinoRisposta);

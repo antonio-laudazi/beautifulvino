@@ -97,7 +97,9 @@ public class putTest {
         azienda.setIdAzienda("1513240316515");
         vino.setAziendaVino(azienda);
         vino.setInBreveVino("SSSSSSSSS");
-        vino.setOldIdAzienda("1521548170718");
+        vino.setOldIdAzienda("1513240316515");
+        vino.setAcquistabileVino(1);
+        vino.setIdVino("1526024406526");
         input.setFunctionName("putVinoGen");
         input.setVino(vino);
         

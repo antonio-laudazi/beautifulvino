@@ -81,7 +81,19 @@ public class Evento {
 	public void setDataEvento(long dataEvento) {
 		this.dataEvento = dataEvento;
 	}
-	
+	/**
+	 * @return the acquistabileEvento
+	 */
+	@DynamoDBAttribute(attributeName="acquistabileEvento")
+	public int getAcquistabileEvento() {
+		return acquistabileEvento;
+	}
+	/**
+	 * @param acquistabileEvento the acquistabileEvento to set
+	 */
+	public void setAcquistabileEvento(int acquistabileEvento) {
+		this.acquistabileEvento = acquistabileEvento;
+	}
 	/**
 	 * @return the oldDate
 	 */
@@ -149,19 +161,6 @@ public class Evento {
 	 */
 	public void setTitoloEvento(String titoloEvento) {
 		this.titoloEvento = titoloEvento;
-	}
-	/**
-	 * @return the acquistabileEvento
-	 */
-	@DynamoDBAttribute(attributeName="acquistabileEvento")
-	public int getAcquistabileEvento() {
-		return acquistabileEvento;
-	}
-	/**
-	 * @param acquistabileEvento the acquistabileEvento to set
-	 */
-	public void setAcquistabileEvento(int acquistabileEvento) {
-		this.acquistabileEvento = acquistabileEvento;
 	}
 	/**
 	 * @return the temaEvento
