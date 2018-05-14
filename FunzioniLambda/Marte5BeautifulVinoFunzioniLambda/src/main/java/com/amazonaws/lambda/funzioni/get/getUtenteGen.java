@@ -49,7 +49,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
@@ -92,7 +92,6 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			
 			//gestione e recupero badge associati all'utente
 			List<BadgeUtente> badges = utente.getBadgeUtenteInt();
-			if(badges != null) {
 				DynamoDBScanExpression expr = new DynamoDBScanExpression();
 				List<Badge> tuttiBadge;
 				try {
@@ -104,41 +103,28 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					risposta.setEsito(esito);
 					return risposta;
 				}
-				List<Badge> badgesCompleti = new ArrayList<>();
+				List<BadgeUtente> badgesCompleti = new ArrayList<>();
 				for (Badge badge : tuttiBadge) {
-					Badge nuovo = new Badge();
+					BadgeUtente nuovo = new BadgeUtente();
 					nuovo.setIdBadge(badge.getIdBadge());
 					nuovo.setNomeBadge(badge.getNomeBadge());
 					nuovo.setInfoBadge(badge.getInfoBadge());
 					nuovo.setUrlLogoBadge(badge.getUrlLogoBadge());
 					nuovo.setTuoBadge("N");
-					for (BadgeUtente badgeUtente : badges) {
-						if(badgeUtente.getIdBadge().equals(badge.getIdBadge())) {
-							nuovo.setTuoBadge("S");
+					if (badges != null) {
+						for (BadgeUtente badgeUtente : badges) {
+							if(badgeUtente.getIdBadge().equals(badge.getIdBadge())) {
+								nuovo.setTuoBadge("S");
+							}
 						}
 					}
-					if (input.getIdUtenteLog() == input.getIdUtentePadre() ||
+					if (input.getIdUtente() == input.getIdUtentePadre() ||
 							nuovo.getTuoBadge().equals("S")
 							) {
 							badgesCompleti.add(nuovo);
 					}
 				}
-				utente.setBadgeUtente(badgesCompleti);
-			}
-			//recupero associazione fra utente loggato e l'utente richiesto
-			String idUtenteLog = input.getIdUtenteLog();
-			if (idUtenteLog != null) {
-				Utente utenteLog = mapper.load(Utente.class, idUtenteLog);
-				if (utenteLog != null) {
-					List<UtenteUtente> listaUtenti = utenteLog.getUtentiUtenteInt();
-					risposta.setStato("D");
-					for (UtenteUtente u : listaUtenti) {
-						if (u.getIdUtente().equals(utente.getIdUtente())) {
-							risposta.setStato("A");
-						}
-					}
-				}
-			}
+				utente.setBadgeUtenteInt(badgesCompleti);
 			//riordino Aziende
 			List<VinoUtente> vini = utente.getViniUtenteInt();
 			List<Azienda> aziendeConvertite = new ArrayList<>();
@@ -147,13 +133,14 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			}
 			utente.setAziendeUtente(aziendeConvertite);
 			
+			//recupero associazione fra utente loggato e l'utente richiesto
 			utente.setStatoUtente("D");
 			if(idUtentePadre != null) {
 				Utente utentePadre = mapper.load(Utente.class, idUtentePadre);
 				if(utentePadre != null) {
-					List<Utente> utentiSeguiti = utentePadre.getUtentiUtente();
+					List<UtenteUtente> utentiSeguiti = utentePadre.getUtentiUtenteInt();
 					if(utentiSeguiti != null) {
-						for(Utente u : utentiSeguiti) {
+						for(UtenteUtente u : utentiSeguiti) {
 							if(u.getIdUtente().equals(idUtente)) {
 								utente.setStatoUtente("A");
 							}

@@ -449,6 +449,9 @@ public class Utente {
 	public static class BadgeUtente{
 		private String idBadge;
 		private String tuoBadge;
+		private String nomeBadge;
+ 		private String infoBadge;
+		private String urlLogoBadge;
 
 		@DynamoDBAttribute(attributeName="idBadge")
 		public String getIdBadge() {
@@ -458,7 +461,48 @@ public class Utente {
 		public void setIdBadge(String idBadge) {
 			this.idBadge = idBadge;
 		}
+		/**
+		 * @return the NomeBadge
+		 */
+		@DynamoDBAttribute(attributeName="nomeBadge")
+		public String getNomeBadge() {
+			return nomeBadge;
+		}
 
+		/**
+		 * @param nomeBadge the nomeBadge to set
+		 */
+		public void setNomeBadge(String nomeBadge) {
+			this.nomeBadge = nomeBadge;
+		}
+		/**
+		 * @return the infoBadge
+		 */
+		@DynamoDBAttribute(attributeName="infoBadge")
+		public String getInfoBadge() {
+			return infoBadge;
+		}
+
+		/**
+		 * @param infoBadge the infoBadge to set
+		 */
+		public void setInfoBadge(String infoBadge) {
+			this.infoBadge = infoBadge;
+		}
+		/**
+		 * @return the urlLogoBadge
+		 */
+		@DynamoDBAttribute(attributeName="urlLogoBadge")
+		public String getUrlLogoBadge() {
+			return urlLogoBadge;
+		}
+
+		/**
+		 * @param urlLogoBadge the urlLogoBadge to set
+		 */
+		public void setUrlLogoBadge(String urlLogoBadge) {
+			this.urlLogoBadge = urlLogoBadge;
+		}
 		/**
 		 * @return the tuoBadge
 		 */

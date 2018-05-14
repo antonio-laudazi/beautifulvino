@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.marte5.modello2.Evento.BadgeEvento;
 import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
@@ -64,13 +65,14 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 		        				r.setIdVino(vv.getIdVino());
 		        				RispostaConnectGenerica o = c.handleRequest(r, context);
 		        				System.out.println("esito connect " + uu.getIdUtente() + " " + vv.getIdVino() + " = "+ o.getEsito());
+		        				BadgeEvento be = e.getBadgeEventoInt();
+		        				
 		        			}
 		        		}
 	        		}
 	        	}
 	        }
 		}
-		sendMail();
 		return "ok";
 	}
 	private void sendMail (){
