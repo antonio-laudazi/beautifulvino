@@ -117,7 +117,11 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 							nuovo.setTuoBadge("S");
 						}
 					}
-					badgesCompleti.add(nuovo);
+					if (input.getIdUtenteLog() == input.getIdUtentePadre() ||
+							nuovo.getTuoBadge().equals("S")
+							) {
+							badgesCompleti.add(nuovo);
+					}
 				}
 				utente.setBadgeUtente(badgesCompleti);
 			}
@@ -135,7 +139,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					}
 				}
 			}
-			
+			//riordino Aziende
 			List<VinoUtente> vini = utente.getViniUtenteInt();
 			List<Azienda> aziendeConvertite = new ArrayList<>();
 			if(vini != null) {

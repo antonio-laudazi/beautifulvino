@@ -235,7 +235,7 @@ public class FunzioniUtils {
 						Azienda nuovaAzienda = new Azienda();
 						nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
 						nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-						aziende1.add(nuovaAzienda);
+						if (!contains(aziende1, nuovaAzienda))aziende1.add(nuovaAzienda);
 					}
 				}
 			}
@@ -283,7 +283,7 @@ public class FunzioniUtils {
 					Azienda nuovaAzienda = new Azienda();
 					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
 					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-					aziende1.add(nuovaAzienda);
+					if (!contains(aziende1, nuovaAzienda))aziende1.add(nuovaAzienda);
 				}
 			}
 			
