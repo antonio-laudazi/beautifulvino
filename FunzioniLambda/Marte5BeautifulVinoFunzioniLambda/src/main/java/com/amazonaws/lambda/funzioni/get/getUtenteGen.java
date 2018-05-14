@@ -149,7 +149,8 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				}
 			}
 			
-		}     
+		}   
+		esito.setMessage("prova");
         risposta.setEsito(esito);
         risposta.setUtente(utente);
         return risposta;

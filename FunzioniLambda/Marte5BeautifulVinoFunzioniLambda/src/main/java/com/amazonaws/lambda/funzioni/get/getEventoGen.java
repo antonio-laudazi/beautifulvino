@@ -165,12 +165,10 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				}
 			}
 			
-		}
-    		
-    		risposta.setEsito(esito);
-    		risposta.setEvento(evento);
-    		
-    		return risposta;
+		}		
+		risposta.setEsito(esito);
+		risposta.setEvento(evento);	
+		return risposta;
     }
     
 }
