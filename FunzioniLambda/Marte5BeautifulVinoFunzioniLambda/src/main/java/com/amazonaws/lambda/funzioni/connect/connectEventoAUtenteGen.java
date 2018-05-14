@@ -7,7 +7,6 @@ import java.util.List;
 import com.amazonaws.lambda.funzioni.common.BeautifulVinoAcquista;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -30,8 +29,6 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         context.getLogger().log("Input: " + input);
         
         RispostaConnectGenerica risposta = getRisposta(input, context);
-
-        // TODO: implement your handler
         return risposta;
     }
     
