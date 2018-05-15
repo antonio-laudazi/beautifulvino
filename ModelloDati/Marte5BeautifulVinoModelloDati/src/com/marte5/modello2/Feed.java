@@ -38,7 +38,7 @@ public class Feed {
 	private AziendaFeed aziendaFeedInt;
 	private String testoFeed;
 	private String visualizzaButtonFeed;
-	
+	private int puntiEsperienza;
 	/**
 	 * @return the idFeed
 	 */
@@ -66,7 +66,19 @@ public class Feed {
 	public void setIdEntitaFeed(String idEntitaFeed) {
 		this.idEntitaFeed = idEntitaFeed;
 	}
-	
+	/**
+	 * @return the puntiEsperienza
+	 */
+	@DynamoDBAttribute(attributeName="puntiEsperienza")
+	public long getPuntiEsperienza() {
+		return puntiEsperienza;
+	}
+	/**
+	 * @param puntiEsperienza the puntiEsperienza to set
+	 */
+	public void setPuntiEsperienza(int puntiEsperienza) {
+		this.puntiEsperienza = puntiEsperienza;
+	}
 	/**
 	 * @return the tipoFeed
 	 */

@@ -113,29 +113,20 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     						daRimuovere = eventoUtente;
     					}
     				}
-    				if(daRimuovere.getStatoEvento().equals(FunzioniUtils.EVENTO_STATO_ACQUISTATO)) {
-    					//7 - non posso cancellare o cambiare stato se lo stato precedente è Acquistato
-    					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-	    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " si tenta di cambiare di stato o cancellare un evento già acquistato.");
-	    		        risposta.setEsito(esito);
-	    		        return risposta;
-    				} else {
-    					eventiUtente.remove(daRimuovere);
-        				if(!(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO))) {
-        					daRimuovere.setStatoEvento(statoEvento);
-        					eventiUtente.add(daRimuovere);
-        				}
-        				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
-        					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
-        				
-	    					if (out.getCodice() != 100) {
-	    						esito = out;
-	    	    		        risposta.setEsito(esito);
-	    	    		        return risposta;
-	    					}
-        				}
+					eventiUtente.remove(daRimuovere);
+    				if(!(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO))) {
+    					daRimuovere.setStatoEvento(statoEvento);
+    					eventiUtente.add(daRimuovere);
     				}
+    				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
+    					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
     				
+    					if (out.getCodice() != 100) {
+    						esito = out;
+    	    		        risposta.setEsito(esito);
+    	    		        return risposta;
+    					}
+    				}	
     			} else {
     				//5
     				if(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO)) {

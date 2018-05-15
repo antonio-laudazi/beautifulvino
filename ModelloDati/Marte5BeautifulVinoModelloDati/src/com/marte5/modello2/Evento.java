@@ -55,6 +55,7 @@ public class Evento {
 	private String oldIdAzienda;
 	private int acquistabileEvento;
 	private int creditiEvento;
+	private int puntiEsperienza;
 	/**
 	 * @return the idEvento
 	 */
@@ -121,7 +122,19 @@ public class Evento {
 	public void setOldDate(long oldDate) {
 		this.oldDate = oldDate;
 	}
-	
+	/**
+	 * @return the puntiEsperienza
+	 */
+	@DynamoDBAttribute(attributeName="puntiEsperienza")
+	public long getPuntiEsperienza() {
+		return puntiEsperienza;
+	}
+	/**
+	 * @param puntiEsperienza the puntiEsperienza to set
+	 */
+	public void setPuntiEsperienza(int puntiEsperienza) {
+		this.puntiEsperienza = puntiEsperienza;
+	}
 	/**
 	 * @return the cittaEvento
 	 */

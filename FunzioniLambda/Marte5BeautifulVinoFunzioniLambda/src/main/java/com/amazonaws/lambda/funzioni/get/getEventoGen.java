@@ -112,10 +112,10 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 						Utente utenteEventoCompleto = new Utente();
 						
 						if (utenteEventoDB.getIdUtente() != null) utenteEventoCompleto.setIdUtente(utenteEventoDB.getIdUtente());
-						if (utenteEventoDB.getNomeUtente()!= null)utenteEventoCompleto.setUsernameUtente(utenteEventoDB.getNomeUtente());
+						utenteEventoCompleto.setUsernameUtente(utenteEventoDB.getUsernameUtente());
 						utenteEventoCompleto.setEsperienzaUtente(utenteEventoDB.getEsperienzaUtente());
-						utenteEventoCompleto.setLivelloUtente(utente.getLivelloUtente());
-						utenteEventoCompleto.setUrlFotoUtente(utente.getUrlFotoUtente());
+						utenteEventoCompleto.setLivelloUtente(utenteEventoDB.getLivelloUtente());
+						utenteEventoCompleto.setUrlFotoUtente(utenteEventoDB.getUrlFotoUtente());
 						
 						utentiEventoCompleti.add(utenteEventoCompleto);
 					}
