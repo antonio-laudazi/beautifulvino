@@ -126,7 +126,7 @@ public class Evento {
 	 * @return the puntiEsperienza
 	 */
 	@DynamoDBAttribute(attributeName="puntiEsperienza")
-	public long getPuntiEsperienza() {
+	public int getPuntiEsperienza() {
 		return puntiEsperienza;
 	}
 	/**
