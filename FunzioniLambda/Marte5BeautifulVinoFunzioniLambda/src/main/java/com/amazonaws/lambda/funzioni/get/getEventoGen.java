@@ -19,6 +19,7 @@ import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
+import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Vino;
@@ -101,22 +102,23 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			evento.setStatoEvento(statoEvento);
 			
 			//gestione degli utenti da visualizzare
-			List<Utente> utentiEvento = evento.getIscrittiEvento();
+			List<UtenteEvento> utentiEvento = evento.getIscrittiEventoInt();
 			List<Utente> utentiEventoCompleti = new ArrayList<>();
 			if(utentiEvento != null) {
-				for (Iterator<Utente> iterator = utentiEvento.iterator(); iterator.hasNext();) {
-					Utente utenteEvento = iterator.next();
+				for (Iterator<UtenteEvento> iterator = utentiEvento.iterator(); iterator.hasNext();) {
+					UtenteEvento utenteEvento = iterator.next();
 					Utente utenteEventoDB = mapper.load(Utente.class, utenteEvento.getIdUtente());
-					Utente utenteEventoCompleto = new Utente();
-					
-					utenteEventoCompleto.setIdUtente(utenteEventoDB.getIdUtente());
-					utenteEventoCompleto.setNomeUtente(utenteEventoDB.getNomeUtente());
-					utenteEventoCompleto.setCognomeUtente(utenteEventoDB.getCognomeUtente());
-					utenteEventoCompleto.setEsperienzaUtente(utenteEventoDB.getEsperienzaUtente());
-					utenteEventoCompleto.setLivelloUtente(utente.getLivelloUtente());
-					utenteEventoCompleto.setUrlFotoUtente(utente.getUrlFotoUtente());
-					
-					utentiEventoCompleti.add(utenteEventoCompleto);
+					if (utenteEventoDB != null) {
+						Utente utenteEventoCompleto = new Utente();
+						
+						if (utenteEventoDB.getIdUtente() != null) utenteEventoCompleto.setIdUtente(utenteEventoDB.getIdUtente());
+						if (utenteEventoDB.getNomeUtente()!= null)utenteEventoCompleto.setUsernameUtente(utenteEventoDB.getNomeUtente());
+						utenteEventoCompleto.setEsperienzaUtente(utenteEventoDB.getEsperienzaUtente());
+						utenteEventoCompleto.setLivelloUtente(utente.getLivelloUtente());
+						utenteEventoCompleto.setUrlFotoUtente(utente.getUrlFotoUtente());
+						
+						utentiEventoCompleti.add(utenteEventoCompleto);
+					}
 				}
 			} 
 			

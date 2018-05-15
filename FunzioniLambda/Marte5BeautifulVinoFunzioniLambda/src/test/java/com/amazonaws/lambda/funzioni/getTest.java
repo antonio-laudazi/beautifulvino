@@ -28,8 +28,8 @@ public class getTest {
         input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
         
           input.setFunctionName("getEventoGen");
-          input.setIdEvento("1525255289722");
-          input.setDataEvento(1528531200000l);
+          input.setIdEvento("1524471967673");
+          input.setDataEvento(1525194000000l);
 //        input.setFunctionName("getViniEventoGen");
 //        input.setIdEvento(1513789129406L);
 //        input.setDataEvento(1513724400000L);

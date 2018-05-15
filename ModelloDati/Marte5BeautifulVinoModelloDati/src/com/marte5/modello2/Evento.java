@@ -54,7 +54,6 @@ public class Evento {
 	private long oldDate;
 	private String oldIdAzienda;
 	private int acquistabileEvento;
-	private int creditiEvento;
 	/**
 	 * @return the idEvento
 	 */
@@ -96,18 +95,7 @@ public class Evento {
 		this.acquistabileEvento = acquistabileEvento;
 	}
 	/**
-	 * @return the creditiEvento
-	 */
-	@DynamoDBAttribute(attributeName="creditiEvento")
-	public int getCreditiEvento() {
-		return creditiEvento;
-	}
-	/**
-	 * @param creditiEvento the creditiEvento to set
-	 */
-	public void setCreditiEvento(int creditiEvento) {
-		this.creditiEvento = creditiEvento;
-	}
+
 	/**
 	 * @return the oldDate
 	 */
