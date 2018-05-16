@@ -92,6 +92,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			
 			//gestione e recupero badge associati all'utente
 			List<BadgeUtente> badges = utente.getBadgeUtenteInt();
+			
 				DynamoDBScanExpression expr = new DynamoDBScanExpression();
 				List<Badge> tuttiBadge;
 				try {
@@ -118,10 +119,11 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 							}
 						}
 					}
-					if (input.getIdUtente() == input.getIdUtentePadre() ||
+					if (input.getIdUtente().equals(input.getIdUtentePadre()) ||
 							nuovo.getTuoBadge().equals("S")
 							) {
 							badgesCompleti.add(nuovo);
+							
 					}
 				}
 				utente.setBadgeUtenteInt(badgesCompleti);

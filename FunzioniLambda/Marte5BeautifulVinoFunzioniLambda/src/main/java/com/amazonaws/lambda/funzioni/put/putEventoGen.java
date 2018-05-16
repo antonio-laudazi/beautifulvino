@@ -61,7 +61,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			}
 			TransactionManager txManager = new TransactionManager (client, "BV_Transactions","BV_TransactionImages");
 			// Create a new transaction from the transaction manager
-			Transaction transaction = txManager.newTransaction();
+			
 
 	        Evento evento = input.getEvento();
 	        if(evento == null) {
@@ -69,19 +69,28 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Evento NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Evento NULL");
 				risposta.setEsito(esito);
-				transaction.rollback();
+				
 				return risposta;
 	        } else {
-	        	
+	        		Transaction transaction = txManager.newTransaction();
 	        		String idEvento = evento.getIdEvento();
 		        	if(idEvento == null || idEvento.equals("")) {
 	        			//insert
 		        		idEvento = FunzioniUtils.getEntitaId();
 		        		flagOld = true;
-		        } 
+		        	} 
 		        	idEventoRisposta = idEvento;
 		        	evento.setIdEvento(idEvento);
-		            
+		            //cancello l'evento duplicato se ho cambiato data
+		        	if (evento.getOldDate() != evento.getDataEvento() && flagOld == false) {
+	        			RichiestaDeleteGenerica rd = new RichiestaDeleteGenerica();
+	        			rd.setFunctionName("deleteEventoGen");
+	        			rd.setIdEvento(evento.getIdEvento());
+	        			rd.setDataEvento(evento.getOldDate());
+	        			BeautifulVinoDelete d = new BeautifulVinoDelete();
+	        			RispostaDeleteGenerica risp = d.handleRequest(rd, context);
+	        			System.out.println("esito cancellazione evento duplicato" + risp.getEsito().getMessage());
+	        		}
 	        		//gestione aziende
 	        		//OSPITANTE
 	        		Azienda toLoadOspitante = new Azienda();
@@ -113,16 +122,16 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		ea.setUrlFotoEvento(ea.getUrlFotoEvento());
 			        		List<EventoAzienda> lea = new ArrayList<>();
 			        		
-			        		//cancello il collegamento vecchio e aggiungo quello nuovo
+			        		//nall'azienda cancello il collegamento vecchio e aggiungo quello nuovo
 			        		if (aziendaOspitante.getEventiAziendaInt() != null) {
 			        			lea = aziendaOspitante.getEventiAziendaInt();
 			        			EventoAzienda daCanc = null;
 			        			if (lea != null) {
 				        			for (EventoAzienda e : lea) {
-				        				if (e.getIdEvento() == ea.getIdEvento()) daCanc = e;
+				        				if (e.getIdEvento().equals(ea.getIdEvento())) daCanc = e;
 				        			}
 			        			}
-			        			if (daCanc != null) lea.remove(daCanc);
+			        			if (daCanc != null && evento.getOldDate() == evento.getDataEvento()) lea.remove(daCanc);
 			        		}
 			        		lea.add(ea);
 			        		aziendaOspitante.setEventiAziendaInt(lea);
@@ -176,19 +185,13 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 					transaction.rollback();
 					return risposta;
 				}
-		        if (evento.getOldDate() != evento.getDataEvento() && flagOld == false) {
-        			RichiestaDeleteGenerica rd = new RichiestaDeleteGenerica();
-        			rd.setFunctionName("deleteEventoGen");
-        			rd.setIdEvento(evento.getIdEvento());
-        			rd.setDataEvento(evento.getOldDate());
-        			BeautifulVinoDelete d = new BeautifulVinoDelete();
-        			RispostaDeleteGenerica risp = d.handleRequest(rd, context);
-        			System.out.println("esito cancellazione evento duplicato" + risp.getEsito().getMessage());
-        		}
+		        
+		        transaction.commit();
 	        }
-	        transaction.commit();
+	        
 	        //Cancello il vecchio collegamento con l'azienda
-    		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") ) {
+    		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") 
+    				&& !evento.getOldIdAzienda().equals(evento.getAziendaOspitanteEvento().getIdAzienda())) {
     			Transaction transactionOld = txManager.newTransaction();
     			Azienda aziendaOldToLoad = new Azienda ();
     			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzienda());
@@ -199,7 +202,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         			EventoAzienda daCanc = null;
         			if (leav != null) {
 	        			for (EventoAzienda e : leav) {
-	        				if (e.getIdEvento() == evento.getIdEvento()) daCanc = e;
+	        				if (e.getIdEvento().equals(evento.getIdEvento())) daCanc = e;
 	        			}
         			}
         			if (daCanc != null) leav.remove(daCanc);

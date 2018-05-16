@@ -139,8 +139,9 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
         		}
 		        if (vino.getOldIdAzienda() != null &&
 		        		!vino.getOldIdAzienda().equals("")) {
+		        	//rimuovo l'associazione nella azienda oldId sia se non ho cambiato azienda(quindi ha un collegamento duplicato)
+		        	//sia se l'ho cambiata 
 		        	Transaction transactionOld = txManager.newTransaction();
-		        	//cambio azienda
 		        	Azienda toLoadOld = new Azienda();
 		        	System.out.println(vino.getOldIdAzienda());
 	        		toLoadOld.setIdAzienda(vino.getOldIdAzienda());

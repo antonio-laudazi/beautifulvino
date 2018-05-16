@@ -35,7 +35,7 @@ public class putTest {
         Evento evento = new Evento();
         evento.setIdEvento("1525706744683");
         
-      evento.setDataEvento(11111110L);
+      evento.setDataEvento(711111110L);
       evento.setOldDate(11111110L);
      // evento.setOldDate(1536357600000L);
       
@@ -56,11 +56,11 @@ public class putTest {
         provincia.setSiglaProvincia("LI");
         provincia.setIdProvincia("1513783245483");
         evento.setProvinciaEventoInt(provincia);        
-        evento.setOldIdAzienda("1522417292119");
+        evento.setOldIdAzienda("1513239955732");
         
         Azienda aziendaOspitante = new Azienda();
-        aziendaOspitante.setIdAzienda("1522417292119");
-        
+       // aziendaOspitante.setIdAzienda("1522417292119");
+        aziendaOspitante.setIdAzienda("1513239955732");
         evento.setAziendaOspitanteEvento(aziendaOspitante);
         
 //        VinoEvento vinoEvento = new VinoEvento();

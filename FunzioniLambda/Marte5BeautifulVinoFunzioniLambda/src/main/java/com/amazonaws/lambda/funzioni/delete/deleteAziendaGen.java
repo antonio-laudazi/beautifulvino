@@ -2,6 +2,8 @@ package com.amazonaws.lambda.funzioni.delete;
 
 import java.util.List;
 
+import com.amazonaws.lambda.funzioni.common.BeautifulVinoGet;
+import com.amazonaws.lambda.funzioni.common.BeautifulVinoPut;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.regions.Regions;
@@ -12,16 +14,19 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
+import com.marte5.modello.risposte.put.RispostaPutGenerica;
 import com.marte5.modello2.Azienda;
-import com.marte5.modello2.Evento;
 import com.marte5.modello2.Azienda.EventoAzienda;
 import com.marte5.modello2.Azienda.VinoAzienda;
+import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
-import com.marte5.modello2.Evento.VinoEvento;
+import com.marte5.modello2.Utente;
+import com.marte5.modello2.Utente.AziendaUtente;
 import com.marte5.modello2.Vino;
-import com.marte5.modello2.Vino.AziendaVino;
-import com.marte5.modello2.Vino.EventoVino;
 
 public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica, RispostaDeleteGenerica> {
 
@@ -88,6 +93,34 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 			        				}
 		        				}
 		        			}
+	        			}
+	        			//cancello il collogamento con gli utenti
+	        			RichiestaGetGenerica r = new RichiestaGetGenerica();
+	        			BeautifulVinoGet g = new BeautifulVinoGet();
+	        			r.setFunctionName("getUtentiGen");
+	        			r.setIdUtente("eu-central-1:e7ae1814-8e42-49fc-a183-d5e2abaf0d7c");
+	        			RispostaGetGenerica out = g.handleRequest(r, context);
+	        			System.out.println("risultato richiesta utenti: "+ out.getEsito().getMessage());
+	        			List<Utente> utenti = out.getUtenti();
+	        			for (Utente u : utenti) {
+	        				List<AziendaUtente> aziendeUtente = u.getAziendeUtenteInt();
+	        				AziendaUtente daCanc = null;
+	        				if (aziendeUtente != null) {
+		        				for (AziendaUtente au : aziendeUtente) {
+		        					if (au.getIdAzienda().equals(aziendaDaCancellare.getIdAzienda())) {
+		        						daCanc = au;
+		        					}
+		        				}
+	        				}
+	        				if (daCanc != null) {
+	        					aziendeUtente.remove(daCanc);
+	        					RichiestaPutGenerica pg = new RichiestaPutGenerica();
+	        					BeautifulVinoPut p = new BeautifulVinoPut();
+	        					pg.setFunctionName("putUtenteGen");
+	        					pg.setUtente(u);
+	        					RispostaPutGenerica out1 = p.handleRequest(pg, context);
+	        					System.out.println("risultato inserimento utenti " + out1.getEsito().getMessage());
+	        				}
 	        			}
 	        			try {
 	        			//cancello l'azienda

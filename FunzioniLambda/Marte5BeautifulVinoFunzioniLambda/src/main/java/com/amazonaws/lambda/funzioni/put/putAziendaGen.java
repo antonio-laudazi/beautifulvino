@@ -38,7 +38,7 @@ public class putAziendaGen implements RequestHandler<RichiestaPutGenerica, Rispo
 
 	        Azienda azienda = input.getAzienda();
 	        if(azienda == null) {
-	        		esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+	        	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Azienda NULL");
 				esito.setTrace(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Azienda NULL");
 				risposta.setEsito(esito);
