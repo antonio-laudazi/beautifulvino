@@ -96,7 +96,7 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 			        					" con esito: " + esito.getMessage() +"\n";
 		        			}
 		        		}
-		        		text = text + "----------------------------------------\n";
+		        		text = text + "-----------------------------------------\n";
 	        		}
 	        	}
 	        }
