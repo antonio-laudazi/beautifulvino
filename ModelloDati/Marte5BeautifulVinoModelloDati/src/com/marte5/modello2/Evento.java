@@ -56,6 +56,7 @@ public class Evento {
 	private int acquistabileEvento;
 	private int creditiEvento;
 	private int puntiEsperienza;
+	private List<VinoEvento> listaViniCancellati;
 	/**
 	 * @return the idEvento
 	 */
@@ -509,6 +510,20 @@ public class Evento {
 	 */
 	public void setViniEventoInt(List<VinoEvento> viniEventoInt) {
 		this.viniEventoInt = viniEventoInt;
+	}
+	
+	/**
+	 * @return the listaViniCancellati
+	 */
+	@DynamoDBAttribute(attributeName="listaViniCancellati")
+	public List<VinoEvento> getListaViniCancellati() {
+		return listaViniCancellati;
+	}
+	/**
+	 * @param listaViniCancellati the listaViniCancellati to set
+	 */
+	public void setListaViniCancellati(List<VinoEvento> listaViniCancellati) {
+		this.listaViniCancellati = listaViniCancellati;
 	}
 	
 	@DynamoDBDocument

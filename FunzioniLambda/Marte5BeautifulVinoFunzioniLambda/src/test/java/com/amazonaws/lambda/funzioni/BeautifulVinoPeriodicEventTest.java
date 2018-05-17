@@ -1,6 +1,7 @@
 package com.amazonaws.lambda.funzioni;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -11,12 +12,12 @@ import com.amazonaws.lambda.funzioni.common.TestContext;
 import com.amazonaws.services.lambda.runtime.Context;
 
 public class BeautifulVinoPeriodicEventTest {
-	 private static Integer input;
+	 private static Map<String, Object> input;
 
 	    @BeforeClass
 	    public static void createInput() throws IOException {
 	        // TODO: set up your sample input object here.
-	        input = new Integer(5);
+	        
 	    }
 
 	    private Context createContext() {

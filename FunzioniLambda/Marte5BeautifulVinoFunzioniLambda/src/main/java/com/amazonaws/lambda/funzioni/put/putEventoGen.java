@@ -38,7 +38,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         boolean flagOld = false;
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -173,7 +173,26 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    					}
 	    				}
 	        		}
-
+	        		List<VinoEvento> lCanc = input.getEvento().getListaViniCancellati();
+	        		if (lCanc != null) {
+	        			for (VinoEvento ve : lCanc) {
+	        				Vino vinoToLoad = new Vino();
+    						vinoToLoad.setIdVino(ve.getIdVino());
+	        				Vino vino = transaction.load(vinoToLoad);
+	        				List<EventoVino> listaEv = vino.getEventiVinoInt();
+	        				EventoVino daCanc = null;
+	        				if (listaEv != null) {
+		        				for (EventoVino ev : listaEv ) {
+		        					if (ev.getIdEvento().equals(evento.getIdEvento())) {
+		        						daCanc = ev;
+		        					}
+		        				}
+	        				}
+	        				listaEv.remove(daCanc);
+	        				vino.setEventiVinoInt(listaEv);
+	        				transaction.save(vino);
+	        			}   			
+	        		}
 		        try {
 		        		transaction.save(evento);
 				} catch (Exception e) {

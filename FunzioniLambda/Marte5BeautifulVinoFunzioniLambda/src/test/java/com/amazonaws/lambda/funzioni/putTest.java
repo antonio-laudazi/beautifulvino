@@ -35,7 +35,7 @@ public class putTest {
         Evento evento = new Evento();
         evento.setIdEvento("1525706744683");
         
-      evento.setDataEvento(711111110L);
+     evento.setDataEvento(11111110L);
       evento.setOldDate(11111110L);
      // evento.setOldDate(1536357600000L);
       
@@ -64,13 +64,19 @@ public class putTest {
         evento.setAziendaOspitanteEvento(aziendaOspitante);
         
 //        VinoEvento vinoEvento = new VinoEvento();
-//        vinoEvento.setIdVino("1520606560866");
+//        vinoEvento.setIdVino("1513357582823");
 //        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
 //        listaVini.add(vinoEvento);
 //        evento.setViniEventoInt(listaVini);
-      input.setEvento(evento);
       
-
+        VinoEvento vinoEventoC = new VinoEvento();
+        vinoEventoC.setIdVino("1513357582823");
+        List<VinoEvento> listaViniC = new ArrayList<VinoEvento>();
+        listaViniC.add(vinoEventoC);
+        evento.setListaViniCancellati(listaViniC);
+//        
+//        
+        input.setEvento(evento);
 //        Provincia provincia = new Provincia();
 //        
 //        provincia.setNomeProvincia("Livorno");
