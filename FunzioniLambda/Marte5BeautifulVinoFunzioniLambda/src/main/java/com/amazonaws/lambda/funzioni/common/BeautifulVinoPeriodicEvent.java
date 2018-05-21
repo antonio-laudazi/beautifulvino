@@ -101,7 +101,7 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 	        	}
 	        }
 		}
-		sendMail(text, "riepilogo aggiornamento periodico BeatifulVino");
+		if (!text.equals("aggiornamento periodico eventi\n"))sendMail(text, "riepilogo aggiornamento periodico BeatifulVino");
 		return "ok";
 	}
 	

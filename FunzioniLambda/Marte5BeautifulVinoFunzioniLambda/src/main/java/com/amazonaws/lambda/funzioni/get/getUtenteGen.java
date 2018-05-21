@@ -1,6 +1,8 @@
 package com.amazonaws.lambda.funzioni.get;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,17 +15,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.marte5.modello.Esito;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
-import com.marte5.modello.Esito;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Utente.BadgeUtente;
 import com.marte5.modello2.Utente.EventoUtente;
 import com.marte5.modello2.Utente.UtenteUtente;
 import com.marte5.modello2.Utente.VinoUtente;
-import com.marte5.modello.richieste.get.RichiestaGetGenerica;
-import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
 public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
@@ -49,7 +51,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
@@ -88,6 +90,15 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					}
 				}
 			}
+			//ordinamento eventi
+			Collections.sort(eventiCompletiUtente, new Comparator<Evento>(){
+		         @Override
+		         public int compare(Evento o1, Evento o2){
+		            if (o1.getDataEvento() < o2.getDataEvento())return -1;
+		            if (o1.getDataEvento() == o2.getDataEvento())return 0;
+		            else return 1;
+		         }
+		      });
 			utente.setEventiUtente(eventiCompletiUtente);
 			
 			//gestione e recupero badge associati all'utente
@@ -150,7 +161,6 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					}
 				}
 			}
-			
 		}   
 		esito.setMessage("prova");
         risposta.setEsito(esito);

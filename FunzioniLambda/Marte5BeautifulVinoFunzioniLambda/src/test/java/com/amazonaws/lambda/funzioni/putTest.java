@@ -72,7 +72,7 @@ public class putTest {
         VinoEvento vinoEventoC = new VinoEvento();
         vinoEventoC.setIdVino("1513357582823");
         List<VinoEvento> listaViniC = new ArrayList<VinoEvento>();
-        listaViniC.add(vinoEventoC);
+//        listaViniC.add(vinoEventoC);
         evento.setListaViniCancellati(listaViniC);
 //        
 //        

@@ -38,7 +38,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         boolean flagOld = false;
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putEvento ");
@@ -78,6 +78,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        			//insert
 		        		idEvento = FunzioniUtils.getEntitaId();
 		        		flagOld = true;
+		        		evento.setNumPostiDisponibiliEvento(evento.getNumMaxPartecipantiEvento());
 		        	} 
 		        	idEventoRisposta = idEvento;
 		        	evento.setIdEvento(idEvento);
@@ -174,7 +175,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    				}
 	        		}
 	        		List<VinoEvento> lCanc = input.getEvento().getListaViniCancellati();
-	        		if (lCanc != null) {
+	        		if (lCanc != null && lCanc.size() > 0) {
 	        			for (VinoEvento ve : lCanc) {
 	        				Vino vinoToLoad = new Vino();
     						vinoToLoad.setIdVino(ve.getIdVino());

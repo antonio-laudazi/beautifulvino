@@ -33,7 +33,7 @@ public class connectViniAUtenteGen_Backup implements RequestHandler<RichiestaCon
 		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
 		Esito esito = new Esito();
 		esito.setCodice(100);
-        esito.setMessage("Esito corretto per la richiesta getEventi");
+        esito.setMessage("Esito corretto per la richiesta connectViniAUtente");
         
         String idUtente = input.getIdUtente();
         String idVino = input.getIdVino();

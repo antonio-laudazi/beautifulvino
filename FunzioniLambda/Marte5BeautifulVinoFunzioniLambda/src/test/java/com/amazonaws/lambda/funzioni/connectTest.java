@@ -31,19 +31,20 @@ public class connectTest {
 //        input.setStatoEvento("D");
 //        input.setFunctionName("connectBadgeAUtenteGen");
 //        input.setIdUtente("b6118563-1486-4448-8994-c121b60534ea");
-        
+//        
         input.setFunctionName("connectEventoAUtenteGen");
         input.setIdUtente("10523a22-9404-453c-9df1-7ad6519c648d");
         input.setIdEvento("1520605230123");
-        input.setStatoEvento("N");
+        input.setStatoEvento("A");
         input.setDataEvento( 1523283131000l);
-        input.setNumeroPartecipanti(0);
+        input.setNumeroPartecipanti(2);
         
-        /*"functionName":"connectViniAUtenteGen",
-	"idVino":"1513240022473",
-	"idUtente":"eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e",
-	"statoEvento":"D"*/
+//        input.setFunctionName("connectViniAUtenteGen");
+//        input.setIdVino("1513240022473");
+//        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
+//        input.setStatoVino("A");
         
+
 //        List<Badge> badges = new ArrayList<>();
 //        
 ////        Badge badge = new Badge();

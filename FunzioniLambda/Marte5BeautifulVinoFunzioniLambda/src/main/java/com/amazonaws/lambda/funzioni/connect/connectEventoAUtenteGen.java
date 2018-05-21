@@ -121,7 +121,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     				}
     				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
     					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
-    				
+    					
     					if (out.getCodice() != 100) {
     						esito = out;
     	    		        risposta.setEsito(esito);
@@ -161,7 +161,8 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     			
     			try {
     				mapper.save(utente);
-    				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, mapper);
+    				int np = input.getNumeroPartecipanti();
+    				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
 			} catch (Exception e) {
 				e.printStackTrace();
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
@@ -174,26 +175,31 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         return risposta;
     }
     
-    private void addUtenteIscritto(String idEvento, long dataEvento, String idUtente,Evento evento, DynamoDBMapper mapper) {
-    		if(evento != null) {
-    			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
-    			if(utentiIscritti == null) {
-    				utentiIscritti = new ArrayList<UtenteEvento>();
-    			}
-    			boolean presente = false;
-    			for (UtenteEvento utenteEvento : utentiIscritti) {
-				if(utenteEvento.getIdUtente().equals(idUtente)) {
-					presente = true;
-				}
+    private void addUtenteIscritto(String idEvento, long dataEvento, String idUtente,Evento evento,int numeroP, DynamoDBMapper mapper) {
+    	UtenteEvento ue = new UtenteEvento();
+		if(evento != null) {
+			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
+			if(utentiIscritti == null) {
+				utentiIscritti = new ArrayList<UtenteEvento>();
 			}
-    			if(!presente) {
-    				UtenteEvento ue = new UtenteEvento();
-    				ue.setIdUtente(idUtente);
-    				utentiIscritti.add(ue);
-    			}
-    			evento.setIscrittiEventoInt(utentiIscritti);
-    			mapper.save(evento);
-    		}
+			boolean presente = false;
+			for (UtenteEvento utenteEvento : utentiIscritti) {
+			if(utenteEvento.getIdUtente().equals(idUtente)) {
+				presente = true;
+				ue = utenteEvento;
+			}
+		}		
+		if(!presente) {
+			ue.setIdUtente(idUtente);
+			ue.setPostiAcquistati(numeroP);
+			utentiIscritti.add(ue);
+		}else {
+			ue.setPostiAcquistati(ue.getPostiAcquistati() + numeroP);
+		}
+		evento.setIscrittiEventoInt(utentiIscritti);
+		evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
+		mapper.save(evento);
+		}
     }
     private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num, Context context) {
     	RichiestaAcquistaGenerica r = new RichiestaAcquistaGenerica();

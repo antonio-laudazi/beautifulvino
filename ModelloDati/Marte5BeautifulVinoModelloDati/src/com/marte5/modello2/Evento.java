@@ -556,7 +556,7 @@ public class Evento {
 	@DynamoDBDocument
 	public static class UtenteEvento{
 		private String idUtente;
-
+		private int postiAcquistati;
 		/**
 		 * @return the idUtente
 		 */
@@ -569,6 +569,19 @@ public class Evento {
 		 */
 		public void setIdUtente(String idUtente) {
 			this.idUtente = idUtente;
+		}
+		/**
+		 * @return the postiAcquistati
+		 */
+		@DynamoDBAttribute(attributeName="postiAcquistati")
+		public int getPostiAcquistati() {
+			return postiAcquistati;
+		}
+		/**
+		 * @param postiAcquistati the postiAcquistati to set
+		 */
+		public void setPostiAcquistati(int postiAcquistati) {
+			this.postiAcquistati = postiAcquistati;
 		}
 	}
 	

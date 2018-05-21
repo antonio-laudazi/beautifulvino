@@ -70,7 +70,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        		} else {
 	        			//cancello il collegamento con l'azienda
 	        			AziendaEvento aziendaEvento = eventoDaCancellare.getAziendaOspitanteEventoInt();
-	        			if (aziendaEvento != null) {	        					        		
+	        			if (aziendaEvento != null && !aziendaEvento.getIdAzienda().equals("")) {	        					        		
 	        					Azienda aziendaDaCanc = mapper.load(Azienda.class, aziendaEvento.getIdAzienda());
 	        					if (aziendaDaCanc != null) {
 	        					List<EventoAzienda> listaEventiAzienda = aziendaDaCanc.getEventiAziendaInt();
