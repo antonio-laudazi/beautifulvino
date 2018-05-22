@@ -40,7 +40,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -70,7 +70,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        		} else {
 	        			//cancello il collegamento con l'azienda
 	        			AziendaEvento aziendaEvento = eventoDaCancellare.getAziendaOspitanteEventoInt();
-	        			if (aziendaEvento != null && !aziendaEvento.getIdAzienda().equals("")) {	        					        		
+	        			if (aziendaEvento != null && aziendaEvento.getIdAzienda() != null) {	        					        		
 	        					Azienda aziendaDaCanc = mapper.load(Azienda.class, aziendaEvento.getIdAzienda());
 	        					if (aziendaDaCanc != null) {
 	        					List<EventoAzienda> listaEventiAzienda = aziendaDaCanc.getEventiAziendaInt();

@@ -1,13 +1,14 @@
 package com.amazonaws.lambda.funzioni.get;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -72,14 +73,8 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				risposta.setEsito(esito);
 				return risposta;
 			}
-			Utente utente = mapper.load(Utente.class, idUtente);
-			if (utente == null) {
-				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET
-						+ " utente non trovato su DB, non posso procedere");
-				risposta.setEsito(esito);
-				return risposta;
-			}
+			Utente utente  = null;
+			if (idUtente!= null )utente = mapper.load(Utente.class, idUtente);
 
 //			scannedCount = mapper.count(Evento.class, expr);
 //			if (!(elencoCompleto != null && elencoCompleto.equalsIgnoreCase("S"))) {
@@ -135,11 +130,24 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 //			}
 			// ottengo la 'pagina'
 			//QueryResultPage<Evento> qpage = mapper.queryPage(Evento.class, qexpr);
+			//recupero tutti gli eventi
 			ScanResultPage<Evento> page = mapper.scanPage(Evento.class, expr);
-			
-			List<Evento> eventi = page.getResults();
+			List<Evento> eventiTot = new ArrayList<>();
+			eventiTot = page.getResults();
+			List<Evento> eventi = new ArrayList<>();
+			long time = Calendar.getInstance().getTimeInMillis();
+			//elimino eventi vecchi
+			if (utente != null) {
+				for (Evento e : eventiTot) {
+					if (e.getDataEvento() >= time) {
+						eventi.add(e);
+					}
+				}
+			}else {
+				eventi = eventiTot;
+			}
 			scannedCount = eventi.size();
-			
+			//riordino gli eventi per data
 			Collections.sort(eventi, new Comparator<Evento>(){
 				@Override
 				public int compare(Evento arg0, Evento arg1) {
@@ -148,7 +156,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					return (Long.compare(d0, d1));
 				}
 		      });
-			
+			//ne invio solo 13 dalla data ultimo evento
 			if (eventi != null && (!(elencoCompleto != null && elencoCompleto.equalsIgnoreCase("S"))) ) {
 				if ((idUltimoEvento != "" || !idUltimoEvento.equals(null)) && dataUltimoEvento != 0) {
 					for (Evento e : eventi) {
@@ -177,8 +185,8 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					eventi = temp;
 				}
 			}
-			
-			if (eventi != null) {
+			//aggiungo la relazione fra l'evento e l'utente loggato
+			if (eventi != null && utente != null) {
 				for (Evento evento : eventi) {
 					String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
 					try {
