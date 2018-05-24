@@ -91,7 +91,7 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			//gestione dello stato evento da visualizzare
 			String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
 			try {
-				statoEvento = FunzioniUtils.getStatoEvento(utente, idEvento, dataEvento, mapper);
+				statoEvento = FunzioniUtils.getStatoEvento(utente, evento, dataEvento, mapper);
 			} catch (Exception e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEvento ");

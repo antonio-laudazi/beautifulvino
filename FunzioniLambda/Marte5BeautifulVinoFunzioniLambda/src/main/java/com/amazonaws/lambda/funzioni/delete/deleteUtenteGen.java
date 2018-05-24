@@ -86,6 +86,26 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 		        				}
 		        			}
 	        			}
+	        			//cancello i preferiti nell'evento
+	        			listaEventi = utenteDaCancellare.getPreferitiEventiUtenteInt();
+	        			if (listaEventi != null) {
+		        			for (EventoUtente eu : listaEventi) {
+		        				Evento eventoDaCanc = mapper.load(Evento.class, eu.getIdEvento());
+		        				if (eventoDaCanc != null) { 
+			        				List<UtenteEvento> listaUtenteEvento = eventoDaCanc.getPreferitiEventoInt();
+			        				UtenteEvento vucanc = null;
+			        				if (listaUtenteEvento != null) {
+				        				for (UtenteEvento v : listaUtenteEvento) {
+					        				if (v.getIdUtente().equals(utenteDaCancellare.getIdUtente())) {
+					        					vucanc = v;
+					        				}
+				        				}
+			        				}
+			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
+			        				mapper.save(eventoDaCanc);
+		        				}
+		        			}
+	        			}
 	        			//cancello il collegamento con le aziende
 	        			//non c'è il collegamento fra le azieda e gli utenti, nulla da cancellare
 //	        			List<AziendaUtente> listaAziende = utenteDaCancellare.getAziendeUtenteInt();

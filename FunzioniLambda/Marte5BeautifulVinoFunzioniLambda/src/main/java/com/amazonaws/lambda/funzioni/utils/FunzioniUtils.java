@@ -37,7 +37,7 @@ public class FunzioniUtils {
 	public static final String EVENTO_STATO_ACQUISTATO = "A";
 	public static final String EVENTO_STATO_PREFERITO = "P";
 	public static final String EVENTO_STATO_CANCELLATO = "D";
-	public static final String EVENTO_STATO_PRENOTATO = "PR";
+	public static final String EVENTO_STATO_PRENOTATO = "P";
 	
 	public static final String VINO_STATO_NEUTRO = "N";
 	public static final String VINO_STATO_ACQUISTATO = "A";
@@ -68,7 +68,7 @@ public class FunzioniUtils {
 		if(utente == null) {
 			throw new Exception("Utente null, non posso procedere");
 		}
-		//scommentare per nuova versione connect
+		
 		List<EventoUtente> eventiUtente = utente.getAcquistatiEventiUtenteInt();
 		//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
 		if(eventiUtente != null) {
@@ -85,7 +85,18 @@ public class FunzioniUtils {
 				}
 			}
 		}
-		
+		evento.setStatoPreferitoEvento(EVENTO_STATO_NEUTRO);
+		eventiUtente = utente.getPreferitiEventiUtenteInt();
+		//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+		if(eventiUtente != null) {
+			for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
+				EventoUtente eventoUtente = iterator.next();
+				if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
+					//l'evento in questione è tra quelli associati all'utente
+					evento.setStatoPreferitoEvento(EVENTO_STATO_PREFERITO);
+				}
+			}
+		}
 		return statoEvento;
 	}
 	

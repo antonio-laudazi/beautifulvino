@@ -9,6 +9,7 @@ import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -22,7 +23,10 @@ import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Azienda.EventoAzienda;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
+import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Evento.VinoEvento;
+import com.marte5.modello2.Utente;
+import com.marte5.modello2.Utente.EventoUtente;
 import com.marte5.modello2.Vino;
 import com.marte5.modello2.Vino.EventoVino;
 
@@ -59,7 +63,8 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 				risposta.setEsito(esito);
 				return risposta;
 			}
-			TransactionManager txManager = new TransactionManager (client, "BV_Transactions","BV_TransactionImages");
+			DynamoDBMapper mapper = new DynamoDBMapper(client);
+			//TransactionManager txManager = new TransactionManager (client, "BV_Transactions","BV_TransactionImages");
 			// Create a new transaction from the transaction manager
 			
 
@@ -72,7 +77,8 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 				
 				return risposta;
 	        } else {
-	        		Transaction transaction = txManager.newTransaction();
+	        		//Transaction transaction = txManager.newTransaction();
+	        		
 	        		String idEvento = evento.getIdEvento();
 		        	if(idEvento == null || idEvento.equals("")) {
 	        			//insert
@@ -91,13 +97,37 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        			BeautifulVinoDelete d = new BeautifulVinoDelete();
 	        			RispostaDeleteGenerica risp = d.handleRequest(rd, context);
 	        			System.out.println("esito cancellazione evento duplicato" + risp.getEsito().getMessage());
+	        			//modifico la data negli utenti iscritti
+	        			List<UtenteEvento> eventiUtente = evento.getIscrittiEventoInt();
+	        			for (UtenteEvento ue : eventiUtente) {
+	        				Utente u = new Utente();
+	        				u.setIdUtente(ue.getIdUtente());
+	        				u = mapper.load(u);
+	        				EventoUtente eu = new EventoUtente ();
+	        				eu.setIdEvento(evento.getIdEvento());
+	        				eu.setDataEvento(evento.getDataEvento());
+	        				u.getAcquistatiEventiUtenteInt().add(eu);
+	        				mapper.save(u);
+        				}
+	        			//modifico la data negli utenti preferiti
+	        			eventiUtente = evento.getPreferitiEventoInt();
+	        			for (UtenteEvento ue : eventiUtente) {
+	        				Utente u = new Utente();
+	        				u.setIdUtente(ue.getIdUtente());
+	        				u = mapper.load(u);
+	        				EventoUtente eu = new EventoUtente ();
+	        				eu.setIdEvento(evento.getIdEvento());
+	        				eu.setDataEvento(evento.getDataEvento());
+	        				u.getPreferitiEventiUtenteInt().add(eu);
+	        				mapper.save(u);
+	        			}
 	        		}
 	        		//gestione aziende
 	        		//OSPITANTE
 	        		Azienda toLoadOspitante = new Azienda();
 	        		if (evento.getAziendaOspitanteEvento() != null && evento.getAziendaOspitanteEvento().getIdAzienda() != null) {
 		        		toLoadOspitante.setIdAzienda(evento.getAziendaOspitanteEvento().getIdAzienda());
-		        		Azienda aziendaOspitante = transaction.load(toLoadOspitante);
+		        		Azienda aziendaOspitante = mapper.load(toLoadOspitante);
 		        		if (aziendaOspitante != null) {
 			        		if(evento.getAziendaOspitanteEventoInt() == null){
 				        		AziendaEvento aziendaVinoOspitante = new AziendaEvento();
@@ -136,7 +166,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        		}
 			        		lea.add(ea);
 			        		aziendaOspitante.setEventiAziendaInt(lea);
-			        		transaction.save(aziendaOspitante);
+			        		mapper.save(aziendaOspitante);
 			        	}
 	        		}
 	        		
@@ -149,7 +179,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    					if(idVino != null && !idVino.equals("")){
 	    						Vino vinoToLoad = new Vino();
 	    						vinoToLoad.setIdVino(idVino);
-	    						Vino vino = transaction.load(vinoToLoad);
+	    						Vino vino = mapper.load(vinoToLoad);
 	    						if(vino != null) {
 	    							List<EventoVino> eventiVino = vino.getEventiVinoInt();
 	    							if(eventiVino == null) {
@@ -169,7 +199,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	    							ev.setDataEvento(evento.getDataEvento());
 	    							eventiVino.add(ev);
 	    							vino.setEventiVinoInt(eventiVino);
-	    							transaction.save(vino);
+	    							mapper.save(vino);
 	    						}
 	    					}
 	    				}
@@ -179,7 +209,7 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        			for (VinoEvento ve : lCanc) {
 	        				Vino vinoToLoad = new Vino();
     						vinoToLoad.setIdVino(ve.getIdVino());
-	        				Vino vino = transaction.load(vinoToLoad);
+	        				Vino vino = mapper.load(vinoToLoad);
 	        				List<EventoVino> listaEv = vino.getEventiVinoInt();
 	        				EventoVino daCanc = null;
 	        				if (listaEv != null) {
@@ -191,31 +221,29 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        				}
 	        				listaEv.remove(daCanc);
 	        				vino.setEventiVinoInt(listaEv);
-	        				transaction.save(vino);
+	        				mapper.save(vino);
 	        			}   			
 	        		}
 		        try {
-		        		transaction.save(evento);
+		        		mapper.save(evento);
 				} catch (Exception e) {
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Evento " + input.getEvento().getIdEvento());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
-					transaction.rollback();
 					return risposta;
 				}
 		        
-		        transaction.commit();
 	        }
 	        
 	        //Cancello il vecchio collegamento con l'azienda
     		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") 
     				&& !evento.getOldIdAzienda().equals(evento.getAziendaOspitanteEvento().getIdAzienda())) {
-    			Transaction transactionOld = txManager.newTransaction();
+    			
     			Azienda aziendaOldToLoad = new Azienda ();
     			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzienda());
-    			Azienda aziendaVecchia = transactionOld.load(aziendaOldToLoad);
+    			Azienda aziendaVecchia = mapper.load(aziendaOldToLoad);
     			List<EventoAzienda> leav = new ArrayList<>();
     			if (aziendaVecchia != null) {
     				leav = aziendaVecchia.getEventiAziendaInt();
@@ -227,9 +255,9 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
         			}
         			if (daCanc != null) leav.remove(daCanc);
         			if (leav != null) aziendaVecchia.setEventiAziendaInt(leav);
-        			transactionOld.save(aziendaVecchia);
+        			mapper.save(aziendaVecchia);
     			}			
-    			transactionOld.commit();
+    			
     		}
 		}	
         risposta.setEsito(esito);

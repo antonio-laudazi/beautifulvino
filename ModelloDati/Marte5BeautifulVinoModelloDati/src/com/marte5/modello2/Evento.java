@@ -30,6 +30,7 @@ public class Evento {
 	private float prezzoEvento;
 	private String urlFotoEvento;
 	private String statoEvento;
+	private String statoPreferitoEvento;
 	private String testoEvento;
 	private double latitudineEvento;
 	private double longitudineEvento;
@@ -246,6 +247,20 @@ public class Evento {
 	 */
 	public void setStatoEvento(String statoevento) {
 		this.statoEvento = statoevento;
+	}
+	
+	/**
+	 * @return the statoPreferitoevento
+	 */
+	@DynamoDBAttribute(attributeName="statoPreferitoEvento")
+	public String getStatoPreferitoEvento() {
+		return statoPreferitoEvento;
+	}
+	/**
+	 * @param statoevento the statoevento to set
+	 */
+	public void setStatoPreferitoEvento(String statoPreferitoevento) {
+		this.statoEvento = statoPreferitoevento;
 	}
 	
 	/**
