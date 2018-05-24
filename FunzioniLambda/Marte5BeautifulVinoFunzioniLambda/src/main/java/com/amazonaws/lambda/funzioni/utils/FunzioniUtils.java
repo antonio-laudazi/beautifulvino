@@ -16,9 +16,10 @@ import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.marte5.modello.Esito;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Azienda.VinoAzienda;
-import com.marte5.modello.Esito;
+import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Provincia;
 import com.marte5.modello2.Utente;
@@ -36,6 +37,7 @@ public class FunzioniUtils {
 	public static final String EVENTO_STATO_ACQUISTATO = "A";
 	public static final String EVENTO_STATO_PREFERITO = "P";
 	public static final String EVENTO_STATO_CANCELLATO = "D";
+	public static final String EVENTO_STATO_PRENOTATO = "PR";
 	
 	public static final String VINO_STATO_NEUTRO = "N";
 	public static final String VINO_STATO_ACQUISTATO = "A";
@@ -61,18 +63,25 @@ public class FunzioniUtils {
         return esito;
 	}
 	
-	public static String getStatoEvento(Utente utente, String idEvento, long dataEvento, DynamoDBMapper mapper) throws Exception {
+	public static String getStatoEvento(Utente utente, Evento evento, long dataEvento, DynamoDBMapper mapper) throws Exception {
 		String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
 		if(utente == null) {
 			throw new Exception("Utente null, non posso procedere");
 		}
-		List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+		//scommentare per nuova versione connect
+		List<EventoUtente> eventiUtente = utente.getAcquistatiEventiUtenteInt();
+		//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
 		if(eventiUtente != null) {
 			for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
 				EventoUtente eventoUtente = iterator.next();
-				if(eventoUtente.getIdEvento().equals(idEvento)) {
+				if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
 					//l'evento in questione è tra quelli associati all'utente
-					statoEvento = eventoUtente.getStatoEvento();
+					if (evento.getAcquistabileEvento() == 1) {
+						statoEvento = EVENTO_STATO_ACQUISTATO;
+					}else {
+						statoEvento = EVENTO_STATO_PRENOTATO;
+					}
+					
 				}
 			}
 		}

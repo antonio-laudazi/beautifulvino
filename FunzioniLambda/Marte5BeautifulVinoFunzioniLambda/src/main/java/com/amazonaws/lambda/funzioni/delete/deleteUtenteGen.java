@@ -65,7 +65,9 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 	    				return risposta;
 	        		} else {
 	        			//cancello il collegamento con gli eventi
-	        			List<EventoUtente> listaEventi = utenteDaCancellare.getEventiUtenteInt();
+	        			//List<EventoUtente> listaEventi = utenteDaCancellare.getEventiUtenteInt();
+	        			//scommentare per versione nuova connect
+	        			List<EventoUtente> listaEventi = utenteDaCancellare.getAcquistatiEventiUtenteInt();
 	        			if (listaEventi != null) {
 		        			for (EventoUtente eu : listaEventi) {
 		        				Evento eventoDaCanc = mapper.load(Evento.class, eu.getIdEvento());

@@ -8,6 +8,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
@@ -40,7 +41,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -109,12 +110,66 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		        			}
 	        			}
 	        			//cancello il collegamento con gli utenti
+//	        			DynamoDBScanExpression expr = new DynamoDBScanExpression();
+//	        			List<Utente> listaUtenti = mapper.scan(Utente.class, expr);
+//	        			if (listaUtenti != null) {
+//		        			for (Utente ev : listaUtenti) {
+//		        				Utente utenteDaCanc = ev;
+//		        				if (utenteDaCanc != null) {
+//		        					//controllo lista acquistati
+//			        				List<EventoUtente> listaUtenteEvento = utenteDaCanc.getAcquistatiEventiUtenteInt();
+//			        				EventoUtente vucanc = null;
+//			        				if (listaUtenteEvento != null) {
+//				        				for (EventoUtente v : listaUtenteEvento) {
+//					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+//					        					vucanc = v;
+//					        				}
+//				        				}
+//			        				}
+//			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
+//			        				//controllo lista preferiti
+//			        				listaUtenteEvento = utenteDaCanc.getPreferitiEventiUtenteInt();
+//			        				vucanc = null;
+//			        				if (listaUtenteEvento != null) {
+//				        				for (EventoUtente v : listaUtenteEvento) {
+//					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+//					        					vucanc = v;
+//					        				}
+//				        				}
+//			        				}
+//			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
+//			        				mapper.save(utenteDaCanc);
+//		        				}
+//		        			}
+//	        			}
+	        			//scommentare per versione nuova connect
+	        			//cancello il collegamento dagli utenti iscritti
 	        			List<UtenteEvento> listaUtenti = eventoDaCancellare.getIscrittiEventoInt();
 	        			if (listaUtenti != null) {
 		        			for (UtenteEvento ev : listaUtenti) {
 		        				Utente utenteDaCanc = mapper.load(Utente.class, ev.getIdUtente());
 		        				if (utenteDaCanc != null) {
-			        				List<EventoUtente> listaUtenteEvento = utenteDaCanc.getEventiUtenteInt();
+			        				List<EventoUtente> listaUtenteEvento = utenteDaCanc.getAcquistatiEventiUtenteInt();
+			        				EventoUtente vucanc = null;
+			        				if (listaUtenteEvento != null) {
+				        				for (EventoUtente v : listaUtenteEvento) {
+					        				if (v.getIdEvento().equals(eventoDaCancellare.getIdEvento())) {
+					        					vucanc = v;
+					        				}
+				        				}
+			        				}
+			        				if (vucanc != null)listaUtenteEvento.remove(vucanc);
+			        				mapper.save(utenteDaCanc);
+		        				}
+		        			}
+	        			}
+	        			//cancello il collegamento dagli utenti preferiti
+	        			listaUtenti = eventoDaCancellare.getPreferitiEventoInt();
+	        			if (listaUtenti != null) {
+		        			for (UtenteEvento ev : listaUtenti) {
+		        				Utente utenteDaCanc = mapper.load(Utente.class, ev.getIdUtente());
+		        				if (utenteDaCanc != null) {
+			        				List<EventoUtente> listaUtenteEvento = utenteDaCanc.getPreferitiEventiUtenteInt();
 			        				EventoUtente vucanc = null;
 			        				if (listaUtenteEvento != null) {
 				        				for (EventoUtente v : listaUtenteEvento) {

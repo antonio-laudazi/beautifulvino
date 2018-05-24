@@ -1,18 +1,15 @@
 package com.amazonaws.lambda.funzioni;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.common.BeautifulVinoConnect;
+import com.amazonaws.lambda.funzioni.connect.connectEventoAUtenteGen1;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
 import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
-import com.marte5.modello2.Utente;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
@@ -33,11 +30,13 @@ public class connectTest {
 //        input.setIdUtente("b6118563-1486-4448-8994-c121b60534ea");
 //        
         input.setFunctionName("connectEventoAUtenteGen");
-        input.setIdUtente("10523a22-9404-453c-9df1-7ad6519c648d");
-        input.setIdEvento("1520605230123");
+        input.setIdUtente("db95f1b7-0b1d-469c-b776-c107c46cb6e2");
+        input.setIdEvento("1526632352429");
         input.setStatoEvento("A");
-        input.setDataEvento( 1523283131000l);
+        input.setDataEvento(1526540400000l);
         input.setNumeroPartecipanti(2);
+        input.setStatoAcquistatoEvento(1);
+        input.setStatoPreferitoEvento(1);
         
 //        input.setFunctionName("connectViniAUtenteGen");
 //        input.setIdVino("1513240022473");
@@ -70,7 +69,8 @@ public class connectTest {
 
     @Test
     public void testdeleteEvento() {
-        BeautifulVinoConnect handler = new BeautifulVinoConnect();
+        connectEventoAUtenteGen1 handler = new connectEventoAUtenteGen1();
+        //BeautifulVinoConnect handler = new BeautifulVinoConnect();
         Context ctx = createContext();
 
         RispostaConnectGenerica output = handler.handleRequest(input, ctx);

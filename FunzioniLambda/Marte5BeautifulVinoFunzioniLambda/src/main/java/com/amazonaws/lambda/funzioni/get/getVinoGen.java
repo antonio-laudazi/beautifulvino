@@ -1,6 +1,7 @@
 package com.amazonaws.lambda.funzioni.get;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
@@ -96,11 +97,12 @@ public class getVinoGen implements RequestHandler<RichiestaGetGenerica, Risposta
     			
     			List<EventoVino> eventiVino = vino.getEventiVinoInt();
     			List<Evento> eventiVinoCompleti = new ArrayList<>();
+    			long time = Calendar.getInstance().getTimeInMillis();
     			if(eventiVino != null) {
     				for (EventoVino eventoVino : eventiVino) {
     						//serve anche la data evento senno' non trova niente!!!
 						Evento eventoDB = mapper.load(Evento.class, eventoVino.getIdEvento(), eventoVino.getDataEvento());
-						if(eventoDB != null) {
+						if(eventoDB != null && eventoDB.getDataEvento() >= time) {
 							eventiVinoCompleti.add(eventoDB);
 						}
 					}

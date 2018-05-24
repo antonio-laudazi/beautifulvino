@@ -118,10 +118,14 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     				if(!(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO))) {
     					daRimuovere.setStatoEvento(statoEvento);
     					eventiUtente.add(daRimuovere);
+    					
+    				}else {
+    					deleteUtenteIscritto(evento, idUtente, mapper);
     				}
     				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
     					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
-    					
+    					int np = input.getNumeroPartecipanti();
+        				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
     					if (out.getCodice() != 100) {
     						esito = out;
     	    		        risposta.setEsito(esito);
@@ -146,12 +150,14 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 	    	    		        return risposta;
 	    					}
     					}
+    					//lo mette fra i preferiti
     					EventoUtente eu = new EventoUtente();
     					eu.setIdEvento(idEvento);
     					eu.setStatoEvento(statoEvento);
     					eu.setDataEvento(dataEvento);
     					eventiUtente.add(eu);
-    					
+    					int np = input.getNumeroPartecipanti();
+        				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
     					//se lo stato è "Aquistato" devo aggiungere un utente agli utenti iscritti all'evento
     				}
     			}
@@ -161,8 +167,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     			
     			try {
     				mapper.save(utente);
-    				int np = input.getNumeroPartecipanti();
-    				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
+    				
 			} catch (Exception e) {
 				e.printStackTrace();
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
@@ -200,7 +205,30 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 		evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
 		mapper.save(evento);
 		}
+		return;
     }
+    
+    private void deleteUtenteIscritto (Evento evento,String idUtente, DynamoDBMapper mapper) {
+    	UtenteEvento ue = new UtenteEvento();
+		if(evento != null) {
+			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
+			if(utentiIscritti == null) {
+				utentiIscritti = new ArrayList<UtenteEvento>();
+			}
+			boolean presente = false;
+			for (UtenteEvento utenteEvento : utentiIscritti) {
+				if(utenteEvento.getIdUtente().equals(idUtente)) {
+					presente = true;
+					ue = utenteEvento;
+					}
+			}
+			if (presente) {
+				utentiIscritti.remove(ue);
+			}
+	    }
+		return;
+    }
+    
     private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num, Context context) {
     	RichiestaAcquistaGenerica r = new RichiestaAcquistaGenerica();
 		BeautifulVinoAcquista c = new BeautifulVinoAcquista();

@@ -48,6 +48,7 @@ public class Evento {
 	private AziendaEvento aziendaOspitanteEventoInt;
 	private AziendaEvento aziendaFornitriceEventoInt;
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
+	private List<UtenteEvento> preferitiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
 	private List<Azienda> aziendeViniEvento;
 	private String orarioEvento; //inutile
@@ -57,6 +58,7 @@ public class Evento {
 	private int creditiEvento;
 	private int puntiEsperienza;
 	private List<VinoEvento> listaViniCancellati;
+	
 	/**
 	 * @return the idEvento
 	 */
@@ -498,6 +500,19 @@ public class Evento {
 		this.iscrittiEventoInt = iscrittiEventoInt;
 	}
 	
+	/**
+	 * @return the preferitiEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="preferitiEventoInt")
+	public List<UtenteEvento> getPreferitiEventoInt() {
+		return preferitiEventoInt;
+	}
+	/**
+	 * @param preferitiEventoInt the preferitiEventoInt to set
+	 */
+	public void setPreferitiEventoInt(List<UtenteEvento> preferitiEventoInt) {
+		this.preferitiEventoInt = preferitiEventoInt;
+	}
 	/**
 	 * @return the viniEventoInt
 	 */

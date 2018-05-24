@@ -78,7 +78,9 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			}
 			
 			//gestione e recupero eventi associati all'utente
-			List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+			//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+			//scommentare per nuova versione connect
+			List<EventoUtente> eventiUtente = utente.getPreferitiEventiUtenteInt();
 			List<Evento> eventiCompletiUtente = new ArrayList<>();
 			if(eventiUtente != null) {
 				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {

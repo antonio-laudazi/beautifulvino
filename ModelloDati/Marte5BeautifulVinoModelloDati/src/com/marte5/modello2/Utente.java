@@ -37,15 +37,18 @@ public class Utente {
 	private String condivisioneEventi;
 	private String condivisioneVini;
 	private String statoUtente;
-	private List<Evento> eventiUtente;
+	private List<Evento> eventiUtente; // Lista preferiti per la getUtenteGen
 	private List<Azienda> aziendeUtente;
 	private List<Badge> badgeUtente;
 	private List<Utente> utentiUtente;
-	private List<EventoUtente> eventiUtenteInt;
+	private List<EventoUtente> eventiUtenteInt; // non utilizzato
+	private List<EventoUtente> preferitiEventiUtenteInt;
+	private List<EventoUtente> acquistatiEventiUtenteInt;
 	private List<AziendaUtente> aziendeUtenteInt;
 	private List<VinoUtente> viniUtenteInt;
 	private List<BadgeUtente> badgeUtenteInt;
 	private List<UtenteUtente> utentiUtenteInt;
+	
 	
 	/**
 	 * @return the idUtente
@@ -338,6 +341,20 @@ public class Utente {
 	}
 	public void setEventiUtenteInt(List<EventoUtente> eventiUtenteInt) {
 		this.eventiUtenteInt = eventiUtenteInt;
+	}
+	@DynamoDBAttribute(attributeName="preferitiEventiUtenteInt")
+	public List<EventoUtente> getPreferitiEventiUtenteInt() {
+		return preferitiEventiUtenteInt;
+	}
+	public void setPreferitiEventiUtenteInt(List<EventoUtente> preferitiEventiUtenteInt) {
+		this.preferitiEventiUtenteInt = preferitiEventiUtenteInt;
+	}
+	@DynamoDBAttribute(attributeName="acquistatiEventiUtenteInt")
+	public List<EventoUtente> getAcquistatiEventiUtenteInt() {
+		return acquistatiEventiUtenteInt;
+	}
+	public void setAcquistatiEventiUtenteInt(List<EventoUtente> acquistatiEventiUtenteInt) {
+		this.acquistatiEventiUtenteInt = acquistatiEventiUtenteInt;
 	}
 	@DynamoDBAttribute(attributeName="aziendeUtente")
 	public List<AziendaUtente> getAziendeUtenteInt() {
