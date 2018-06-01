@@ -134,6 +134,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			if (utente != null) {
 				String s = input.getIdProvincia();
 				if (s == null)s = "X";
+				if (s.equals("0"))s = "X";
 				for (Evento e : eventiTot) {
 					String s1 = "";
 					if (e.getProvinciaEventoInt()!= null) {
