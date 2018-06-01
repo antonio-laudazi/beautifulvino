@@ -123,7 +123,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     					deleteUtenteIscritto(evento, idUtente, mapper);
     				}
     				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
-    					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+    					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), evento.getAcquistabileEvento(),context);
     					int np = input.getNumeroPartecipanti();
         				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
     					if (out.getCodice() != 100) {
@@ -143,7 +143,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     				} else {
     					//6
     					if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
-    					Esito out =sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), context);
+    					Esito out =sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), evento.getAcquistabileEvento(), context);
 	    					if (out.getCodice() != 100) {
 	    						esito = out;
 	    	    		        risposta.setEsito(esito);
@@ -229,7 +229,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 		return;
     }
     
-    private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num, Context context) {
+    private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num,int ac, Context context) {
     	RichiestaAcquistaGenerica r = new RichiestaAcquistaGenerica();
 		BeautifulVinoAcquista c = new BeautifulVinoAcquista();
 		r.setIdUtente(idU);
@@ -237,6 +237,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 		r.setIdEvento(idE);
 		r.setNomeEvento(nomeE);
 		r.setNumeroPartecipanti(num);
+		r.setAcquista(ac);
 		Risposta out = c.handleRequest(r, context);
 		return out.getEsito();
     }

@@ -189,7 +189,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 						for (Livello l1: listaLivelli) {
 							if (l1.getMin() == l.getMax() + 1) prox = l1.getNomeLivello();
 						}
-						utente.setPuntiMancantiProssimoLivelloUtente("Per diventare " + prox + " ti mancano " + gap + " punti esperienza" );
+						utente.setPuntiMancantiProssimoLivelloUtente("Per diventare " + prox + " ti mancano " + gap + " pt" );
 						break;
 					}
 				}else {

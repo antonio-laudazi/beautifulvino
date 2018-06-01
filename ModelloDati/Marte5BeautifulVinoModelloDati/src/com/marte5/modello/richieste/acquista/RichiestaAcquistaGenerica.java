@@ -7,6 +7,7 @@ public class RichiestaAcquistaGenerica extends Richiesta{
 	private String nomeUtente;
 	private String idEvento;
 	private String nomeEvento;
+	private int acquista;
 	private int numeroPartecipanti;
 	
 	/**
@@ -77,5 +78,19 @@ public class RichiestaAcquistaGenerica extends Richiesta{
 	 */
 	public void setNumeroPartecipanti(int numeroPartecipanti) {
 		this.numeroPartecipanti = numeroPartecipanti;
+	}
+	
+	/**
+	 * @return the acquista
+	 */
+	public int getAcquista() {
+		return acquista;
+	}
+	
+	/**
+	 * @param acquista the acquista to set
+	 */
+	public void setAcquista(int acquista) {
+		this.acquista = acquista;
 	}
 }
