@@ -52,17 +52,17 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		}
 		if(client != null) {
 			
-			try {
-				TransactionManager.verifyOrCreateTransactionTable(client, "BV_Transactions", 10L, 10L, 10L * 60L);
-				TransactionManager.verifyOrCreateTransactionImagesTable(client, "BV_TransactionImages", 10L, 10L, 10L * 60L);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Problemi con la gestione della transazione ");
-				esito.setTrace(e1.getMessage());
-				risposta.setEsito(esito);
-				return risposta;
-			}
+//			try {
+//				TransactionManager.verifyOrCreateTransactionTable(client, "BV_Transactions", 10L, 10L, 10L * 60L);
+//				TransactionManager.verifyOrCreateTransactionImagesTable(client, "BV_TransactionImages", 10L, 10L, 10L * 60L);
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+//				esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " Problemi con la gestione della transazione ");
+//				esito.setTrace(e1.getMessage());
+//				risposta.setEsito(esito);
+//				return risposta;
+//			}
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 			//TransactionManager txManager = new TransactionManager (client, "BV_Transactions","BV_TransactionImages");
 			// Create a new transaction from the transaction manager
@@ -99,27 +99,43 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        			System.out.println("esito cancellazione evento duplicato" + risp.getEsito().getMessage());
 	        			//modifico la data negli utenti iscritti
 	        			List<UtenteEvento> eventiUtente = evento.getIscrittiEventoInt();
-	        			for (UtenteEvento ue : eventiUtente) {
-	        				Utente u = new Utente();
-	        				u.setIdUtente(ue.getIdUtente());
-	        				u = mapper.load(u);
-	        				EventoUtente eu = new EventoUtente ();
-	        				eu.setIdEvento(evento.getIdEvento());
-	        				eu.setDataEvento(evento.getDataEvento());
-	        				u.getAcquistatiEventiUtenteInt().add(eu);
-	        				mapper.save(u);
-        				}
+	        			if (eventiUtente != null) {
+		        			for (UtenteEvento ue : eventiUtente) {
+			        				Utente u = new Utente();
+			        				u.setIdUtente(ue.getIdUtente());
+			        				u = mapper.load(u);
+			        				EventoUtente eu = new EventoUtente ();
+			        				eu.setIdEvento(evento.getIdEvento());
+			        				eu.setDataEvento(evento.getDataEvento());
+			        				List<EventoUtente> lp = u.getAcquistatiEventiUtenteInt();
+			        				if (lp == null) {
+			        					lp = new ArrayList<>();
+			        				}
+			        				lp.add(eu);
+			        				u.setAcquistatiEventiUtenteInt(lp);
+			        				mapper.save(u);
+	        				}
+	        			}
 	        			//modifico la data negli utenti preferiti
 	        			eventiUtente = evento.getPreferitiEventoInt();
-	        			for (UtenteEvento ue : eventiUtente) {
-	        				Utente u = new Utente();
-	        				u.setIdUtente(ue.getIdUtente());
-	        				u = mapper.load(u);
-	        				EventoUtente eu = new EventoUtente ();
-	        				eu.setIdEvento(evento.getIdEvento());
-	        				eu.setDataEvento(evento.getDataEvento());
-	        				u.getPreferitiEventiUtenteInt().add(eu);
-	        				mapper.save(u);
+	        			if (eventiUtente != null) {
+		        			for (UtenteEvento ue : eventiUtente) {
+		        				if (ue != null) {
+			        				Utente u = new Utente();
+			        				u.setIdUtente(ue.getIdUtente());
+			        				u = mapper.load(u);
+			        				EventoUtente eu = new EventoUtente ();
+			        				eu.setIdEvento(evento.getIdEvento());
+			        				eu.setDataEvento(evento.getDataEvento());
+			        				List<EventoUtente> lp = u.getPreferitiEventiUtenteInt();
+			        				if (lp == null) {
+			        					lp = new ArrayList<>();
+			        				}
+			        				lp.add(eu);
+			        				u.setPreferitiEventiUtenteInt(lp);
+			        				mapper.save(u);
+		        				}
+		        			}
 	        			}
 	        		}
 	        		//gestione aziende
@@ -236,10 +252,13 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 				}
 		        
 	        }
-	        
+	        String nId = "";
+	        if (evento.getAziendaOspitanteEvento()!= null) {
+	        	nId = evento.getAziendaOspitanteEvento().getIdAzienda();
+	        }
 	        //Cancello il vecchio collegamento con l'azienda
     		if (evento.getOldIdAzienda() != null  && !evento.getOldIdAzienda().equals("") 
-    				&& !evento.getOldIdAzienda().equals(evento.getAziendaOspitanteEvento().getIdAzienda())) {
+    				&& !evento.getOldIdAzienda().equals(nId)) {
     			
     			Azienda aziendaOldToLoad = new Azienda ();
     			aziendaOldToLoad.setIdAzienda(evento.getOldIdAzienda());

@@ -130,10 +130,17 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			eventiTot = page.getResults();
 			List<Evento> eventi = new ArrayList<>();
 			long time = Calendar.getInstance().getTimeInMillis();
-			//elimino eventi vecchi
+			//elimino eventi vecchi, quelli non nella provincia e quelli non pubblicati
 			if (utente != null) {
+				String s = input.getIdProvincia();
+				if (s == null)s = "X";
 				for (Evento e : eventiTot) {
-					if (e.getDataEvento() >= time) {
+					String s1 = "";
+					if (e.getProvinciaEventoInt()!= null) {
+						s1 = e.getProvinciaEventoInt().getIdProvincia();
+					}
+					if (s1 == null) s1 = "";
+					if (e.getDataEvento() >= time && (s.equals("X") || s1.equals(s)) && e.getPubblicatoEvento()) {
 						eventi.add(e);
 					}
 				}
@@ -196,6 +203,19 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 						return risposta;
 					}
 					evento.setStatoEvento(statoEvento);
+					try {
+						statoEvento = FunzioniUtils.getStatoEventoPreferito(utente, evento, evento.getDataEvento(),
+								mapper);
+					} catch (Exception e) {
+						esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+						esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET
+								+ " getEventi: errore nell'estrazione delle associazioni degli eventi preferiti");
+						esito.setTrace(e.getMessage());
+						esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
+						risposta.setEsito(esito);
+						return risposta;
+					}
+					evento.setStatoPreferitoEvento(statoEvento);
 				}
 			}
 			risposta.setEventi(eventi);

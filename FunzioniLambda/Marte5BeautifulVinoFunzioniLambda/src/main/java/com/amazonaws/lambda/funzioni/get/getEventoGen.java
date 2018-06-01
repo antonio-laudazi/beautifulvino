@@ -50,7 +50,7 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEvento ");
@@ -100,7 +100,17 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				return risposta;
 			}
 			evento.setStatoEvento(statoEvento);
-			
+			statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
+			try {
+				statoEvento = FunzioniUtils.getStatoEventoPreferito(utente, evento, dataEvento, mapper);
+			} catch (Exception e) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEvento ");
+				esito.setTrace(e.getMessage());
+				risposta.setEsito(esito);
+				return risposta;
+			}
+			evento.setStatoPreferitoEvento(statoEvento);
 			//gestione degli utenti da visualizzare
 			List<UtenteEvento> utentiEvento = evento.getIscrittiEventoInt();
 			List<Utente> utentiEventoCompleti = new ArrayList<>();

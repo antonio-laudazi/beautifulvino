@@ -10,6 +10,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.xspec.AddAction;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
@@ -43,7 +44,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 		//mi collego al database
 		AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -115,12 +116,12 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			if (pAttuale == 0 && aAttuale == 0) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "00 00");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 0 && aRicevuto == 1) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "00 01");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 0) {
@@ -139,12 +140,12 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 					evento = removeUtentePreferito(idEvento, dataEvento, idUtente, evento);
 				}else if (pRicevuto == 0 && aRicevuto == 1) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "10 01");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "10 10");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
@@ -155,7 +156,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			}else if (pAttuale == 1 && aAttuale == 1) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "11 00");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 0 && aRicevuto == 1) {
@@ -163,29 +164,27 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 					evento = removeUtentePreferito(idEvento, dataEvento, idUtente, evento);
 				}else if (pRicevuto == 1 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "11 10");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
-					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
-			        risposta.setEsito(esito);
+					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
 			        return risposta;
 				}
 			}else if (pAttuale == 0 && aAttuale == 1) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "01 00");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 0 && aRicevuto == 1) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "01 01");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "");
+			        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + "01 10");
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
@@ -196,6 +195,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			mapper.save(utente);
 			mapper.save(evento);
 		}	
+		risposta.setEsito(esito);
 		return risposta;
 	}
 	

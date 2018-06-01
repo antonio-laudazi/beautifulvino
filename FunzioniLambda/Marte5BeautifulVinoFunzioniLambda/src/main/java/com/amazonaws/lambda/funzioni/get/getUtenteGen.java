@@ -21,6 +21,7 @@ import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
+import com.marte5.modello2.Livello;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Utente.BadgeUtente;
 import com.marte5.modello2.Utente.EventoUtente;
@@ -28,7 +29,9 @@ import com.marte5.modello2.Utente.UtenteUtente;
 import com.marte5.modello2.Utente.VinoUtente;
 
 public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
-
+	
+	public static final int INFINITI_PUNTI_ESP = -1;
+	
     @Override
     public RispostaGetGenerica handleRequest(RichiestaGetGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
@@ -51,7 +54,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
@@ -88,6 +91,16 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					Evento eventoCompleto = mapper.load(Evento.class, evento.getIdEvento(), evento.getDataEvento());
 					if(eventoCompleto != null) {
 						eventoCompleto.setStatoEvento(evento.getStatoEvento());
+						try {
+							String stato = FunzioniUtils.getStatoEvento(utente, eventoCompleto, eventoCompleto.getDataEvento(), mapper);
+							eventoCompleto.setStatoEvento(stato);
+							stato = FunzioniUtils.getStatoEventoPreferito(utente, eventoCompleto, eventoCompleto.getDataEvento(), mapper);
+							eventoCompleto.setStatoPreferitoEvento(stato);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 						eventiCompletiUtente.add(eventoCompleto);
 					}
 				}
@@ -140,7 +153,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					}
 				}
 				utente.setBadgeUtenteInt(badgesCompleti);
-			//riordino Aziende
+			//riordino vini
 			List<VinoUtente> vini = utente.getViniUtenteInt();
 			List<Azienda> aziendeConvertite = new ArrayList<>();
 			if(vini != null) {
@@ -163,8 +176,31 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					}
 				}
 			}
+			//gestione livello utente 
+			int esp = utente.getEsperienzaUtente();
+			utente.setLivelloUtente("unknown");
+			List<Livello> listaLivelli = mapper.scan(Livello.class, expr);
+			for (Livello l : listaLivelli) {
+				if (l.getMax() != INFINITI_PUNTI_ESP) {
+					if (esp >= l.getMin() && esp <= l.getMax() ) {
+						utente.setLivelloUtente(l.getNomeLivello());
+						int gap = l.getMax() - esp;
+						String prox = "";
+						for (Livello l1: listaLivelli) {
+							if (l1.getMin() == l.getMax() + 1) prox = l1.getNomeLivello();
+						}
+						utente.setPuntiMancantiProssimoLivelloUtente("Per diventare " + prox + " ti mancano " + gap + " punti esperienza" );
+						break;
+					}
+				}else {
+					if (esp >= l.getMin() ) {
+						utente.setLivelloUtente(l.getNomeLivello());
+						utente.setPuntiMancantiProssimoLivelloUtente("Hai raggiunto il massimo livello" );
+						break;
+					}
+				}
+			}
 		}   
-		esito.setMessage("prova");
         risposta.setEsito(esito);
         risposta.setUtente(utente);
         return risposta;

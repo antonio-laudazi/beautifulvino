@@ -33,10 +33,10 @@ public class putTest {
         
         input.setFunctionName("putEventoGen");
         Evento evento = new Evento();
-        evento.setIdEvento("1525706744683");
+        evento.setIdEvento("1526985054504");
         
-     evento.setDataEvento(11111110L);
-      evento.setOldDate(11111110L);
+     evento.setDataEvento(111111555510L);
+      evento.setOldDate(1515024000000L);
      // evento.setOldDate(1536357600000L);
       
    //     evento.setCittaEvento("a");

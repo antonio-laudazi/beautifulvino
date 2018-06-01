@@ -59,6 +59,7 @@ public class Evento {
 	private int creditiEvento;
 	private int puntiEsperienza;
 	private List<VinoEvento> listaViniCancellati;
+	private boolean pubblicatoEvento;
 	
 	/**
 	 * @return the idEvento
@@ -86,6 +87,19 @@ public class Evento {
 	 */
 	public void setDataEvento(long dataEvento) {
 		this.dataEvento = dataEvento;
+	}
+	/**
+	 * @return the pubblicatoEvento
+	 */
+	@DynamoDBAttribute(attributeName="pubblicatoEvento")
+	public boolean getPubblicatoEvento() {
+		return pubblicatoEvento;
+	}
+	/**
+	 * @param acquistabileEvento the acquistabileEvento to set
+	 */
+	public void setPubblicatoEvento(boolean pubblicatoEvento) {
+		this.pubblicatoEvento = pubblicatoEvento;
 	}
 	/**
 	 * @return the acquistabileEvento
@@ -259,8 +273,8 @@ public class Evento {
 	/**
 	 * @param statoevento the statoevento to set
 	 */
-	public void setStatoPreferitoEvento(String statoPreferitoevento) {
-		this.statoEvento = statoPreferitoevento;
+	public void setStatoPreferitoEvento(String statoPreferitoEvento) {
+		this.statoPreferitoEvento = statoPreferitoEvento;
 	}
 	
 	/**

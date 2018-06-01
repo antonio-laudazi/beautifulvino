@@ -85,18 +85,26 @@ public class FunzioniUtils {
 				}
 			}
 		}
-		evento.setStatoPreferitoEvento(EVENTO_STATO_NEUTRO);
-		eventiUtente = utente.getPreferitiEventiUtenteInt();
-		//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
-		if(eventiUtente != null) {
-			for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
-				EventoUtente eventoUtente = iterator.next();
-				if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
-					//l'evento in questione è tra quelli associati all'utente
-					evento.setStatoPreferitoEvento(EVENTO_STATO_PREFERITO);
+		
+		return statoEvento;
+	}
+	
+	public static String getStatoEventoPreferito(Utente utente, Evento evento, long dataEvento, DynamoDBMapper mapper) throws Exception {
+		String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
+		if(utente == null) {
+			throw new Exception("Utente null, non posso procedere");
+		}
+			List<EventoUtente> eventiUtente = utente.getPreferitiEventiUtenteInt();
+			//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+			if(eventiUtente != null) {
+				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
+					EventoUtente eventoUtente = iterator.next();
+					if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
+						//l'evento in questione è tra quelli associati all'utente
+						statoEvento = FunzioniUtils.EVENTO_STATO_PREFERITO;
+					}
 				}
 			}
-		}
 		return statoEvento;
 	}
 	

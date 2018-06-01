@@ -29,15 +29,23 @@ public class connectTest {
 //        input.setFunctionName("connectBadgeAUtenteGen");
 //        input.setIdUtente("b6118563-1486-4448-8994-c121b60534ea");
 //        
-        input.setFunctionName("connectEventoAUtenteGen");
-        input.setIdUtente("db95f1b7-0b1d-469c-b776-c107c46cb6e2");
-        input.setIdEvento("1526632352429");
-        input.setStatoEvento("A");
-        input.setDataEvento(1526540400000l);
+        input.setFunctionName("connectEventoAUtenteGen1");
+        input.setIdUtente("4835df2a-9678-4645-8dc9-6e5d0985482d");
+        input.setIdEvento("1527169395218");       
+        input.setDataEvento(157766400000l);
         input.setNumeroPartecipanti(2);
         input.setStatoAcquistatoEvento(1);
         input.setStatoPreferitoEvento(1);
         
+//        {
+//        	  "idEvento" : "1525255289722",
+//        	  "functionName" : "connectEventoAUtenteGen1",
+//        	  "statoPreferitoUtente" : 1,
+//        	  "idUtente" : "eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea",
+//        	  "statoAcquistatoUtente" : 0,
+//        	  "dataEvento" : 1528531200000,
+//        	  "numeroPartecipanti" : 0
+//        	}
 //        input.setFunctionName("connectViniAUtenteGen");
 //        input.setIdVino("1513240022473");
 //        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");

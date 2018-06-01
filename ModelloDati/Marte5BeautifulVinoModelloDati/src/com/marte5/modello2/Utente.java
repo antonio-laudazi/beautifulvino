@@ -24,6 +24,7 @@ public class Utente {
 	private int creditiUtente;
 	private int esperienzaUtente;
 	private String livelloUtente;
+	private String puntiMancantiProssimoLivelloUtente;
 	private String biografiaUtente;
 	private String cittaUtente;
 	private String usernameUtente;
@@ -127,6 +128,19 @@ public class Utente {
 	 */
 	public void setLivelloUtente(String livelloUtente) {
 		this.livelloUtente = livelloUtente;
+	}
+	/**
+	 * @return the puntiMancantiProssimoLivelloUtente
+	 */
+	@DynamoDBAttribute(attributeName="puntiMancantiProssimoLivelloUtente")
+	public String getPuntiMancantiProssimoLivelloUtente() {
+		return puntiMancantiProssimoLivelloUtente;
+	}
+	/**
+	 * @param puntiMancantiProssimoLivelloUtente the puntiMancantiProssimoLivelloUtente to set
+	 */
+	public void setPuntiMancantiProssimoLivelloUtente(String puntiMancantiProssimoLivelloUtente) {
+		this.puntiMancantiProssimoLivelloUtente = puntiMancantiProssimoLivelloUtente;
 	}
 	/**
 	 * @return the biografiaUtente
