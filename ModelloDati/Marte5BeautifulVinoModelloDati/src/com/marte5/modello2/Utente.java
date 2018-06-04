@@ -377,7 +377,7 @@ public class Utente {
 	public void setAziendeUtenteInt(List<AziendaUtente> aziendeUtenteInt) {
 		this.aziendeUtenteInt = aziendeUtenteInt;
 	}
-	@DynamoDBAttribute(attributeName="badgeUtente")
+	@DynamoDBAttribute(attributeName="badgeUtenteInt")
 	public List<BadgeUtente> getBadgeUtenteInt() {
 		return badgeUtenteInt;
 	}

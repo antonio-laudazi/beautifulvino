@@ -19,6 +19,7 @@ public class Badge {
 	private String infoBadge;	
 	private String urlLogoBadge;
 	private String tuoBadge;//S=guadagnato, N=da guadagnare
+	private long dataBadge;
 	
 	/**
 	 * @return the idBadge
@@ -84,5 +85,18 @@ public class Badge {
 	 */
 	public void setTuoBadge(String tuoBadge) {
 		this.tuoBadge = tuoBadge;
+	}
+	/**
+	 * @return the dataBadge
+	 */
+	@DynamoDBAttribute(attributeName="dataBadge")
+	public long getDataBadge() {
+		return dataBadge;
+	}
+	/**
+	 * @param tuoBadge the tuoBadge to set
+	 */
+	public void setDataBadge(long dataBadge) {
+		this.dataBadge = dataBadge;
 	}
 }
