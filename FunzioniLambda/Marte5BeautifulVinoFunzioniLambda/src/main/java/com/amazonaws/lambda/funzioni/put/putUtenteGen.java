@@ -32,7 +32,7 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putUtente ");
@@ -67,29 +67,34 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        }
 		        	DynamoDBScanExpression expr = new DynamoDBScanExpression();
 		        	//se è stato eliminato l'acquisto di un evento elimino il collegamneto
-		        	if (utenteDaSalvare.getEventoEliminatoUtente() != null &&
-		        			!utenteDaSalvare.getEventoEliminatoUtente().equals("")	
+		        	if (utente.getEventoEliminatoUtente() != null &&
+		        			!utente.getEventoEliminatoUtente().equals("")	
 		        			) {
 		        		List<EventoUtente> le = utenteDaSalvare.getAcquistatiEventiUtenteInt();
-		        		EventoUtente remove = null;
-		        		for (EventoUtente e : le) {
-		        			if (e.getIdEvento().equals(utenteDaSalvare.getEventoEliminatoUtente())) {
-		        				remove = e;
-		        			}
+		        		if (le != null) {
+			        		EventoUtente remove = null;
+			        		for (EventoUtente e : le) {
+			        			if (e.getIdEvento().equals(utente.getEventoEliminatoUtente())) {
+			        				remove = e;
+			        			}
+			        		}		        		
+			        		le.remove(remove);		       
+			        		utenteDaSalvare.setAcquistatiEventiUtenteInt(le);
 		        		}
-		        		le.remove(remove);
-		        		utenteDaSalvare.setAcquistatiEventiUtenteInt(le);
-		        		Evento evento = mapper.load(Evento.class, utenteDaSalvare.getEventoEliminatoUtente());
-		        		List<UtenteEvento> lu = evento.getIscrittiEventoInt();
-		        		UtenteEvento re = null;
-		        		for (UtenteEvento u : lu) {
-		        			if (u.getIdUtente().equals(utenteDaSalvare.getIdUtente())) {
-		        				re = u;
-		        			}
+		        		Evento evento = mapper.load(Evento.class, utente.getEventoEliminatoUtente(),
+		        				utente.getDataEventoEliminatoUtente());
+		        		if (evento != null) {
+			        		List<UtenteEvento> lu = evento.getIscrittiEventoInt();
+			        		UtenteEvento re = null;
+			        		for (UtenteEvento u : lu) {
+			        			if (u.getIdUtente().equals(utenteDaSalvare.getIdUtente())) {
+			        				re = u;
+			        			}
+			        		}
+			        		lu.remove(re);
+			        		evento.setIscrittiEventoInt(lu);
+			        		mapper.save(evento);
 		        		}
-		        		lu.remove(re);
-		        		evento.setIscrittiEventoInt(lu);
-		        		mapper.save(evento);
 		        	}
 		        	//gestione livello utente 
 					int esp = utenteDaSalvare.getEsperienzaUtente();

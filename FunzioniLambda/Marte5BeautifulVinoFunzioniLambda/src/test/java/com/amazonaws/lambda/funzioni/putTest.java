@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.amazonaws.lambda.funzioni.common.BeautifulVinoPut;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.marte5.modello2.Evento.VinoEvento;
+import com.marte5.modello2.Utente;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 import com.marte5.modello2.Azienda;
@@ -31,52 +32,52 @@ public class putTest {
         // TODO: set up your sample input object here.
         input = new RichiestaPutGenerica();
         
-        input.setFunctionName("putEventoGen");
-        Evento evento = new Evento();
-        evento.setIdEvento("1526985054504");
-        
-     evento.setDataEvento(111111555510L);
-      evento.setOldDate(1515024000000L);
-     // evento.setOldDate(1536357600000L);
-      
-   //     evento.setCittaEvento("a");
-        evento.setTitoloEvento("i");
-        evento.setTemaEvento("e");
-        evento.setPrezzoEvento(10);
-        evento.setTestoEvento("e");
-        evento.setLatitudineEvento(1);
-        evento.setLongitudineEvento(2);
-        evento.setIndirizzoEvento("e");
-        evento.setTelefonoEvento("e");
-        evento.setEmailEvento("e");
-        evento.setNumMaxPartecipantiEvento(10);
-        evento.setOrarioEvento("5");
-        ProvinciaEvento provincia = new ProvinciaEvento();
-        provincia.setNomeProvincia("Livorno");
-        provincia.setSiglaProvincia("LI");
-        provincia.setIdProvincia("1513783245483");
-        evento.setProvinciaEventoInt(provincia);        
-        evento.setOldIdAzienda("1513239955732");
-        
-        Azienda aziendaOspitante = new Azienda();
-       // aziendaOspitante.setIdAzienda("1522417292119");
-        aziendaOspitante.setIdAzienda("1513239955732");
-        evento.setAziendaOspitanteEvento(aziendaOspitante);
-        
-//        VinoEvento vinoEvento = new VinoEvento();
-//        vinoEvento.setIdVino("1513357582823");
-//        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
-//        listaVini.add(vinoEvento);
-//        evento.setViniEventoInt(listaVini);
-      
-        VinoEvento vinoEventoC = new VinoEvento();
-        vinoEventoC.setIdVino("1513357582823");
-        List<VinoEvento> listaViniC = new ArrayList<VinoEvento>();
-//        listaViniC.add(vinoEventoC);
-        evento.setListaViniCancellati(listaViniC);
+//        input.setFunctionName("putEventoGen");
+//        Evento evento = new Evento();
+//        evento.setIdEvento("1526985054504");
+//        
+//     evento.setDataEvento(111111555510L);
+//      evento.setOldDate(1515024000000L);
+//     // evento.setOldDate(1536357600000L);
+//      
+//   //     evento.setCittaEvento("a");
+//        evento.setTitoloEvento("i");
+//        evento.setTemaEvento("e");
+//        evento.setPrezzoEvento(10);
+//        evento.setTestoEvento("e");
+//        evento.setLatitudineEvento(1);
+//        evento.setLongitudineEvento(2);
+//        evento.setIndirizzoEvento("e");
+//        evento.setTelefonoEvento("e");
+//        evento.setEmailEvento("e");
+//        evento.setNumMaxPartecipantiEvento(10);
+//        evento.setOrarioEvento("5");
+//        ProvinciaEvento provincia = new ProvinciaEvento();
+//        provincia.setNomeProvincia("Livorno");
+//        provincia.setSiglaProvincia("LI");
+//        provincia.setIdProvincia("1513783245483");
+//        evento.setProvinciaEventoInt(provincia);        
+//        evento.setOldIdAzienda("1513239955732");
+//        
+//        Azienda aziendaOspitante = new Azienda();
+//       // aziendaOspitante.setIdAzienda("1522417292119");
+//        aziendaOspitante.setIdAzienda("1513239955732");
+//        evento.setAziendaOspitanteEvento(aziendaOspitante);
+//        
+////        VinoEvento vinoEvento = new VinoEvento();
+////        vinoEvento.setIdVino("1513357582823");
+////        List<VinoEvento> listaVini = new ArrayList<VinoEvento>();
+////        listaVini.add(vinoEvento);
+////        evento.setViniEventoInt(listaVini);
+//      
+//        VinoEvento vinoEventoC = new VinoEvento();
+//        vinoEventoC.setIdVino("1513357582823");
+//        List<VinoEvento> listaViniC = new ArrayList<VinoEvento>();
+////        listaViniC.add(vinoEventoC);
+//        evento.setListaViniCancellati(listaViniC);
 //        
 //        
-        input.setEvento(evento);
+//        input.setEvento(evento);
 //        Provincia provincia = new Provincia();
 //        
 //        provincia.setNomeProvincia("Livorno");
@@ -85,16 +86,17 @@ public class putTest {
 //        input.setProvincia(provincia);
 //        
 //        
-//        Utente utente = new Utente();
-//        //utente.setEmailUtente("aversionn@msn.com");
-//        utente.setCittaUtente("Cecina, Toscana, Italy");
-//        utente.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8axxxxxxxx");
-//        utente.setBiografiaUtente("");
-//        utente.setCognomeUtente("Maria");
-//        utente.setNomeUtente("Concetta");
-//        utente.setUsernameUtente("Concetta Maria");
-//        input.setUtente(utente);
-//        
+        Utente utente = new Utente();
+        //utente.setEmailUtente("aversionn@msn.com");
+        utente.setCittaUtente("Cecina, Toscana, Italy");
+        utente.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8axxxxxxxx");
+        utente.setBiografiaUtente("");
+        utente.setCognomeUtente("Maria");
+        utente.setNomeUtente("Concetta");
+        utente.setUsernameUtente("ugo");
+        utente.setEventoEliminatoUtente("1520605230123");
+        input.setUtente(utente);
+        input.setFunctionName("putUtenteGen");
 //        Vino vino = new Vino();
 //        
 //        vino.setAnnoVino(2);

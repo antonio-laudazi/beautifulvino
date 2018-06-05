@@ -39,6 +39,7 @@ public class Utente {
 	private String condivisioneVini;
 	private String statoUtente;
 	private String eventoEliminatoUtente;
+	private long dataEventoEliminatoUtente;
 	private List<Evento> eventiUtente; // Lista preferiti per la getUtenteGen
 	private List<Azienda> aziendeUtente;
 	private List<Badge> badgeUtente;
@@ -283,6 +284,20 @@ public class Utente {
 	 */
 	public void setUtentiUtente(List<Utente> utentiUtente) {
 		this.utentiUtente = utentiUtente;
+	}
+	
+	/**
+	 * @return the dataEventoEliminatoUtente
+	 */
+	@DynamoDBAttribute(attributeName="dataEventoEliminatoUtente")
+	public long getDataEventoEliminatoUtente() {
+		return dataEventoEliminatoUtente;
+	}
+	/**
+	 * @param dataEventoEliminatoUtente the dataEventoEliminatoUtente to set
+	 */
+	public void setDataEventoEliminatoUtente(long dataEventoEliminatoUtente) {
+		this.dataEventoEliminatoUtente = dataEventoEliminatoUtente;
 	}
 	/**
 	 * @return the numTotaleBadge
