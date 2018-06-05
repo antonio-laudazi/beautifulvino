@@ -49,7 +49,7 @@ public class getTest {
         
 //<<<<<<< HEAD
         input.setFunctionName("getUtenteGen");
-        input.setIdUtente("10523a22-9404-453c-9df1-7ad6519c648d");
+        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
         
      //   input.setFunctionName("getEventiGen");
   //    input.setIdUltimoEvento("1523609733534");

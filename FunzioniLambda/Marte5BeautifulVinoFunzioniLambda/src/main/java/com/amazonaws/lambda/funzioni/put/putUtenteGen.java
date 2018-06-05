@@ -12,8 +12,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
+import com.marte5.modello2.Evento;
+import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Livello;
 import com.marte5.modello2.Utente;
+import com.marte5.modello2.Utente.EventoUtente;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
@@ -62,10 +65,35 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
 		        		utenteDaSalvare = getUtenteModificato(utente, mapper);
 		        		idUtenteRisposta = utente.getIdUtente();
 		        }
+		        	DynamoDBScanExpression expr = new DynamoDBScanExpression();
+		        	//se è stato eliminato l'acquisto di un evento elimino il collegamneto
+		        	if (utenteDaSalvare.getEventoEliminatoUtente() != null &&
+		        			!utenteDaSalvare.getEventoEliminatoUtente().equals("")	
+		        			) {
+		        		List<EventoUtente> le = utenteDaSalvare.getAcquistatiEventiUtenteInt();
+		        		EventoUtente remove = null;
+		        		for (EventoUtente e : le) {
+		        			if (e.getIdEvento().equals(utenteDaSalvare.getEventoEliminatoUtente())) {
+		        				remove = e;
+		        			}
+		        		}
+		        		le.remove(remove);
+		        		utenteDaSalvare.setAcquistatiEventiUtenteInt(le);
+		        		Evento evento = mapper.load(Evento.class, utenteDaSalvare.getEventoEliminatoUtente());
+		        		List<UtenteEvento> lu = evento.getIscrittiEventoInt();
+		        		UtenteEvento re = null;
+		        		for (UtenteEvento u : lu) {
+		        			if (u.getIdUtente().equals(utenteDaSalvare.getIdUtente())) {
+		        				re = u;
+		        			}
+		        		}
+		        		lu.remove(re);
+		        		evento.setIscrittiEventoInt(lu);
+		        		mapper.save(evento);
+		        	}
 		        	//gestione livello utente 
 					int esp = utenteDaSalvare.getEsperienzaUtente();
 					utenteDaSalvare.setLivelloUtente("unknown");
-					DynamoDBScanExpression expr = new DynamoDBScanExpression();
 					List<Livello> listaLivelli = mapper.scan(Livello.class, expr);
 					for (Livello l : listaLivelli) {
 						if (l.getMax() != INFINITI_PUNTI_ESP) {
