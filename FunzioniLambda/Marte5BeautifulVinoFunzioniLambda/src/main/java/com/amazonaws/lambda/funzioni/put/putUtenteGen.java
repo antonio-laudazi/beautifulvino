@@ -78,7 +78,7 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        				remove = e;
 			        			}
 			        		}		        		
-			        		le.remove(remove);		       
+			        		if (le!= null)le.remove(remove);		       
 			        		utenteDaSalvare.setAcquistatiEventiUtenteInt(le);
 		        		}
 		        		Evento evento = mapper.load(Evento.class, utente.getEventoEliminatoUtente(),
@@ -91,7 +91,7 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
 			        				re = u;
 			        			}
 			        		}
-			        		lu.remove(re);
+			        		if (lu != null)lu.remove(re);
 			        		evento.setIscrittiEventoInt(lu);
 			        		mapper.save(evento);
 		        		}

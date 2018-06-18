@@ -17,6 +17,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.acquista.RichiestaAcquistaGenerica;
 import com.marte5.modello.risposte.Risposta;
+import com.marte5.modello2.Utente;
 
 public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGenerica, Risposta> {
 	
@@ -29,10 +30,13 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
 	public Risposta handleRequest(RichiestaAcquistaGenerica input, Context context) {
         Risposta risposta = new Risposta();
         Esito esito = FunzioniUtils.getEsitoPositivo();
-        String nomeU = input.getNomeUtente();
-        String idU = input.getIdUtente();
+        Utente utente = input.getUtente();
+        String nomeU = utente.getUsernameUtente();
+        String emailU = utente.getEmailUtente();
+        String idU = utente.getIdUtente();
         String nomeE = input.getNomeEvento();
         String idE = input.getIdEvento();
+        
         int num = input.getNumeroPartecianti();
         String ac = "prenotato";
         if (input.getAcquista() == 1) {
@@ -41,7 +45,8 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
         if (nomeU == null) nomeU = "utente senza nome";
         if (nomeE == null) nomeE = "evento senza nome";
         if (nomeU != null && idU != null && nomeE != null && idE != null) {
-	        String testo = "l'utente " + nomeU + " (id:" + idU +") ha "+ ac + " l'evento " + nomeE + " (id: " + idE + ").\n Numero partecipanti " + num;
+	        String testo = "l'utente " + nomeU + " (id:" + idU +") ha "+ ac + " l'evento " + nomeE + " (id: " + idE + ").\n Numero partecipanti " + num +
+	        		". \n email: " + emailU;
 	        String oggetto = ac + " evento " + nomeE;
 	        sendMail(testo, oggetto);
         }else {

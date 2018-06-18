@@ -95,6 +95,7 @@ public class putTest {
         utente.setNomeUtente("Concetta");
         utente.setUsernameUtente("ugo");
         utente.setEventoEliminatoUtente("1520605230123");
+        utente.setDataEventoEliminatoUtente(1497017531000l);
         input.setUtente(utente);
         input.setFunctionName("putUtenteGen");
 //        Vino vino = new Vino();

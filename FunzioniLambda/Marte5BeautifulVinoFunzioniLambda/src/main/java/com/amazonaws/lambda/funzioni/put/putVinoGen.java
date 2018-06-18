@@ -84,7 +84,7 @@ public class putVinoGen implements RequestHandler<RichiestaPutGenerica, Risposta
 		        		toLoad.setIdAzienda(vino.getAziendaVino().getIdAzienda());
 		        		azienda = transaction.load(toLoad);
 		        		//Azienda azienda = mapper.load(Azienda.class, vino.getAziendaVino().getIdAzienda());
-	
+		        		
 		        		if(vino.getAziendaVinoInt() == null){
 			        		AziendaVino aziendaVino = new AziendaVino();
 			        		aziendaVino.setIdAzienda(azienda.getIdAzienda());

@@ -132,7 +132,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 					utente = aggiungiAllaListaAcquistati(utente, evento);
 					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
 					evento = addUtentePreferito(idEvento, dataEvento, idUtente, evento);
-					sendMail(idUtente, utente.getUsernameUtente(), idEvento, evento.getTitoloEvento(), numeroP,evento.getAcquistabileEvento(), context);
+					sendMail(utente, idEvento, evento.getTitoloEvento(), numeroP,evento.getAcquistabileEvento(), context);
 				}
 			}else if (pAttuale == 1 && aAttuale == 0) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
@@ -151,7 +151,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
 					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
 					utente = aggiungiAllaListaAcquistati(utente, evento);
-					sendMail(idUtente, utente.getUsernameUtente(), idEvento, evento.getTitoloEvento(), numeroP, evento.getAcquistabileEvento(), context);
+					sendMail(utente, idEvento, evento.getTitoloEvento(), numeroP, evento.getAcquistabileEvento(), context);
 				}
 			}else if (pAttuale == 1 && aAttuale == 1) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
@@ -341,11 +341,10 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
     	return utente;
     }
     
-    private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num,int ac, Context context) {
+    private Esito sendMail(Utente utente, String idE, String nomeE, int num,int ac, Context context) {
     	RichiestaAcquistaGenerica r = new RichiestaAcquistaGenerica();
 		BeautifulVinoAcquista c = new BeautifulVinoAcquista();
-		r.setIdUtente(idU);
-		r.setNomeUtente(nomeU);
+		r.setUtente(utente);
 		r.setIdEvento(idE);
 		r.setNomeEvento(nomeE);
 		r.setNumeroPartecipanti(num);

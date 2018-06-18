@@ -101,19 +101,19 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        			List<UtenteEvento> eventiUtente = evento.getIscrittiEventoInt();
 	        			if (eventiUtente != null) {
 		        			for (UtenteEvento ue : eventiUtente) {
-			        				Utente u = new Utente();
-			        				u.setIdUtente(ue.getIdUtente());
-			        				u = mapper.load(u);
-			        				EventoUtente eu = new EventoUtente ();
-			        				eu.setIdEvento(evento.getIdEvento());
-			        				eu.setDataEvento(evento.getDataEvento());
-			        				List<EventoUtente> lp = u.getAcquistatiEventiUtenteInt();
-			        				if (lp == null) {
-			        					lp = new ArrayList<>();
-			        				}
-			        				lp.add(eu);
-			        				u.setAcquistatiEventiUtenteInt(lp);
-			        				mapper.save(u);
+		        				Utente u = new Utente();
+		        				u.setIdUtente(ue.getIdUtente());
+		        				u = mapper.load(u);
+		        				EventoUtente eu = new EventoUtente ();
+		        				eu.setIdEvento(evento.getIdEvento());
+		        				eu.setDataEvento(evento.getDataEvento());
+		        				List<EventoUtente> lp = u.getAcquistatiEventiUtenteInt();
+		        				if (lp == null) {
+		        					lp = new ArrayList<>();
+		        				}
+		        				lp.add(eu);
+		        				u.setAcquistatiEventiUtenteInt(lp);
+		        				mapper.save(u);
 	        				}
 	        			}
 	        			//modifico la data negli utenti preferiti

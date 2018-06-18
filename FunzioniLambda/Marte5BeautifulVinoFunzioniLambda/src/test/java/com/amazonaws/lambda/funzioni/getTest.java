@@ -23,10 +23,10 @@ public class getTest {
         // TODO: set up your sample input object here.
         input = new RichiestaGetGenerica();
         
-//        input.setFunctionName("getUtenteGen");
-//        input.setIdUtentePadre("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
-//        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
-//        
+        input.setFunctionName("getUtenteGen");
+        input.setIdUtentePadre("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
+        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
+        
 //          input.setFunctionName("getEventoGen");
 //          input.setIdEvento("1524471967673");
 //          input.setDataEvento(1525194000000l);
@@ -48,8 +48,8 @@ public class getTest {
 //        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
         
 //<<<<<<< HEAD
-        input.setFunctionName("getUtenteGen");
-        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
+//        input.setFunctionName("getUtenteGen");
+//        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
         
      //   input.setFunctionName("getEventiGen");
   //    input.setIdUltimoEvento("1523609733534");
@@ -66,7 +66,7 @@ public class getTest {
         //input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
         
         //getUtenteGen
-//        input.setFunctionName("getUtenteGen");
+  //    input.setFunctionName("getFeedGen");
 //        input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
         
         //input.setIdAzienda(1513241364518L);

@@ -55,7 +55,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
@@ -139,6 +139,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					nuovo.setNomeBadge(badge.getNomeBadge());
 					nuovo.setInfoBadge(badge.getInfoBadge());
 					nuovo.setUrlLogoBadge(badge.getUrlLogoBadge());
+					nuovo.setDataBadge(badge.getDataBadge());
 					nuovo.setTuoBadge("N");
 					if (badges != null) {
 						for (BadgeUtente badgeUtente : badges) {
@@ -153,6 +154,15 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 							badgesCompleti.add(nuovo);
 						}
 				}
+				//riordino i badge per data
+				Collections.sort(badgesCompleti, new Comparator<Badge>(){
+					@Override
+					public int compare(Badge arg0, Badge arg1) {
+						long d0 = arg0.getDataBadge();
+						long d1 = arg1.getDataBadge();
+						return (Long.compare(d0, d1));
+					}
+			      });
 				utente.setBadgeUtente(badgesCompleti);
 			//riordino vini
 			List<VinoUtente> vini = utente.getViniUtenteInt();
