@@ -51,6 +51,7 @@ public class Utente {
 	private List<VinoUtente> viniUtenteInt;
 	private List<BadgeUtente> badgeUtenteInt;
 	private List<UtenteUtente> utentiUtenteInt;
+	private List<String> feedUtente;
 	
 	
 	/**
@@ -235,6 +236,19 @@ public class Utente {
 	 */
 	public void setProfessioneUtente(String professioneUtente) {
 		this.professioneUtente = professioneUtente;
+	}
+	/**
+	 * @return the feedUtente
+	 */
+	@DynamoDBAttribute(attributeName="feedUtente")
+	public List<String> getFeedUtente() {
+		return feedUtente;
+	}
+	/**
+	 * @param feedUtente the feedUtente to set
+	 */
+	public void setFeedUtente(List<String> feedUtente) {
+		this.feedUtente = feedUtente;
 	}
 	/**
 	 * @return the eventiUtente

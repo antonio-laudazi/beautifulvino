@@ -39,6 +39,8 @@ public class Feed {
 	private String testoFeed;
 	private String visualizzaButtonFeed;
 	private int puntiEsperienza;
+	private boolean pubblicato;
+	
 	/**
 	 * @return the idFeed
 	 */
@@ -53,6 +55,19 @@ public class Feed {
 		this.idFeed = idFeed;
 	}
 	
+	/**
+	 * @return the pubblicato
+	 */
+	@DynamoDBAttribute(attributeName="pubblicato")
+	public boolean getPubblicato() {
+		return pubblicato;
+	}
+	/**
+	 * @param pubblicato the pubblicato to set
+	 */
+	public void setPubblicato(boolean pubblicato) {
+		this.pubblicato = pubblicato;
+	}
 	/**
 	 * @return the idEntitaFeed
 	 */

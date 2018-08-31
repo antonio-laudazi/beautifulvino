@@ -21,6 +21,7 @@ import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
+import com.marte5.modello2.Badge.EventoBadge;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Livello;
 import com.marte5.modello2.Utente;
@@ -55,7 +56,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
         //scan del database per estrarre tutti gli eventi (per ora, poi da filtrare)
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getUtente ");
@@ -140,6 +141,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					nuovo.setInfoBadge(badge.getInfoBadge());
 					nuovo.setUrlLogoBadge(badge.getUrlLogoBadge());
 					nuovo.setDataBadge(badge.getDataBadge());
+					nuovo.setEventoBadge(badge.getEventoBadge());
 					nuovo.setTuoBadge("N");
 					if (badges != null) {
 						for (BadgeUtente badgeUtente : badges) {
@@ -148,8 +150,15 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 							}
 						}
 					}
-					if ((input.getIdUtente().equals(input.getIdUtentePadre()) && badge.getDataBadge() >= data) ||
-						nuovo.getTuoBadge().equals("S")
+					EventoBadge be = badge.getEventoBadge();
+					boolean p  = true;
+					if (be != null) {
+						p = be.getPubblicatoEvento();
+					}
+					
+					if (
+						((input.getIdUtente().equals(input.getIdUtentePadre()) && badge.getDataBadge() >= data) ||
+						nuovo.getTuoBadge().equals("S")) && p 
 						) {
 							badgesCompleti.add(nuovo);
 						}
@@ -187,7 +196,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 					}
 				}
 			}
-			//gestione livello utente 
+//			gestione livello utente 
 			int esp = utente.getEsperienzaUtente();
 			utente.setLivelloUtente("unknown");
 			List<Livello> listaLivelli = mapper.scan(Livello.class, expr);
@@ -195,7 +204,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				if (l.getMax() != INFINITI_PUNTI_ESP) {
 					if (esp >= l.getMin() && esp <= l.getMax() ) {
 						utente.setLivelloUtente(l.getNomeLivello());
-						int gap = l.getMax() - esp;
+						int gap = l.getMax() - esp + 1;
 						String prox = "";
 						for (Livello l1: listaLivelli) {
 							if (l1.getMin() == l.getMax() + 1) prox = l1.getNomeLivello();

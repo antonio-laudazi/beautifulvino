@@ -8,7 +8,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
@@ -16,8 +15,10 @@ import com.marte5.modello.richieste.delete.RichiestaDeleteGenerica;
 import com.marte5.modello.risposte.delete.RispostaDeleteGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Azienda.EventoAzienda;
+import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.AziendaEvento;
+import com.marte5.modello2.Evento.BadgeEvento;
 import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Utente;
@@ -195,15 +196,19 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
 		    				risposta.setEsito(esito);
 		    				return risposta;
 					}
-	        			
-	        			//cancello eventuale immagine dell'evento
-	        			String immagineEventoUrl = eventoDaCancellare.getUrlFotoEvento();
-	        			if(immagineEventoUrl != null) {
-	        				if(!immagineEventoUrl.equals("")) {
-		        				esito = FunzioniUtils.cancellaImmagine(immagineEventoUrl);
-		        			}
+        			//cancello eventuale immagine dell'evento
+        			String immagineEventoUrl = eventoDaCancellare.getUrlFotoEvento();
+        			if(immagineEventoUrl != null) {
+        				if(!immagineEventoUrl.equals("")) {
+	        				esito = FunzioniUtils.cancellaImmagine(immagineEventoUrl);
 	        			}
-	        		}
+        			}
+        			//cancello il badge 
+        			BadgeEvento be =  eventoDaCancellare.getBadgeEventoInt();
+        			Badge b = new Badge();
+        			b.setIdBadge(be.getIdBadge());
+        			mapper.delete(b);
+        		}
 	        }
 		}
         

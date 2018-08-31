@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +15,7 @@ import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
@@ -21,11 +23,14 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.marte5.modello.Esito;
+import com.marte5.modello2.Livello;
 import com.marte5.modello2.Utente;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
 
 public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
+	
+	public static final int INFINITI_PUNTI_ESP = -1;
 	
     @Override
     public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
@@ -141,6 +146,32 @@ public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaP
 		DynamoDBMapper mapper = new DynamoDBMapper(clientUser);
 		
 		Utente utenteDaSalvare = getUtenteModificato(utente, mapper);
+		
+		//gestione livello utente 
+		int esp = utenteDaSalvare.getEsperienzaUtente();
+		utenteDaSalvare.setLivelloUtente("unknown");
+		DynamoDBScanExpression expr = new DynamoDBScanExpression();
+		List<Livello> listaLivelli = mapper.scan(Livello.class, expr);
+		for (Livello l : listaLivelli) {
+			if (l.getMax() != INFINITI_PUNTI_ESP) {
+				if (esp >= l.getMin() && esp <= l.getMax() ) {
+					utenteDaSalvare.setLivelloUtente(l.getNomeLivello());
+					int gap = l.getMax() - esp + 1;
+					String prox = "";
+					for (Livello l1: listaLivelli) {
+						if (l1.getMin() == l.getMax() + 1) prox = l1.getNomeLivello();
+					}
+					utenteDaSalvare.setPuntiMancantiProssimoLivelloUtente("Per diventare " + prox + " ti mancano " + gap + " pt" );
+					break;
+				}
+			}else {
+				if (esp >= l.getMin() ) {
+					utenteDaSalvare.setLivelloUtente(l.getNomeLivello());
+					utenteDaSalvare.setPuntiMancantiProssimoLivelloUtente("Hai raggiunto il massimo livello" );
+					break;
+				}
+			}
+		}
 		
 		try {
 			mapper.save(utenteDaSalvare);

@@ -101,10 +101,10 @@ public class getFeedGen implements RequestHandler<RichiestaGetGenerica, Risposta
 				public int compare(Feed arg0, Feed arg1) {
 					long d0 = arg0.getDataFeed();
 					long d1 = arg1.getDataFeed();
-					return (Long.compare(d0, d1));
+					return (Long.compare(d1, d0));
 				}
 		      });
-			listaFeed = reverse(listaFeed);
+			//listaFeed = reverse(listaFeed);
 			//ne invio solo 112
 			if (listaFeed != null && (!(elencoCompleto != null && elencoCompleto.equalsIgnoreCase("S"))) ) {
 				List<Feed> tempFeed = new ArrayList<>();
@@ -115,7 +115,7 @@ public class getFeedGen implements RequestHandler<RichiestaGetGenerica, Risposta
 					}
 				}
 				listaFeed = tempFeed;
-				if ((idUltimoFeed != "" || idUltimoFeed != null ) ) {
+				if ((idUltimoFeed != null && !idUltimoFeed.equals("")  ) ) {
 					for (Feed f : listaFeed) {
 						if (f.getIdFeed().equals(idUltimoFeed)) {
 							int idf = listaFeed.indexOf(f);
@@ -150,14 +150,14 @@ public class getFeedGen implements RequestHandler<RichiestaGetGenerica, Risposta
 		return risposta;
     }
     
-    public List<Feed> reverse(List<Feed> list) {
-        if(list.size() > 1) {                   
-            Feed value = list.remove(0);
-            reverse(list);
-            list.add(value);
-        }
-        return list;
-    }
+//    public List<Feed> reverse(List<Feed> list) {
+//        if(list.size() > 1) {                   
+//            Feed value = list.remove(0);
+//            reverse(list);
+//            list.add(value);
+//        }
+//        return list;
+//    }
     
 //    public List<Feed> reverse(List<Feed> list) {
 //        int length = list.size();

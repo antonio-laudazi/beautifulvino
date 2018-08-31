@@ -96,7 +96,7 @@ public class Evento {
 		return pubblicatoEvento;
 	}
 	/**
-	 * @param acquistabileEvento the acquistabileEvento to set
+	 * @param pubblicato Evento the pubblicato Evento to set
 	 */
 	public void setPubblicatoEvento(boolean pubblicatoEvento) {
 		this.pubblicatoEvento = pubblicatoEvento;
@@ -813,7 +813,10 @@ public class Evento {
 	@DynamoDBDocument
 	public static class BadgeEvento{
 		private String idBadge;
-
+		private long dataBadge;
+		private String nomeBadge;
+		private String infoBadge;
+		private String urlLogoBadge;
 		/**
 		 * @return the idBadge
 		 */
@@ -826,6 +829,58 @@ public class Evento {
 		 */
 		public void setIdBadge(String idBadge) {
 			this.idBadge = idBadge;
+		}
+		/**
+		 * @return the dataBadge
+		 */
+		@DynamoDBAttribute(attributeName="dataBadge")
+		public long getDataBadge() {
+			return dataBadge;
+		}
+		/**
+		 * @param dataBadge the dataBadge to set
+		 */
+		public void setDataBadge(long dataBadge) {
+			this.dataBadge = dataBadge;
+		}
+		/**
+		 * @return the nomeBadge
+		 */
+		@DynamoDBAttribute(attributeName="nomeBadge")
+		public String getNomeBadge() {
+			return nomeBadge;
+		}
+		/**
+		 * @param idBadge the idBadge to set
+		 */
+		public void setNomeBadge(String nomeBadge) {
+			this.nomeBadge = nomeBadge;
+		}
+		/**
+		 * @return the infoBadge
+		 */
+		@DynamoDBAttribute(attributeName="infoBadge")
+		public String getInfoBadge() {
+			return infoBadge;
+		}
+		/**
+		 * @param infoBadge the infoBadge to set
+		 */
+		public void setInfoBadge(String infoBadge) {
+			this.infoBadge = infoBadge;
+		}
+		/**
+		 * @return the urlLogoBadge
+		 */
+		@DynamoDBAttribute(attributeName="urlLogoBadge")
+		public String getUrlLogoBadge() {
+			return urlLogoBadge;
+		}
+		/**
+		 * @param urlLogoBadge the urlLogoBadge to set
+		 */
+		public void setUrlLogoBadge(String urlLogoBadge) {
+			this.urlLogoBadge = urlLogoBadge;
 		}
 	}
 

@@ -23,7 +23,7 @@ public class RichiestaPutGenerica extends Richiesta {
 	private Utente utente;
 	private Vino vino;
 	private String idUtente;
-	
+	private String idFeed;
 	
 	/**
 	 * @return the provincia
@@ -156,5 +156,17 @@ public class RichiestaPutGenerica extends Richiesta {
 	 */
 	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
+	}
+	/**
+	 * @return the idFeed
+	 */
+	public String getIdFeed() {
+		return idFeed;
+	}
+	/**
+	 * @param idFeed the idFeed to set
+	 */
+	public void setIdFeed(String idFeed) {
+		this.idFeed = idFeed;
 	}
 }

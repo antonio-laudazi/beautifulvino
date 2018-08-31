@@ -129,7 +129,18 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			List<Evento> eventiTot = new ArrayList<>();
 			eventiTot = page.getResults();
 			List<Evento> eventi = new ArrayList<>();
-			long time = Calendar.getInstance().getTimeInMillis();
+			
+			Date dt = new Date();
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(dt); 
+			if (c.get(Calendar.HOUR_OF_DAY) < 8) {
+				c.add(Calendar.DATE, -1);
+			}
+			c.set(Calendar.HOUR_OF_DAY, 8);
+			long time = c.getTimeInMillis();
+			
+			//long time = Calendar.getInstance().getTimeInMillis();
+			
 			//elimino eventi vecchi, quelli non nella provincia e quelli non pubblicati
 			if (utente != null) {
 				String s = input.getIdProvincia();

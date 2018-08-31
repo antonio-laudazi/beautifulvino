@@ -21,6 +21,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
@@ -31,6 +32,7 @@ import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
+import com.marte5.modello2.Livello;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Evento.BadgeEvento;
 import com.marte5.modello2.Evento.UtenteEvento;
@@ -38,6 +40,7 @@ import com.marte5.modello2.Evento.VinoEvento;
 
 public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Object>, String> {
 	
+	public static final int INFINITI_PUNTI_ESP = -1;
 	private static final String SMTP_HOST_NAME = "smtps.aruba.it";
     private static final int SMTP_HOST_PORT = 465;//465,587,25
     private static final String SMTP_AUTH_USER = "info@beautifulvino.com";
@@ -140,6 +143,31 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 		}
 		utente.setEsperienzaUtente(utente.getEsperienzaUtente() + exp);
 		utente.setCreditiUtente(utente.getCreditiUtente() + cred);
+		//gestione livello utente 
+		int esp = utente.getEsperienzaUtente();
+		utente.setLivelloUtente("unknown");
+		DynamoDBScanExpression expr = new DynamoDBScanExpression();
+		List<Livello> listaLivelli = mapper.scan(Livello.class, expr);
+		for (Livello l : listaLivelli) {
+			if (l.getMax() != INFINITI_PUNTI_ESP) {
+				if (esp >= l.getMin() && esp <= l.getMax() ) {
+					utente.setLivelloUtente(l.getNomeLivello());
+					int gap = l.getMax() - esp;
+					String prox = "";
+					for (Livello l1: listaLivelli) {
+						if (l1.getMin() == l.getMax() + 1) prox = l1.getNomeLivello();
+					}
+					utente.setPuntiMancantiProssimoLivelloUtente("Per diventare " + prox + " ti mancano " + gap + 1 + " pt" );
+					break;
+				}
+			}else {
+				if (esp >= l.getMin() ) {
+					utente.setLivelloUtente(l.getNomeLivello());
+					utente.setPuntiMancantiProssimoLivelloUtente("Hai raggiunto il massimo livello" );
+					break;
+				}
+			}
+		}
 		mapper.save(utente);
 		return 1;
 	}

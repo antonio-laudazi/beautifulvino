@@ -104,7 +104,7 @@ public class putUtenteGen implements RequestHandler<RichiestaPutGenerica, Rispos
 						if (l.getMax() != INFINITI_PUNTI_ESP) {
 							if (esp >= l.getMin() && esp <= l.getMax() ) {
 								utenteDaSalvare.setLivelloUtente(l.getNomeLivello());
-								int gap = l.getMax() - esp;
+								int gap = l.getMax() - esp + 1;
 								String prox = "";
 								for (Livello l1: listaLivelli) {
 									if (l1.getMin() == l.getMax() + 1) prox = l1.getNomeLivello();
