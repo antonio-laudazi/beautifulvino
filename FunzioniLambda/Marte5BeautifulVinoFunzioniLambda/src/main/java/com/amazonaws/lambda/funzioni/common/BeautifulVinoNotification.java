@@ -72,17 +72,40 @@ public class BeautifulVinoNotification implements RequestHandler<RichiestaNotifi
 						.withCredentials(new AWSStaticCredentialsProvider(awsCreds))
 						.build();			
     			//publish to an SNS topic
+    			System.out.println(msg);
     	        PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:test", msg);
-    	        //publishRequest.setMessageStructure("json");
+    	        //PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:testIos", msg);
+    	        publishRequest.setMessageStructure("json");
     	        PublishResult publishResult = null;
     	        try {
     	        	publishResult = snsClient.publish(publishRequest);
     	        }catch(Exception e) {
     	        	System.out.println(e.getMessage());
     	        	System.out.println(e.getStackTrace());
+    	        	esito.setMessage(e.getMessage());
+    	        	esito.setCodice(200);
+    	        	risposta.setEsito(esito);
+    	        	return risposta;
     	        }
     	        //print MessageId of message published to SNS topic
     	        System.out.println("MessageId - " + publishResult.getMessageId());
+    	        
+    	        
+//    	        publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:android", msg);
+//    	        publishRequest.setMessageStructure("json");
+//    	        publishResult = null;
+//    	        try {
+//    	        	publishResult = snsClient.publish(publishRequest);
+//    	        }catch(Exception e) {
+//    	        	System.out.println(e.getMessage());
+//    	        	System.out.println(e.getStackTrace());
+//    	        	esito.setMessage(e.getMessage());
+//    	        	esito.setCodice(200);
+//    	        	risposta.setEsito(esito);
+//    	        	return risposta;
+//    	        }
+//    	        //print MessageId of message published to SNS topic
+//    	        System.out.println("MessageId - " + publishResult.getMessageId());
 	        }
 		}	
         risposta.setEsito(esito);

@@ -121,10 +121,11 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 				        					" con esito: " + esito.getMessage() +"\n";
 			        			}
 			        			//aggiungo crediti e esperienza
-				        		int r = aggiungiEspCred(uu.getIdUtente(), e.getPuntiEsperienza(), e.getCreditiEvento(), mapper);
-				        		if (r == -1) {
+				        		String risp = aggiungiEspCred(uu.getIdUtente(), e.getPuntiEsperienza(), e.getCreditiEvento(), mapper);
+				        		if (risp.equals("errore")) {
 				        			System.out.println("errore aggiunta punti esperienza o crediti");
 				        		}
+				        		text = text + risp + "\n";
 			        		}
 			        		text = text + "-----------------------------------------\n";
 		        		}
@@ -136,13 +137,17 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 		return "ok";
 	}
 	
-	private int aggiungiEspCred(String idUtente, int exp, int cred, DynamoDBMapper mapper) {
+	private String aggiungiEspCred(String idUtente, int exp, int cred, DynamoDBMapper mapper) {
 		Utente utente = mapper.load(Utente.class, idUtente);
 		if(utente == null) {
-			return -1;
+			return "errore";
 		}
-		utente.setEsperienzaUtente(utente.getEsperienzaUtente() + exp);
+		String text = "l'utente " + utente.getNomeUtente() + "ha guadagnato " + exp + " esperienza e " +
+				cred + " crediti. ";
+		utente.setEsperienzaUtente(utente.getEsperienzaUtente() + exp); 
 		utente.setCreditiUtente(utente.getCreditiUtente() + cred);
+		text = text + " adesso ha " + utente.getEsperienzaUtente() + " exp e" + utente.getCreditiUtente() + " cred.";
+		System.out.println ("l'utente : " + utente.getIdUtente() + utente.getNomeUtente() + utente.getCognomeUtente() + "ha ottenuto " + exp + " esperienza");
 		//gestione livello utente 
 		int esp = utente.getEsperienzaUtente();
 		utente.setLivelloUtente("unknown");
@@ -169,7 +174,7 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 			}
 		}
 		mapper.save(utente);
-		return 1;
+		return text;
 	}
 	
 	private Esito aggiungiBadge (UtenteEvento utente, Badge badge, Context context) {

@@ -51,12 +51,12 @@ public class getTest {
 //        input.setFunctionName("getUtenteGen");
 //        input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
         
-       input.setFunctionName("getEventiGen");
-  //    input.setIdUltimoEvento("1523609733534");
- //    input.setDataUltimoEvento(1524261600000L);
-       input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
-        input.setIdProvincia("X");
-        
+//       input.setFunctionName("getEventiGen");
+//  //    input.setIdUltimoEvento("1523609733534");
+// //    input.setDataUltimoEvento(1524261600000L);
+//       input.setIdUtente("eu-central-1:cd7292d1-a224-4e7a-af59-b1a5878c06ea");
+//        input.setIdProvincia("X");
+//        
         
         /*{"functionName":"getUtenteGen","idUtente":"1ba3b3c5-2b98-46c5-a670-c5eb25131a11","idUtentePadre":"1ba3b3c5-2b98-46c5-a670-c5eb25131a11"}*/
 //=======
@@ -66,12 +66,12 @@ public class getTest {
         //input.setIdUtente("eu-central-1:2b62862a-01d4-4a20-8651-ca8ab601972e");
         
        
-   //   input.setFunctionName("getFeedGen");
-    //  input.setElencoCompleto("S");
+      input.setFunctionName("getFeedGen");
+     input.setElencoCompleto("S");
 //        input.setIdUtente("eu-central-1:3172e705-6ea1-420e-95f3-d93a11556228");
 //        input.setDataUltimoFeed(1526921342336l);
 //        input.setIdUltimoFeed("1526921342336");
-        //input.setIdAzienda(1513241364518L);
+//        input.setIdAzienda(1513241364518L);
     }
 
     private Context createContext() {
