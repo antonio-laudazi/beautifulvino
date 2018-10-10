@@ -42,7 +42,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	
     @Override
     public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
-    	
+    	System.out.println("ciao");
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
         String idImmagine = FunzioniUtils.getEntitaId();
@@ -123,6 +123,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					optimizedBytes.close();
 					BufferedImage imout = ImageIO.read(bais);
 			        bais.close();
+			        System.out.println("png 1");
 			        System.out.println("dimensione " + imout.getWidth() + " " + imout.getHeight() );
 			        if (imout.getWidth() > imout.getHeight()) {
 					    if(imout.getWidth() > 1100) {
@@ -140,12 +141,14 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			        System.out.println("dimensione " + imout.getWidth() + " " + imout.getHeight() );
 			        ImageIO.write(imout, format, outputfile);
 			    } catch (IOException e) {
+			    	System.out.println("errore 1");
 			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;
 			    }catch(Exception e1){
+			    	System.out.println("error 3");
 			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
 					esito.setTrace(e1.getMessage());
@@ -220,11 +223,14 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	    	risposta.setEsito(esito);
 			return risposta;
 	    }
+			System.out.println("png 2");
 		//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
 		PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
 		request.setCannedAcl(CannedAccessControlList.PublicRead);
 		client.putObject(request);
         }
+        System.out.println("png 3");
+        System.out.println(esito.getMessage());
         risposta.setEsito(esito);
         risposta.setImageUrl(FunzioniUtils.AMAZON_S3_BASE_URL + bucketName + "/" + filename + "." + format);
         return risposta;

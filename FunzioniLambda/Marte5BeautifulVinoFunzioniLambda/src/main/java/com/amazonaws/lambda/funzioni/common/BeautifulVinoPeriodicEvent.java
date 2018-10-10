@@ -218,7 +218,7 @@ public class BeautifulVinoPeriodicEvent implements RequestHandler<Map<String,Obj
 			e.printStackTrace();
 		}
 	}
-	private class SMTPAuthenticator extends javax.mail.Authenticator {
+	public class SMTPAuthenticator extends javax.mail.Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
            String username = SMTP_AUTH_USER;
            String password = SMTP_AUTH_PWD;

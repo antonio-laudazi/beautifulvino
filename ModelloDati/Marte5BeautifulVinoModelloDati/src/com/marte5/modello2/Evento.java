@@ -36,6 +36,7 @@ public class Evento {
 	private double longitudineEvento;
 	private String indirizzoEvento;
 	private String telefonoEvento;
+	private String facebookEvento;
 	private String emailEvento;
 	private int numMaxPartecipantiEvento;
 	private int numPostiDisponibiliEvento;
@@ -345,6 +346,20 @@ public class Evento {
 	 */
 	public void setTelefonoEvento(String telefonoEvento) {
 		this.telefonoEvento = telefonoEvento;
+	}
+	
+	/**
+	 * @return the facebookEvento
+	 */
+	@DynamoDBAttribute(attributeName="facebookEvento")
+	public String getFacebookEvento() {
+		return facebookEvento;
+	}
+	/**
+	 * @param facebookEvento the facebookEvento to set
+	 */
+	public void setFacebookEvento(String facebookEvento) {
+		this.facebookEvento = facebookEvento;
 	}
 	/**
 	 * @return the emailEvento

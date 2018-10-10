@@ -5,11 +5,19 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.codec.binary.Base64;
-
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -31,6 +39,10 @@ import com.marte5.modello.risposte.put.RispostaPutGenerica;
 public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaPutGenerica, RispostaPutGenerica> {
 	
 	public static final int INFINITI_PUNTI_ESP = -1;
+	private static final String SMTP_HOST_NAME = "smtps.aruba.it";
+    private static final int SMTP_HOST_PORT = 465;//465,587,25
+    private static final String SMTP_AUTH_USER = "info@beautifulvino.com";
+    private static final String SMTP_AUTH_PWD  = "biutiful2017";
 	
     @Override
     public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
@@ -184,6 +196,7 @@ public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaP
 			return esito;
 		}
 		
+		
 		return esito;
     }
     
@@ -231,10 +244,51 @@ public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaP
 			if(utenteDB.getIdUtente() == null || utenteDB.getIdUtente().equals("")) {
 				utenteDB.setIdUtente(FunzioniUtils.getEntitaId());
 			}
+			sendMail("l'utente " + utenteDB.getUsernameUtente() + " si &eacute iscritto\n"
+					+ "Email: " + utenteDB.getEmailUtente() + "\n"
+					+ "Citta: " + utenteDB.getCittaUtente() +"\n"
+					+ "Professione: " + utenteDB.getProfessioneUtente() + "\n"
+					+ "Biografia: " + utenteDB.getBiografiaUtente()
+					, "Nuovo iscritto");
 		}
 		
 		return utenteDB;
 	
-}
-
+    }
+    private void sendMail (String testo, String oggetto){
+		Properties props = new Properties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.host", SMTP_HOST_NAME);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", SMTP_HOST_PORT);
+        props.put("mail.smtp.ssl.enable", "true");
+        Authenticator auth = new SMTPAuthenticator();
+        Session mailSession = Session.getDefaultInstance(props, auth);
+        // uncomment for debugging infos to stdout
+        // mailSession.setDebug(true);
+        Transport transport;
+		try {
+			transport = mailSession.getTransport();
+	        MimeMessage message = new MimeMessage(mailSession);
+	        message.setContent(testo, "text/plain");
+	        message.setSubject(oggetto);
+	        message.setFrom(new InternetAddress(SMTP_AUTH_USER));
+	        message.addRecipient(Message.RecipientType.TO,
+	        new InternetAddress(SMTP_AUTH_USER));
+	        transport.connect();
+	        transport.sendMessage(message,
+	            message.getRecipients(Message.RecipientType.TO));
+	        transport.close();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private class SMTPAuthenticator extends javax.mail.Authenticator {
+        public PasswordAuthentication getPasswordAuthentication() {
+           String username = SMTP_AUTH_USER;
+           String password = SMTP_AUTH_PWD;
+           return new PasswordAuthentication(username, password);
+        }
+    }
 }

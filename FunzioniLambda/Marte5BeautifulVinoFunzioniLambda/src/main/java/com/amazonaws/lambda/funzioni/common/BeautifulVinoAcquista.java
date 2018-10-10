@@ -23,8 +23,8 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
 	
 	private static final String SMTP_HOST_NAME = "smtps.aruba.it";
     private static final int SMTP_HOST_PORT = 465;//465,587,25
-    private static final String SMTP_AUTH_USER = "info@beautifulvino.com";
-    private static final String SMTP_AUTH_PWD  = "biutiful2017";
+    private static final String SMTP_AUTH_USER = "eventi@beautifulvino.com";
+    private static final String SMTP_AUTH_PWD  = "beautifulevents";
     
     @Override
 	public Risposta handleRequest(RichiestaAcquistaGenerica input, Context context) {
