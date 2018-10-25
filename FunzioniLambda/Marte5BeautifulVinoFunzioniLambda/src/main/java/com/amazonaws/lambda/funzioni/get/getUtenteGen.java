@@ -91,7 +91,7 @@ public class getUtenteGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
 					EventoUtente evento = iterator.next();
 					Evento eventoCompleto = mapper.load(Evento.class, evento.getIdEvento(), evento.getDataEvento());
-					if(eventoCompleto != null) {
+					if(eventoCompleto != null && eventoCompleto.getPubblicatoEvento() == true) {
 						eventoCompleto.setStatoEvento(evento.getStatoEvento());
 						try {
 							String stato = FunzioniUtils.getStatoEvento(utente, eventoCompleto, eventoCompleto.getDataEvento(), mapper);
