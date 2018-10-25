@@ -102,7 +102,7 @@ public class getVinoGen implements RequestHandler<RichiestaGetGenerica, Risposta
     				for (EventoVino eventoVino : eventiVino) {
     						//serve anche la data evento senno' non trova niente!!!
 						Evento eventoDB = mapper.load(Evento.class, eventoVino.getIdEvento(), eventoVino.getDataEvento());
-						if(eventoDB != null && eventoDB.getDataEvento() >= time) {
+						if(eventoDB != null && eventoDB.getDataEvento() >= time && eventoDB.getPubblicatoEvento() == true) {
 							eventiVinoCompleti.add(eventoDB);
 						}
 					}
