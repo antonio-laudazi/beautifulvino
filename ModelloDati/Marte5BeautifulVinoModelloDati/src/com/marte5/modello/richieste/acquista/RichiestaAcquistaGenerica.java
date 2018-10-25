@@ -1,12 +1,14 @@
 package com.marte5.modello.richieste.acquista;
 
 import com.marte5.modello.richieste.Richiesta;
+import com.marte5.modello2.Evento;
 import com.marte5.modello2.Utente;
 
 public class RichiestaAcquistaGenerica extends Richiesta{
 	private String idUtente;
 	private String nomeUtente;
 	private Utente utente;
+	private Evento evento;
 	private String idEvento;
 	private String nomeEvento;
 	private int acquista;
@@ -107,5 +109,18 @@ public class RichiestaAcquistaGenerica extends Richiesta{
 	 */
 	public void setUtente(Utente utente) {
 		this.utente = utente;
+	}
+	/**
+	 * @return the evento
+	 */
+	public Evento getEvento() {
+		return evento;
+	}
+	
+	/**
+	 * @param evento the evento to set
+	 */
+	public void setEvento(Evento evento) {
+		this.evento = evento;
 	}
 }

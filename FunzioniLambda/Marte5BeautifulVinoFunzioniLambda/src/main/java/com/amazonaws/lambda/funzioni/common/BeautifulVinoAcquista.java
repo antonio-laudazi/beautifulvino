@@ -1,4 +1,7 @@
 package com.amazonaws.lambda.funzioni.common;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -17,6 +20,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.acquista.RichiestaAcquistaGenerica;
 import com.marte5.modello.risposte.Risposta;
+import com.marte5.modello2.Evento;
 import com.marte5.modello2.Utente;
 
 public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGenerica, Risposta> {
@@ -33,9 +37,15 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
         Utente utente = input.getUtente();
         String nomeU = utente.getUsernameUtente();
         String emailU = utente.getEmailUtente();
+        Evento evento = input.getEvento();
+        String facebookU = evento.getFacebookEvento();
         String idU = utente.getIdUtente();
         String nomeE = input.getNomeEvento();
         String idE = input.getIdEvento();
+        
+        Date date = new Date (evento.getDataEvento());
+        DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = f.format(date);
         
         int num = input.getNumeroPartecianti();
         String ac = "prenotato";
@@ -48,7 +58,31 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
 	        String testo = "l'utente " + nomeU + " (id:" + idU +") ha "+ ac + " l'evento " + nomeE + " (id: " + idE + ").\n Numero partecipanti " + num +
 	        		". \n email: " + emailU;
 	        String oggetto = ac + " evento " + nomeE;
-	        sendMail(testo, oggetto);
+	        sendMail(testo, oggetto, SMTP_AUTH_USER);
+	        
+	        //invio l'email a l'utente
+	        String partStr = " posti";
+	        if (num == 1) {
+	        	partStr = " posto";
+	        }
+	        String testo1 = "<div style=\"font-style:interUI; font-size:16pt\">" + 
+	        		"    <div>Ciao "+ nomeU + "!</div>" + 
+	        		"     <p></p>  " +
+	        		"    <div>Ti confermiamo la prenotazione di "+ input.getNumeroPartecianti()+ partStr + " per la degustazione "+ evento.getTitoloEvento()+ ".</div></br>" + 
+	        		"    <div>Ci vediamo il "+ dateString +" a "+ evento.getCittaEvento() +"!</div></br>" + 
+	        		"    <div>Fai sapere ai tuoi amici che ci sarai, condividi l'evento:  <a href=" + facebookU+ ">"+facebookU +"</a>.</div>" + 
+	        		"     <p></p>  " +
+	        		"    <div>Trovi tutte le info nell'app.</div>" + 
+	        		"     <p></p>  " +
+	        		"    <div>A presto!</div>" + 
+	        		"     <p></p>  " +
+	        		"    <div style=\"color:#E8C900\">Il Team di Beautiful Vino </div>" + 
+	        		"    <a href=\"www.beautifulvino.com\">www.beautifulvino.com</a>" + 
+	        		"     <p></p>  " +
+	        		"    <div><img src=\"https://s3.eu-central-1.amazonaws.com/beautifulvino-bucket-immagini/1539174434157_eventoImagefile.png\"></div>" + 
+	        		"</div>" ;
+	        String oggetto1 = "Evento BeautifulVino";
+	        sendMail(testo1, oggetto1, emailU);
         }else {
         	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_PROCEDURA_LAMBDA);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + "passati valori nulli");
@@ -59,7 +93,7 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
 		return risposta;
 	}
     
-	private void sendMail (String testo, String oggetto){
+	private void sendMail (String testo, String oggetto, String mail){
 		Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.host", SMTP_HOST_NAME);
@@ -74,11 +108,11 @@ public class BeautifulVinoAcquista implements RequestHandler<RichiestaAcquistaGe
 		try {
 			transport = mailSession.getTransport();
 	        MimeMessage message = new MimeMessage(mailSession);
-	        message.setContent(testo, "text/plain");
+	        message.setContent(testo, "text/html");
 	        message.setSubject(oggetto);
 	        message.setFrom(new InternetAddress(SMTP_AUTH_USER));
 	        message.addRecipient(Message.RecipientType.TO,
-	        new InternetAddress(SMTP_AUTH_USER));
+	        new InternetAddress(mail));
 	        transport.connect();
 	        transport.sendMessage(message,
 	            message.getRecipients(Message.RecipientType.TO));

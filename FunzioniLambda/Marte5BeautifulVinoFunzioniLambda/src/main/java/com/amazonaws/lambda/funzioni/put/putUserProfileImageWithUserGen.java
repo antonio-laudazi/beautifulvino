@@ -249,13 +249,48 @@ public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaP
 					+ "Citta: " + utenteDB.getCittaUtente() +"\n"
 					+ "Professione: " + utenteDB.getProfessioneUtente() + "\n"
 					+ "Biografia: " + utenteDB.getBiografiaUtente()
-					, "Nuovo iscritto");
+					, "Nuovo iscritto", SMTP_AUTH_USER);
+			
+			String testo = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + 
+					"" + 
+					"<div >Ciao "+ utenteDB.getUsernameUtente() + "," + 
+					"<p></p>" + 
+					"Benvenuto in Beautiful Vino!</br>" + 
+					"<p></p>" + 
+					"Il nostro &egrave un club di degustazione molto particolare, dove troverai:</br>" + 
+					" - <strong>Eventi</strong> particolari nei quali degusterai ottimi vini imparando a conoscere le mille sfaccettature di questo mondo.</br>" + 
+					"- La sezione <strong>Scopri</strong>, una scuola tascabile per wine lovers, nella quale i professori sono i vignaioli stessi!</br>" + 
+					"- Un <strong>Profilo Utente</strong> nel quale veder crescere la tua <strong>Carta dei Vini</strong>, collezionare badge esperienziali e salire di livello.</br>" + 
+					"<p></p>" + 
+					"Potrai anche vedere quali utenti parteciperanno a un evento e seguirli per scoprire cosa bevono 😉" + 
+					"<P></P>" + 
+					"Ma non &egrave finita. " + 
+					"<p></p>" + 
+					"La nostra piattaforma &egrave in continua evoluzione, ci piacciono le sorprese e i contenuti esclusivi, quindi, per non perderti nulla, ti consigliamo di iscriverti subito alla nostra newsletter.</br>" + 
+					"Basta cliccare proprio <a href=http://www.beautifulvino.com/newsletter/>QUI</a>" + 
+					"<p></p>" + 
+					"Ti aspettiamo in app e ovviamente sui nostri social!" + 
+					"<p></p>" + 
+					"<a href=\"https://www.facebook.com/beautifulvino/\"><img width=\"30px\" src=\"https://s3.eu-central-1.amazonaws.com/beautifulvino-bucket-immagini/1539270165125_vinoImagefile.jpeg\"></a>" + 
+					"<a href=\"https://www.instagram.com/beautifulvino/\"><img width=\"30px\" src=\"https://s3.eu-central-1.amazonaws.com/beautifulvino-bucket-immagini/1539271802007_vinoImagefile.jpeg\"></a></br>" + 
+					"" + 
+					"<p></p>" + 
+					"A presto!" + 
+					"<p></p>" + 
+					"<div style=\"color:#D42462\">Il Team di Beautiful Vino </div>" + 
+					"    <a style=\"color:grey\" href=\"www.beautifulvino.com\">www.beautifulvino.com</a>" + 
+					"    <p></p>" + 
+					"    <img width=\"20%\" src=\"https://s3.eu-central-1.amazonaws.com/beautifulvino-bucket-immagini/1539174434157_eventoImagefile.png\">" + 
+					"</div>";
+			
+			sendMail(testo, "Iscrizione Beautiful Vino", utenteDB.getEmailUtente());
 		}
+		
 		
 		return utenteDB;
 	
     }
-    private void sendMail (String testo, String oggetto){
+    private void sendMail (String testo, String oggetto, String email){
 		Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.host", SMTP_HOST_NAME);
@@ -270,11 +305,11 @@ public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaP
 		try {
 			transport = mailSession.getTransport();
 	        MimeMessage message = new MimeMessage(mailSession);
-	        message.setContent(testo, "text/plain");
+	        message.setContent(testo, "text/html; charset=UTF-8");
 	        message.setSubject(oggetto);
 	        message.setFrom(new InternetAddress(SMTP_AUTH_USER));
 	        message.addRecipient(Message.RecipientType.TO,
-	        new InternetAddress(SMTP_AUTH_USER));
+	        new InternetAddress(email));
 	        transport.connect();
 	        transport.sendMessage(message,
 	            message.getRecipients(Message.RecipientType.TO));
