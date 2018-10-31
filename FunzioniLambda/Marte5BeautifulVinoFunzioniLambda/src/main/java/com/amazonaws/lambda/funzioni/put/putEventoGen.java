@@ -233,18 +233,20 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
 	        				Vino vinoToLoad = new Vino();
     						vinoToLoad.setIdVino(ve.getIdVino());
 	        				Vino vino = mapper.load(vinoToLoad);
-	        				List<EventoVino> listaEv = vino.getEventiVinoInt();
-	        				EventoVino daCanc = null;
-	        				if (listaEv != null) {
-		        				for (EventoVino ev : listaEv ) {
-		        					if (ev.getIdEvento().equals(evento.getIdEvento())) {
-		        						daCanc = ev;
-		        					}
+	        				if (vino != null) {
+		        				List<EventoVino> listaEv = vino.getEventiVinoInt();
+		        				EventoVino daCanc = null;
+		        				if (listaEv != null) {
+			        				for (EventoVino ev : listaEv ) {
+			        					if (ev.getIdEvento().equals(evento.getIdEvento())) {
+			        						daCanc = ev;
+			        					}
+			        				}
 		        				}
+		        				listaEv.remove(daCanc);
+		        				vino.setEventiVinoInt(listaEv);
+		        				mapper.save(vino);
 	        				}
-	        				listaEv.remove(daCanc);
-	        				vino.setEventiVinoInt(listaEv);
-	        				mapper.save(vino);
 	        			}   			
 	        		}
 	        		evento.getBadgeEventoInt().setIdBadge(evento.getIdEvento());

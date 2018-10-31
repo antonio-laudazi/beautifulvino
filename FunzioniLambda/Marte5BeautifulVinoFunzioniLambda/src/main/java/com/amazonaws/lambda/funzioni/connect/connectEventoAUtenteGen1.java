@@ -113,6 +113,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 				}
 			}
 			//vari casi di stato attuale 
+			risposta.setEsito(esito);
 			if (pAttuale == 0 && aAttuale == 0) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
@@ -169,7 +170,8 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
 					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
-			        return risposta;
+					sendMail(utente, evento, idEvento, evento.getTitoloEvento(), numeroP,evento.getAcquistabileEvento(), context);
+					risposta.setEsito(esito);			       
 				}
 			}else if (pAttuale == 0 && aAttuale == 1) {
 				if (pRicevuto == 0 && aRicevuto == 0) {
@@ -212,17 +214,17 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			if(utenteEvento.getIdUtente().equals(idUtente)) {
 				presente = true;
 				ue = utenteEvento;
+				}
+			}		
+			if(!presente) {
+				ue.setIdUtente(idUtente);
+				ue.setPostiAcquistati(numeroP);
+				utentiIscritti.add(ue);
+			}else {
+				ue.setPostiAcquistati(ue.getPostiAcquistati() + numeroP);
 			}
-		}		
-		if(!presente) {
-			ue.setIdUtente(idUtente);
-			ue.setPostiAcquistati(numeroP);
-			utentiIscritti.add(ue);
-		}else {
-			ue.setPostiAcquistati(ue.getPostiAcquistati() + numeroP);
-		}
-		evento.setIscrittiEventoInt(utentiIscritti);
-		evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
+			evento.setIscrittiEventoInt(utentiIscritti);
+			evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
 		}
 		return evento;
     }

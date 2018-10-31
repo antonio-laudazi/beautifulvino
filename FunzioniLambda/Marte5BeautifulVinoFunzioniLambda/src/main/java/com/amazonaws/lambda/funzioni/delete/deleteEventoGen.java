@@ -200,7 +200,7 @@ public class deleteEventoGen implements RequestHandler<RichiestaDeleteGenerica, 
         			String immagineEventoUrl = eventoDaCancellare.getUrlFotoEvento();
         			if(immagineEventoUrl != null) {
         				if(!immagineEventoUrl.equals("")) {
-	        				esito = FunzioniUtils.cancellaImmagine(immagineEventoUrl);
+	        				FunzioniUtils.cancellaImmagine(immagineEventoUrl);
 	        			}
         			}
         			//cancello il badge 

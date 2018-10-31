@@ -86,7 +86,7 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        			String immagineHaderFeedUrl = feedDaCancellare.getUrlImmagineHeaderFeed();
 	        			if(immagineHaderFeedUrl != null) {
 	        				if(!immagineHaderFeedUrl.equals("")) {
-		        				esito = FunzioniUtils.cancellaImmagine(immagineHaderFeedUrl);
+		        				FunzioniUtils.cancellaImmagine(immagineHaderFeedUrl);
 		        			}
 	        			}
 	        			

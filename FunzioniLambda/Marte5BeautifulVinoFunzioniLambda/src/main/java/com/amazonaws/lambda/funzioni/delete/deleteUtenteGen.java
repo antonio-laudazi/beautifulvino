@@ -180,7 +180,7 @@ public class deleteUtenteGen implements RequestHandler<RichiestaDeleteGenerica, 
 	        			String immagineUtenteUrl = utenteDaCancellare.getUrlFotoUtente();
 	        			if(immagineUtenteUrl != null) {
 	        				if(!immagineUtenteUrl.equals("")) {
-		        				esito = FunzioniUtils.cancellaImmagine(immagineUtenteUrl);
+		        				FunzioniUtils.cancellaImmagine(immagineUtenteUrl);
 		        			}
 	        			}
 	        		}

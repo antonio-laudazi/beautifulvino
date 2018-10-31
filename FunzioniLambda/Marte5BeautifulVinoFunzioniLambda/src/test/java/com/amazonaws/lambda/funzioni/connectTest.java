@@ -30,10 +30,10 @@ public class connectTest {
 //        input.setIdUtente("b6118563-1486-4448-8994-c121b60534ea");
 //        
         input.setFunctionName("connectEventoAUtenteGen1");
-        input.setIdUtente("4835df2a-9678-4645-8dc9-6e5d0985482d");
-        input.setIdEvento("1527169395218");       
-        input.setDataEvento(157766400000l);
-        input.setNumeroPartecipanti(2);
+        input.setIdUtente("10523a22-9404-453c-9df1-7ad6519c648d");
+        input.setIdEvento("1537169878555");       
+        input.setDataEvento(1541617200000l);
+        input.setNumeroPartecipanti(1);
         input.setStatoAcquistatoEvento(1);
         input.setStatoPreferitoEvento(1);
         

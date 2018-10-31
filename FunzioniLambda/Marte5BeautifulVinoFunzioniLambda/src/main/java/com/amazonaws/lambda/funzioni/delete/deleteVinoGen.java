@@ -138,7 +138,7 @@ public class deleteVinoGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        			String immagineVinoUrl = vinoDaCancellare.getUrlImmagineVino();
 	        			if(immagineVinoUrl != null) {
 	        				if(!immagineVinoUrl.equals("")) {
-		        				esito = FunzioniUtils.cancellaImmagine(immagineVinoUrl);
+		        				FunzioniUtils.cancellaImmagine(immagineVinoUrl);
 		        			}
 	        			}
 

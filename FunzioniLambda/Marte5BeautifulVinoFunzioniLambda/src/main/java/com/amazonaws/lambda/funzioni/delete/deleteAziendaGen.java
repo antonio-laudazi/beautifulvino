@@ -137,7 +137,7 @@ public class deleteAziendaGen implements RequestHandler<RichiestaDeleteGenerica,
 	        			String immagineAziendaUrl = aziendaDaCancellare.getUrlImmagineAzienda();
 	        			if(immagineAziendaUrl != null) {
 	        				if(!immagineAziendaUrl.equals("")) {
-		        				esito = FunzioniUtils.cancellaImmagine(immagineAziendaUrl);
+		        				FunzioniUtils.cancellaImmagine(immagineAziendaUrl);
 		        			}
 	        			}
 	        		}
