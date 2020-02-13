@@ -30,7 +30,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.googlecode.pngtastic.core.PngImage;
 import com.googlecode.pngtastic.core.PngOptimizer;
-
 import com.marte5.modello.Esito;
 import com.marte5.modello.richieste.put.RichiestaPutGenerica;
 import com.marte5.modello.risposte.put.RispostaPutGenerica;
@@ -43,7 +42,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	
     @Override
     public RispostaPutGenerica handleRequest(RichiestaPutGenerica input, Context context) {
-    	
+    	System.out.println("ciao");
         RispostaPutGenerica risposta = new RispostaPutGenerica();
         
         String idImmagine = FunzioniUtils.getEntitaId();
@@ -75,15 +74,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
         }
         
         String tipoEntita = input.getTipoEntita();
-        String rawFilename = input.getFilename();
-        
-        String cleanFilename = rawFilename;
-        if(rawFilename.contains(".")) {
-        	String[] splittedFilename = rawFilename.split(".");
-            cleanFilename = splittedFilename[0];//elimino qualsiasi cosa ci sia dopo un eventuale punto
-        }
-        
-        String filename =  idImmagine + "_" + cleanFilename + "." + format;
+        String filename =  idImmagine + "_" + input.getFilename();
         
         //controlli sui dati ricevuti
         String bucketName = getBucketName(tipoEntita);
@@ -123,9 +114,7 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					bis.close();
 					// optimize
 					PngOptimizer optimizer = new PngOptimizer();
-					System.out.println("dimensione" + image.getHeight() + "  "+ image.getWidth());
 					PngImage optimizedImage = optimizer.optimize(image, true, new Integer(9));
-					System.out.println("dimensione" + optimizedImage.getHeight() + "  " + optimizedImage.getWidth());
 					// export the optimized image to a new file
 					ByteArrayOutputStream optimizedBytes = new ByteArrayOutputStream();
 					optimizedImage.writeDataOutputStream(optimizedBytes);
@@ -133,18 +122,33 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					ByteArrayInputStream bais = new ByteArrayInputStream(optimizedBytes.toByteArray());
 					optimizedBytes.close();
 					BufferedImage imout = ImageIO.read(bais);
-					if(imout.getWidth() > 1100) {
-						imout = resize(imout, (int)getYResizeFactor(imout.getWidth(), 1100) * imout.getHeight(), 1100);
-					}
 			        bais.close();
+			        System.out.println("png 1");
+			        System.out.println("dimensione " + imout.getWidth() + " " + imout.getHeight() );
+			        if (imout.getWidth() > imout.getHeight()) {
+					    if(imout.getWidth() > 1100) {
+					    	float w = getYResizeFactor(imout.getWidth(), 1100) * imout.getHeight();
+					    	int wi = Math.round(w);
+					    	imout = resize(imout, wi , 1100);
+					    }
+				    }else {
+				    	if(imout.getHeight() > 1100) {
+					    	float w = getYResizeFactor(imout.getHeight(), 1100) * imout.getWidth();
+					    	int wi = Math.round(w);
+					    	imout = resize(imout, 1100 , wi);
+					    }
+				    }
+			        System.out.println("dimensione " + imout.getWidth() + " " + imout.getHeight() );
 			        ImageIO.write(imout, format, outputfile);
 			    } catch (IOException e) {
+			    	System.out.println("errore 1");
 			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;
 			    }catch(Exception e1){
+			    	System.out.println("error 3");
 			    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putImage ");
 					esito.setTrace(e1.getMessage());
@@ -152,11 +156,29 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					return risposta;
 			    }
 				
-			}else {
+			}else if (format.equalsIgnoreCase("jpg") || format.equalsIgnoreCase("jpeg")){
 				//l'immagine è un jpg
 				try {
-				BufferedImage image = null;
-				image = ImageIO.read(bis);
+				
+//					Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+//			        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+//			        Graphics2D g2d = resized.createGraphics();
+//			        g2d.drawImage(tmp, 0, 0, null);
+//			        g2d.dispose();
+//			        return resized;
+				BufferedImage firstImage = null;
+				firstImage = ImageIO.read(bis);
+				
+				System.out.println(firstImage.getType()); 
+				BufferedImage image = new BufferedImage(firstImage.getWidth(),firstImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = image.createGraphics();
+				
+				
+		        g.drawImage(firstImage, 0, 0, null);
+		        g.dispose();
+				
+				System.out.println(image.getType());
+				
 				System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
 				Iterator<ImageWriter>writers = ImageIO.getImageWritersByFormatName(format);
 				ImageWriter writer = writers.next();
@@ -173,10 +195,20 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 			        imgOutStream.close();
 			    }
 			    System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
-			    if(image.getWidth() > 1100) {
-			    		image = resize(image, (int)getYResizeFactor(image.getWidth(), 1100) * image.getHeight(), 1100);
-				}
-			    
+			    if (image.getWidth() > image.getHeight()) {
+				    if(image.getWidth() > 1100) {
+				    	float w = getYResizeFactor(image.getWidth(), 1100) * image.getHeight();
+				    	int wi = Math.round(w);
+				    	image = resize(image, wi , 1100);
+				    }
+			    }else {
+			    	if(image.getHeight() > 1100) {
+				    	float w = getYResizeFactor(image.getHeight(), 1100) * image.getWidth();
+				    	int wi = Math.round(w);
+				    	image = resize(image, 1100 , wi);
+				    }
+			    }
+			    System.out.println("dimensione " + image.getWidth() + " " + image.getHeight() );
 				ImageIO.write(image, format, outputfile);	
 				}catch (Exception e) {
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
@@ -185,14 +217,22 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 					risposta.setEsito(esito);
 					return risposta;
 				}
+	    }else {
+	    	esito.setMessage("è possibile caricare solo png e jpg");
+	    	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
+	    	risposta.setEsito(esito);
+			return risposta;
 	    }
+			System.out.println("png 2");
 		//preparo la richiesta di put aggiungendo l'istruzione che rende pubblico il file
-		PutObjectRequest request = new PutObjectRequest(bucketName, filename, outputfile);
+		PutObjectRequest request = new PutObjectRequest(bucketName, filename + "." + format, outputfile);
 		request.setCannedAcl(CannedAccessControlList.PublicRead);
 		client.putObject(request);
         }
+        System.out.println("png 3");
+        System.out.println(esito.getMessage());
         risposta.setEsito(esito);
-        risposta.setImageUrl(FunzioniUtils.AMAZON_S3_BASE_URL + bucketName + "/" + filename);
+        risposta.setImageUrl(FunzioniUtils.AMAZON_S3_BASE_URL + bucketName + "/" + filename + "." + format);
         return risposta;
     }
 
@@ -229,12 +269,13 @@ public class putImageGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	
 	private static BufferedImage resize(BufferedImage img, int height, int width) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resized.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
         return resized;
-    }
+	}
+
 	
 	private float getYResizeFactor(float x, float max) {
 		return (max / x);

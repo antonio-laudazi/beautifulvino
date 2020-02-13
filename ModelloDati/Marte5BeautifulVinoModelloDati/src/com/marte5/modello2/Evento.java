@@ -12,6 +12,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
+
+
 /**
  * @author paolosalvadori
  *
@@ -28,11 +30,13 @@ public class Evento {
 	private float prezzoEvento;
 	private String urlFotoEvento;
 	private String statoEvento;
+	private String statoPreferitoEvento;
 	private String testoEvento;
 	private double latitudineEvento;
 	private double longitudineEvento;
 	private String indirizzoEvento;
 	private String telefonoEvento;
+	private String facebookEvento;
 	private String emailEvento;
 	private int numMaxPartecipantiEvento;
 	private int numPostiDisponibiliEvento;
@@ -46,8 +50,18 @@ public class Evento {
 	private AziendaEvento aziendaOspitanteEventoInt;
 	private AziendaEvento aziendaFornitriceEventoInt;
 	private List<UtenteEvento> iscrittiEventoInt;//solo uso interno
+	private List<UtenteEvento> preferitiEventoInt;//solo uso interno
 	private List<VinoEvento> viniEventoInt;//solo uso interno
 	private List<Azienda> aziendeViniEvento;
+	private String orarioEvento; //inutile
+	private long oldDate;
+	private String oldIdAzienda;
+	private int acquistabileEvento;
+	private int creditiEvento;
+	private int puntiEsperienza;
+	private List<VinoEvento> listaViniCancellati;
+	private boolean pubblicatoEvento;
+	
 	/**
 	 * @return the idEvento
 	 */
@@ -75,7 +89,71 @@ public class Evento {
 	public void setDataEvento(long dataEvento) {
 		this.dataEvento = dataEvento;
 	}
-	
+	/**
+	 * @return the pubblicatoEvento
+	 */
+	@DynamoDBAttribute(attributeName="pubblicatoEvento")
+	public boolean getPubblicatoEvento() {
+		return pubblicatoEvento;
+	}
+	/**
+	 * @param pubblicato Evento the pubblicato Evento to set
+	 */
+	public void setPubblicatoEvento(boolean pubblicatoEvento) {
+		this.pubblicatoEvento = pubblicatoEvento;
+	}
+	/**
+	 * @return the acquistabileEvento
+	 */
+	@DynamoDBAttribute(attributeName="acquistabileEvento")
+	public int getAcquistabileEvento() {
+		return acquistabileEvento;
+	}
+	/**
+	 * @param acquistabileEvento the acquistabileEvento to set
+	 */
+	public void setAcquistabileEvento(int acquistabileEvento) {
+		this.acquistabileEvento = acquistabileEvento;
+	}
+	/**
+	 * @return the creditiEvento
+	 */
+	@DynamoDBAttribute(attributeName="creditiEvento")
+	public int getCreditiEvento() {
+		return creditiEvento;
+	}
+	/**
+	 * @param creditiEvento the creditiEvento to set
+	 */
+	public void setCreditiEvento(int creditiEvento) {
+		this.creditiEvento = creditiEvento;
+	}
+	/**
+	 * @return the oldDate
+	 */
+	@DynamoDBAttribute(attributeName="oldDate")
+	public long getOldDate() {
+		return oldDate;
+	}
+	/**
+	 * @param oldDate the oldDate to set
+	 */
+	public void setOldDate(long oldDate) {
+		this.oldDate = oldDate;
+	}
+	/**
+	 * @return the puntiEsperienza
+	 */
+	@DynamoDBAttribute(attributeName="puntiEsperienza")
+	public int getPuntiEsperienza() {
+		return puntiEsperienza;
+	}
+	/**
+	 * @param puntiEsperienza the puntiEsperienza to set
+	 */
+	public void setPuntiEsperienza(int puntiEsperienza) {
+		this.puntiEsperienza = puntiEsperienza;
+	}
 	/**
 	 * @return the cittaEvento
 	 */
@@ -88,6 +166,20 @@ public class Evento {
 	 */
 	public void setCittaEvento(String cittaEvento) {
 		this.cittaEvento = cittaEvento;
+	}
+	
+	/**
+	 * @return the orario
+	 */
+	@DynamoDBAttribute(attributeName="orarioEvento")
+	public String getOrarioEvento() {
+		return orarioEvento;
+	}
+	/**
+	 * @param orarioEvento the orarioEvento to set
+	 */
+	public void setOrarioEvento(String orarioEvento) {
+		this.orarioEvento = orarioEvento;
 	}
 	
 	/**
@@ -116,7 +208,6 @@ public class Evento {
 	public void setTitoloEvento(String titoloEvento) {
 		this.titoloEvento = titoloEvento;
 	}
-	
 	/**
 	 * @return the temaEvento
 	 */
@@ -171,6 +262,20 @@ public class Evento {
 	 */
 	public void setStatoEvento(String statoevento) {
 		this.statoEvento = statoevento;
+	}
+	
+	/**
+	 * @return the statoPreferitoevento
+	 */
+	@DynamoDBAttribute(attributeName="statoPreferitoEvento")
+	public String getStatoPreferitoEvento() {
+		return statoPreferitoEvento;
+	}
+	/**
+	 * @param statoevento the statoevento to set
+	 */
+	public void setStatoPreferitoEvento(String statoPreferitoEvento) {
+		this.statoPreferitoEvento = statoPreferitoEvento;
 	}
 	
 	/**
@@ -242,6 +347,20 @@ public class Evento {
 	public void setTelefonoEvento(String telefonoEvento) {
 		this.telefonoEvento = telefonoEvento;
 	}
+	
+	/**
+	 * @return the facebookEvento
+	 */
+	@DynamoDBAttribute(attributeName="facebookEvento")
+	public String getFacebookEvento() {
+		return facebookEvento;
+	}
+	/**
+	 * @param facebookEvento the facebookEvento to set
+	 */
+	public void setFacebookEvento(String facebookEvento) {
+		this.facebookEvento = facebookEvento;
+	}
 	/**
 	 * @return the emailEvento
 	 */
@@ -309,6 +428,20 @@ public class Evento {
 	 */
 	public void setIscrittiEvento(List<Utente> iscrittiEvento) {
 		this.iscrittiEvento = iscrittiEvento;
+	}
+	
+	/**
+	 * @return the oldIdAzineda
+	 */
+	@DynamoDBAttribute(attributeName="oldIdAzienda")
+	public String getOldIdAzienda() {
+		return oldIdAzienda;
+	}
+	/**
+	 * @param oldIdAzineda the oldIdAzineda to set
+	 */
+	public void setOldIdAzienda(String oldIdAzienda) {
+		this.oldIdAzienda = oldIdAzienda;
 	}
 	
 	/**
@@ -412,6 +545,19 @@ public class Evento {
 	}
 	
 	/**
+	 * @return the preferitiEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="preferitiEventoInt")
+	public List<UtenteEvento> getPreferitiEventoInt() {
+		return preferitiEventoInt;
+	}
+	/**
+	 * @param preferitiEventoInt the preferitiEventoInt to set
+	 */
+	public void setPreferitiEventoInt(List<UtenteEvento> preferitiEventoInt) {
+		this.preferitiEventoInt = preferitiEventoInt;
+	}
+	/**
 	 * @return the viniEventoInt
 	 */
 	@DynamoDBAttribute(attributeName="viniEvento")
@@ -423,6 +569,20 @@ public class Evento {
 	 */
 	public void setViniEventoInt(List<VinoEvento> viniEventoInt) {
 		this.viniEventoInt = viniEventoInt;
+	}
+	
+	/**
+	 * @return the listaViniCancellati
+	 */
+	@DynamoDBAttribute(attributeName="listaViniCancellati")
+	public List<VinoEvento> getListaViniCancellati() {
+		return listaViniCancellati;
+	}
+	/**
+	 * @param listaViniCancellati the listaViniCancellati to set
+	 */
+	public void setListaViniCancellati(List<VinoEvento> listaViniCancellati) {
+		this.listaViniCancellati = listaViniCancellati;
 	}
 	
 	@DynamoDBDocument
@@ -455,7 +615,7 @@ public class Evento {
 	@DynamoDBDocument
 	public static class UtenteEvento{
 		private String idUtente;
-
+		private int postiAcquistati;
 		/**
 		 * @return the idUtente
 		 */
@@ -468,6 +628,19 @@ public class Evento {
 		 */
 		public void setIdUtente(String idUtente) {
 			this.idUtente = idUtente;
+		}
+		/**
+		 * @return the postiAcquistati
+		 */
+		@DynamoDBAttribute(attributeName="postiAcquistati")
+		public int getPostiAcquistati() {
+			return postiAcquistati;
+		}
+		/**
+		 * @param postiAcquistati the postiAcquistati to set
+		 */
+		public void setPostiAcquistati(int postiAcquistati) {
+			this.postiAcquistati = postiAcquistati;
 		}
 	}
 	
@@ -655,7 +828,10 @@ public class Evento {
 	@DynamoDBDocument
 	public static class BadgeEvento{
 		private String idBadge;
-
+		private long dataBadge;
+		private String nomeBadge;
+		private String infoBadge;
+		private String urlLogoBadge;
 		/**
 		 * @return the idBadge
 		 */
@@ -668,6 +844,58 @@ public class Evento {
 		 */
 		public void setIdBadge(String idBadge) {
 			this.idBadge = idBadge;
+		}
+		/**
+		 * @return the dataBadge
+		 */
+		@DynamoDBAttribute(attributeName="dataBadge")
+		public long getDataBadge() {
+			return dataBadge;
+		}
+		/**
+		 * @param dataBadge the dataBadge to set
+		 */
+		public void setDataBadge(long dataBadge) {
+			this.dataBadge = dataBadge;
+		}
+		/**
+		 * @return the nomeBadge
+		 */
+		@DynamoDBAttribute(attributeName="nomeBadge")
+		public String getNomeBadge() {
+			return nomeBadge;
+		}
+		/**
+		 * @param idBadge the idBadge to set
+		 */
+		public void setNomeBadge(String nomeBadge) {
+			this.nomeBadge = nomeBadge;
+		}
+		/**
+		 * @return the infoBadge
+		 */
+		@DynamoDBAttribute(attributeName="infoBadge")
+		public String getInfoBadge() {
+			return infoBadge;
+		}
+		/**
+		 * @param infoBadge the infoBadge to set
+		 */
+		public void setInfoBadge(String infoBadge) {
+			this.infoBadge = infoBadge;
+		}
+		/**
+		 * @return the urlLogoBadge
+		 */
+		@DynamoDBAttribute(attributeName="urlLogoBadge")
+		public String getUrlLogoBadge() {
+			return urlLogoBadge;
+		}
+		/**
+		 * @param urlLogoBadge the urlLogoBadge to set
+		 */
+		public void setUrlLogoBadge(String urlLogoBadge) {
+			this.urlLogoBadge = urlLogoBadge;
 		}
 	}
 

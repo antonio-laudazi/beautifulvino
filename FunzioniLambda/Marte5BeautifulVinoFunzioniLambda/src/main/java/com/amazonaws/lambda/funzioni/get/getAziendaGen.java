@@ -1,6 +1,7 @@
 package com.amazonaws.lambda.funzioni.get;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -78,8 +79,8 @@ public class getAziendaGen implements RequestHandler<RichiestaGetGenerica, Rispo
 						
 						Evento eventoCompleto = new Evento();
 						Evento eventoEstratto = mapper.load(Evento.class, evento.getIdEvento(), evento.getDataEvento());
-						
-						if(eventoEstratto != null) {
+						long time = Calendar.getInstance().getTimeInMillis();
+						if(eventoEstratto != null && eventoEstratto.getDataEvento() >= time && eventoEstratto.getPubblicatoEvento() == true) {
 							eventoCompleto.setIdEvento(eventoEstratto.getIdEvento());
 							eventoCompleto.setDataEvento(eventoEstratto.getDataEvento());
 							eventoCompleto.setCittaEvento(eventoEstratto.getCittaEvento());

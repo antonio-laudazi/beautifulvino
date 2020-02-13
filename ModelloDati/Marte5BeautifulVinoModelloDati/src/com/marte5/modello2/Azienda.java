@@ -22,7 +22,6 @@ public class Azienda {
 	private String zonaAzienda;
 	private String nomeAzienda;
 	private String infoAzienda;
-	private String descrizioneAzienda;
 	private String cittaAzienda;
 	private String regioneAzienda;
 	private String indirizzoAzienda;
@@ -109,19 +108,6 @@ public class Azienda {
 	 */
 	public void setInfoAzienda(String infoAzienda) {
 		this.infoAzienda = infoAzienda;
-	}
-	/**
-	 * @return the descrizioneAzienda
-	 */
-	@DynamoDBAttribute(attributeName="descrizioneAzienda")
-	public String getDescrizioneAzienda() {
-		return descrizioneAzienda;
-	}
-	/**
-	 * @param descrizioneAzienda the descrizioneAzienda to set
-	 */
-	public void setDescrizioneAzienda(String descrizioneAzienda) {
-		this.descrizioneAzienda = descrizioneAzienda;
 	}
 	/**
 	 * @return the luogoAzienda
@@ -446,6 +432,11 @@ public class Azienda {
 	public static class EventoAzienda{
 		private String idEvento;
 		private long dataEvento;
+		private String titoloEvento;
+		private String cittaEvento;
+		private String temaEvento;
+		private float prezzoEvento;
+		private String urlFotoEvento;
 		
 		@DynamoDBAttribute(attributeName="idEvento")
 		public String getIdEvento() {
@@ -461,6 +452,46 @@ public class Azienda {
 		}
 		public void setDataEvento(long dataEvento) {
 			this.dataEvento = dataEvento;
+		}
+		
+		@DynamoDBAttribute(attributeName="titoloEvento")
+		public String getTitoloEvento() {
+			return titoloEvento;
+		}
+		public void setTitoloEvento(String titoloEvento) {
+			this.titoloEvento = titoloEvento;
+		}
+		
+		@DynamoDBAttribute(attributeName="cittaEvento")
+		public String getCittaEvento() {
+			return cittaEvento;
+		}
+		public void setCittaEvento(String cittaEvento) {
+			this.cittaEvento = cittaEvento;
+		}
+		
+		@DynamoDBAttribute(attributeName="temaEvento")
+		public String getTemaEvento() {
+			return temaEvento;
+		}
+		public void setTemaEvento(String temaEvento) {
+			this.temaEvento = temaEvento;
+		}
+		
+		@DynamoDBAttribute(attributeName="prezzoEvento")
+		public float getPrezzoEvento() {
+			return prezzoEvento;
+		}
+		public void setPrezzoEvento(float prezzoEvento) {
+			this.prezzoEvento = prezzoEvento;
+		}
+		
+		@DynamoDBAttribute(attributeName="urlFotoEvento")
+		public String getUrlFotoEvento() {
+			return urlFotoEvento;
+		}
+		public void setUrlFotoEvento(String urlFotoEvento) {
+			this.urlFotoEvento = urlFotoEvento;
 		}
 	}
 

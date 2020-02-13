@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -77,7 +78,7 @@ public class connectViniAUtenteGen implements RequestHandler<RichiestaConnectGen
 		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
 		Esito esito = new Esito();
 		esito.setCodice(100);
-        esito.setMessage("Esito corretto per la richiesta getEventi");
+        esito.setMessage("Esito corretto per la richiesta connectViniAUtente");
         
         String idUtente = input.getIdUtente();
         String idVino = input.getIdVino();
@@ -154,25 +155,16 @@ public class connectViniAUtenteGen implements RequestHandler<RichiestaConnectGen
 						daRimuovere = vinoUtente;
 					}
 				}
-				if(daRimuovere.getStatoVino().equals(FunzioniUtils.VINO_STATO_ACQUISTATO) && !statoVino.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
-					//7 - non posso cancellare o cambiare stato se lo stato precedente è Acquistato
-					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-	    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " si tenta di cambiare di stato o cancellare un vino già acquistato.");
-	    		        risposta.setEsito(esito);
-	    		        return risposta;
-				} else {
-					viniUtente.remove(daRimuovere);
-					
-					//devo anche rimuovere l'utente dal vino
-	    				if(!(statoVino.equals(FunzioniUtils.VINO_STATO_CANCELLATO) || statoVino.equals(FunzioniUtils.VINO_STATO_NEUTRO))) {
-	    					associaUtenteAVino(idUtente, idVino, mapper);
-	    					daRimuovere.setStatoVino(statoVino);
-	    					viniUtente.add(daRimuovere);
-	    				} else {
-	    					disassociaUtenteAVino(idUtente, idVino, mapper);
-	    				}
-				}
+				viniUtente.remove(daRimuovere);
 				
+				//devo anche rimuovere l'utente dal vino
+    				if(!(statoVino.equals(FunzioniUtils.VINO_STATO_CANCELLATO) || statoVino.equals(FunzioniUtils.VINO_STATO_NEUTRO))) {
+    					associaUtenteAVino(idUtente, idVino, mapper);
+    					daRimuovere.setStatoVino(statoVino);
+    					viniUtente.add(daRimuovere);
+    				} else {
+    					disassociaUtenteAVino(idUtente, idVino, mapper);
+    				}				
 			} else {
 				
 				//5

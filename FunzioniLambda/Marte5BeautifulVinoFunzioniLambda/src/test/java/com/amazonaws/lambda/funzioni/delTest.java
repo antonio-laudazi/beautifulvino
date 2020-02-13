@@ -20,8 +20,8 @@ public class delTest {
 	        input = new RichiestaDeleteGenerica();
 
 	        input.setFunctionName("deleteEventoGen");
-	        input.setIdEvento("1522315486942");
-	        input.setDataEvento(1520809200000L);
+	        input.setIdEvento("1526632352429");
+	        input.setDataEvento(1526540400000l);
 	    }
 
 	    private Context createContext() {

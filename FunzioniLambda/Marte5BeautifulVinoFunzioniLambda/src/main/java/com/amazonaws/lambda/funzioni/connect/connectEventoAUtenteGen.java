@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.amazonaws.lambda.funzioni.common.BeautifulVinoAcquista;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
+import com.marte5.modello.richieste.acquista.RichiestaAcquistaGenerica;
+import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
+import com.marte5.modello.risposte.Risposta;
+import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
 import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Utente.EventoUtente;
-import com.marte5.modello.richieste.connect.RichiestaConnectGenerica;
-import com.marte5.modello.risposte.connect.RispostaConnectGenerica;
 
 public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectGenerica, RispostaConnectGenerica> {
 
@@ -25,15 +29,14 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     public RispostaConnectGenerica handleRequest(RichiestaConnectGenerica input, Context context) {
         context.getLogger().log("Input: " + input);
         
-        RispostaConnectGenerica risposta = getRisposta(input);
-
-        // TODO: implement your handler
+        RispostaConnectGenerica risposta = getRisposta(input, context);
         return risposta;
     }
     
-    private RispostaConnectGenerica getRisposta(RichiestaConnectGenerica input) {
-    	RispostaConnectGenerica risposta = new RispostaConnectGenerica();
-
+    private RispostaConnectGenerica getRisposta(RichiestaConnectGenerica input, Context context) {
+    		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
+    		Utente utente = null;
+    		Evento evento = null;
     		Esito esito = FunzioniUtils.getEsitoPositivo();
     		
     		String idUtente = input.getIdUtente();
@@ -43,7 +46,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		
         AmazonDynamoDB client = null;
     		try {
-    			client = AmazonDynamoDBClientBuilder.standard().build();
+    			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
     		} catch (Exception e1) {
     			// TODO Auto-generated catch block
     			e1.printStackTrace();
@@ -53,16 +56,16 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		}
     		if(client != null) {
     			DynamoDBMapper mapper = new DynamoDBMapper(client);
-    			
-    			if(idEvento == null || idEvento.equals("")) {
+    			evento = mapper.load(Evento.class, idEvento, dataEvento);
+    			if(evento == null) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idEvento nullo, non posso procedere");
+    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " evento non trovato sul DB, non posso procedere");
     		        risposta.setEsito(esito);
     		        return risposta;
     			}
-    			if(dataEvento == 0L) {
+    			if(idEvento == null || idEvento.equals("")) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " dataEvento nulla, non posso procedere");
+    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idEvento nullo, non posso procedere");
     		        risposta.setEsito(esito);
     		        return risposta;
     			}
@@ -79,7 +82,7 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     		        return risposta;
     			}
     			
-    			Utente utente = mapper.load(Utente.class, idUtente);
+    			utente = mapper.load(Utente.class, idUtente);
     			if(utente == null) {
     				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
     		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " utente non trovato sul DB, non posso procedere");
@@ -111,20 +114,24 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     						daRimuovere = eventoUtente;
     					}
     				}
-    				if(daRimuovere.getStatoEvento().equals(FunzioniUtils.EVENTO_STATO_ACQUISTATO)) {
-    					//7 - non posso cancellare o cambiare stato se lo stato precedente è Acquistato
-    					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-	    		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " si tenta di cambiare di stato o cancellare un evento già acquistato.");
-	    		        risposta.setEsito(esito);
-	    		        return risposta;
-    				} else {
-    					eventiUtente.remove(daRimuovere);
-        				if(!(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO))) {
-        					daRimuovere.setStatoEvento(statoEvento);
-        					eventiUtente.add(daRimuovere);
-        				}
+					eventiUtente.remove(daRimuovere);
+    				if(!(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO))) {
+    					daRimuovere.setStatoEvento(statoEvento);
+    					eventiUtente.add(daRimuovere);
+    					
+    				}else {
+    					deleteUtenteIscritto(evento, idUtente, mapper);
     				}
-    				
+    				if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
+    					Esito out = sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), evento.getAcquistabileEvento(),context);
+    					int np = input.getNumeroPartecipanti();
+        				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
+    					if (out.getCodice() != 100) {
+    						esito = out;
+    	    		        risposta.setEsito(esito);
+    	    		        return risposta;
+    					}
+    				}	
     			} else {
     				//5
     				if(statoEvento.equals(FunzioniUtils.EVENTO_STATO_CANCELLATO) || statoEvento.equals(FunzioniUtils.EVENTO_STATO_NEUTRO)) {
@@ -135,12 +142,22 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
 	    		        return risposta;
     				} else {
     					//6
+    					if (statoEvento.equals(FunzioniUtils.VINO_STATO_ACQUISTATO)) {
+    					Esito out =sendMail(utente.getIdUtente(), utente.getUsernameUtente(), evento.getIdEvento(), evento.getTitoloEvento(), input.getNumeroPartecipanti(), evento.getAcquistabileEvento(), context);
+	    					if (out.getCodice() != 100) {
+	    						esito = out;
+	    	    		        risposta.setEsito(esito);
+	    	    		        return risposta;
+	    					}
+    					}
+    					//lo mette fra i preferiti
     					EventoUtente eu = new EventoUtente();
     					eu.setIdEvento(idEvento);
     					eu.setStatoEvento(statoEvento);
     					eu.setDataEvento(dataEvento);
     					eventiUtente.add(eu);
-    					
+    					int np = input.getNumeroPartecipanti();
+        				addUtenteIscritto(idEvento, dataEvento, idUtente,evento, np, mapper);
     					//se lo stato è "Aquistato" devo aggiungere un utente agli utenti iscritti all'evento
     				}
     			}
@@ -150,9 +167,8 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
     			
     			try {
     				mapper.save(utente);
-    				addUtenteIscritto(idEvento, dataEvento, idUtente, mapper);
+    				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Errore nell'aggiunta dell'evento tra i preferiti dell'utente ");
@@ -164,27 +180,65 @@ public class connectEventoAUtenteGen implements RequestHandler<RichiestaConnectG
         return risposta;
     }
     
-    private void addUtenteIscritto(String idEvento, long dataEvento, String idUtente, DynamoDBMapper mapper) {
-    	
-    		Evento evento = mapper.load(Evento.class, idEvento, dataEvento);
-    		if(evento != null) {
-    			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
-    			if(utentiIscritti == null) {
-    				utentiIscritti = new ArrayList<UtenteEvento>();
-    			}
-    			boolean presente = false;
-    			for (UtenteEvento utenteEvento : utentiIscritti) {
+    private void addUtenteIscritto(String idEvento, long dataEvento, String idUtente,Evento evento,int numeroP, DynamoDBMapper mapper) {
+    	UtenteEvento ue = new UtenteEvento();
+		if(evento != null) {
+			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
+			if(utentiIscritti == null) {
+				utentiIscritti = new ArrayList<UtenteEvento>();
+			}
+			boolean presente = false;
+			for (UtenteEvento utenteEvento : utentiIscritti) {
+			if(utenteEvento.getIdUtente().equals(idUtente)) {
+				presente = true;
+				ue = utenteEvento;
+			}
+		}		
+		if(!presente) {
+			ue.setIdUtente(idUtente);
+			ue.setPostiAcquistati(numeroP);
+			utentiIscritti.add(ue);
+		}else {
+			ue.setPostiAcquistati(ue.getPostiAcquistati() + numeroP);
+		}
+		evento.setIscrittiEventoInt(utentiIscritti);
+		evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
+		mapper.save(evento);
+		}
+		return;
+    }
+    
+    private void deleteUtenteIscritto (Evento evento,String idUtente, DynamoDBMapper mapper) {
+    	UtenteEvento ue = new UtenteEvento();
+		if(evento != null) {
+			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
+			if(utentiIscritti == null) {
+				utentiIscritti = new ArrayList<UtenteEvento>();
+			}
+			boolean presente = false;
+			for (UtenteEvento utenteEvento : utentiIscritti) {
 				if(utenteEvento.getIdUtente().equals(idUtente)) {
 					presente = true;
-				}
+					ue = utenteEvento;
+					}
 			}
-    			if(!presente) {
-    				UtenteEvento ue = new UtenteEvento();
-    				ue.setIdUtente(idUtente);
-    				utentiIscritti.add(ue);
-    			}
-    			evento.setIscrittiEventoInt(utentiIscritti);
-    			mapper.save(evento);
-    		}
+			if (presente) {
+				utentiIscritti.remove(ue);
+			}
+	    }
+		return;
+    }
+    
+    private Esito sendMail(String idU, String nomeU, String idE, String nomeE, int num,int ac, Context context) {
+    	RichiestaAcquistaGenerica r = new RichiestaAcquistaGenerica();
+		BeautifulVinoAcquista c = new BeautifulVinoAcquista();
+		r.setIdUtente(idU);
+		r.setNomeUtente(nomeU);
+		r.setIdEvento(idE);
+		r.setNomeEvento(nomeE);
+		r.setNumeroPartecipanti(num);
+		r.setAcquista(ac);
+		Risposta out = c.handleRequest(r, context);
+		return out.getEsito();
     }
 }

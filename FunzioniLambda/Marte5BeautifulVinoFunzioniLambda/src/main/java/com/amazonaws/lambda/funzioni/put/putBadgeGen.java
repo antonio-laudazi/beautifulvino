@@ -25,7 +25,7 @@ public class putBadgeGen implements RequestHandler<RichiestaPutGenerica, Rispost
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putBadge ");
@@ -47,7 +47,6 @@ public class putBadgeGen implements RequestHandler<RichiestaPutGenerica, Rispost
 	        } else {
 		        	String idBadge = badge.getIdBadge();
 		        	if(idBadge == null || idBadge.equals("")) {
-	        			//insert
 		        		idBadge = FunzioniUtils.getEntitaId();
 		        } 
 		        	idBadgeRisposta = idBadge;
@@ -56,7 +55,6 @@ public class putBadgeGen implements RequestHandler<RichiestaPutGenerica, Rispost
 		        try {
 					mapper.save(badge);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Badge " + input.getBadge().getIdBadge());

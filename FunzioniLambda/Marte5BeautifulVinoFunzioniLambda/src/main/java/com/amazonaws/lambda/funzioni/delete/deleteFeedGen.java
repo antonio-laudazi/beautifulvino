@@ -61,23 +61,7 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	    				risposta.setEsito(esito);
 	    				return risposta;
 	        		} else {
-	        			//cancello il collegamento col i vini
-	        			VinoFeed vinofeed = feedDaCancellare.getVinoFeedInt();
-	        			if (vinofeed != null) {	        					        		
-		        				Vino vinoDaCanc = mapper.load(Vino.class, vinofeed.getIdVino());
-		        				vinoDaCanc.setAziendaVinoInt(null);
-		        				mapper.save(vinoDaCanc);
-	        			}
-	        			//cancello il collegamento con gli eventi
-	        		    EventoFeed eventofeed = feedDaCancellare.getEventoFeedInt();
-	        			if (eventofeed != null) {	        					        		
-		        				Evento eventoDaCanc = mapper.load(Evento.class, eventofeed.getIdEvento());
-		        				//non c'è il collegamento con i feed da cancellare
-		        				mapper.save(eventoDaCanc);
-	        			}
-	        			//non trovo aziendaFeed nella classe feed e nella classe connect
-	        			//non è stata implementata??
-	        			//caricato il feed, lo vado a cancellare	        			
+        			
 	        			try {
 						mapper.delete(feedDaCancellare);
 					} catch (Exception e) {
@@ -102,7 +86,7 @@ public class deleteFeedGen implements RequestHandler<RichiestaDeleteGenerica, Ri
 	        			String immagineHaderFeedUrl = feedDaCancellare.getUrlImmagineHeaderFeed();
 	        			if(immagineHaderFeedUrl != null) {
 	        				if(!immagineHaderFeedUrl.equals("")) {
-		        				esito = FunzioniUtils.cancellaImmagine(immagineHaderFeedUrl);
+		        				FunzioniUtils.cancellaImmagine(immagineHaderFeedUrl);
 		        			}
 	        			}
 	        			

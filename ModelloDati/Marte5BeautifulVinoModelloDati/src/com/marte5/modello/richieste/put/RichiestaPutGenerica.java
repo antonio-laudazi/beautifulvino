@@ -23,8 +23,12 @@ public class RichiestaPutGenerica extends Richiesta {
 	private Utente utente;
 	private Vino vino;
 	private String idUtente;
+<<<<<<< HEAD
 	private String idProfiloAzienda;
 	
+=======
+	private String idFeed;
+>>>>>>> 61aeff335aacd7c861143e1e457f756a54446698
 	
 	/**
 	 * @return the provincia
@@ -159,6 +163,7 @@ public class RichiestaPutGenerica extends Richiesta {
 		this.idUtente = idUtente;
 	}
 	/**
+<<<<<<< HEAD
 	 * @return the idProfiloAzienda
 	 */
 	public String getIdProfiloAzienda() {
@@ -169,5 +174,17 @@ public class RichiestaPutGenerica extends Richiesta {
 	 */
 	public void setIdProfiloAzienda(String idProfiloAzienda) {
 		this.idProfiloAzienda = idProfiloAzienda;
+=======
+	 * @return the idFeed
+	 */
+	public String getIdFeed() {
+		return idFeed;
+	}
+	/**
+	 * @param idFeed the idFeed to set
+	 */
+	public void setIdFeed(String idFeed) {
+		this.idFeed = idFeed;
+>>>>>>> 61aeff335aacd7c861143e1e457f756a54446698
 	}
 }

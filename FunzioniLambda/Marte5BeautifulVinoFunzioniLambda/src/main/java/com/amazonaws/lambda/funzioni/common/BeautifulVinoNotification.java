@@ -10,7 +10,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.richieste.notifica.RichiestaNotificaGenerica;
-import com.marte5.modello.risposte.notifica.RispostaNotificaGenerica;
+import com.marte5.modello.risposte.notifiche.RispostaNotificaGenerica;
 import com.marte5.modello2.Credenziali;
 import com.marte5.modello.Esito;
 import com.amazonaws.services.sns.AmazonSNS;
@@ -73,7 +73,7 @@ public class BeautifulVinoNotification implements RequestHandler<RichiestaNotifi
 						.build();			
     			//publish to an SNS topic
     			System.out.println(msg);
-    	        PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-west-1:041368420722:bv_notifiche", msg);
+    	        PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:test", msg);
     	        //PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:testIos", msg);
     	        publishRequest.setMessageStructure("json");
     	        PublishResult publishResult = null;

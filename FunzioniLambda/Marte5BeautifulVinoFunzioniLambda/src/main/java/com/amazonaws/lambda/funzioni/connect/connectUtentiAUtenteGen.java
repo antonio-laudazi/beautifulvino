@@ -32,7 +32,7 @@ public class connectUtentiAUtenteGen implements RequestHandler<RichiestaConnectG
 		RispostaConnectGenerica risposta = new RispostaConnectGenerica();
 		Esito esito = new Esito();
 		esito.setCodice(100);
-        esito.setMessage("Esito corretto per la richiesta connectUtenteAUtenti");
+        esito.setMessage("Esito corretto per la richiesta connectUtentiAUtenti");
         
         String idUtente = input.getIdUtente();
 		List<Utente> utentiDaAssociare = input.getUtenti();

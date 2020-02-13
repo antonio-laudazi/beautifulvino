@@ -24,6 +24,7 @@ public class Utente {
 	private int creditiUtente;
 	private int esperienzaUtente;
 	private String livelloUtente;
+	private String puntiMancantiProssimoLivelloUtente;
 	private String biografiaUtente;
 	private String cittaUtente;
 	private String usernameUtente;
@@ -37,15 +38,21 @@ public class Utente {
 	private String condivisioneEventi;
 	private String condivisioneVini;
 	private String statoUtente;
-	private List<Evento> eventiUtente;
+	private String eventoEliminatoUtente;
+	private long dataEventoEliminatoUtente;
+	private List<Evento> eventiUtente; // Lista preferiti per la getUtenteGen
 	private List<Azienda> aziendeUtente;
 	private List<Badge> badgeUtente;
 	private List<Utente> utentiUtente;
-	private List<EventoUtente> eventiUtenteInt;
+	private List<EventoUtente> eventiUtenteInt; // non utilizzato
+	private List<EventoUtente> preferitiEventiUtenteInt;
+	private List<EventoUtente> acquistatiEventiUtenteInt;
 	private List<AziendaUtente> aziendeUtenteInt;
 	private List<VinoUtente> viniUtenteInt;
 	private List<BadgeUtente> badgeUtenteInt;
 	private List<UtenteUtente> utentiUtenteInt;
+	private List<String> feedUtente;
+	
 	
 	/**
 	 * @return the idUtente
@@ -126,6 +133,19 @@ public class Utente {
 		this.livelloUtente = livelloUtente;
 	}
 	/**
+	 * @return the puntiMancantiProssimoLivelloUtente
+	 */
+	@DynamoDBAttribute(attributeName="puntiMancantiProssimoLivelloUtente")
+	public String getPuntiMancantiProssimoLivelloUtente() {
+		return puntiMancantiProssimoLivelloUtente;
+	}
+	/**
+	 * @param puntiMancantiProssimoLivelloUtente the puntiMancantiProssimoLivelloUtente to set
+	 */
+	public void setPuntiMancantiProssimoLivelloUtente(String puntiMancantiProssimoLivelloUtente) {
+		this.puntiMancantiProssimoLivelloUtente = puntiMancantiProssimoLivelloUtente;
+	}
+	/**
 	 * @return the biografiaUtente
 	 */
 	@DynamoDBAttribute(attributeName="biografiaUtente")
@@ -190,7 +210,20 @@ public class Utente {
 	public void setEmailUtente(String emailUtente) {
 		this.emailUtente = emailUtente;
 	}
-
+	
+	/**
+	 * @return the eventoEliminatoUtente
+	 */
+	@DynamoDBAttribute(attributeName="eventoEliminatoUtente")
+	public String getEventoEliminatoUtente() {
+		return eventoEliminatoUtente;
+	}
+	/**
+	 * @param eventoEliminatoUtente the eventoEliminatoUtente to set
+	 */
+	public void setEventoEliminatoUtente(String eventoEliminatoUtente) {
+		this.eventoEliminatoUtente = eventoEliminatoUtente;
+	}
 	/**
 	 * @return the professioneUtente
 	 */
@@ -203,6 +236,19 @@ public class Utente {
 	 */
 	public void setProfessioneUtente(String professioneUtente) {
 		this.professioneUtente = professioneUtente;
+	}
+	/**
+	 * @return the feedUtente
+	 */
+	@DynamoDBAttribute(attributeName="feedUtente")
+	public List<String> getFeedUtente() {
+		return feedUtente;
+	}
+	/**
+	 * @param feedUtente the feedUtente to set
+	 */
+	public void setFeedUtente(List<String> feedUtente) {
+		this.feedUtente = feedUtente;
 	}
 	/**
 	 * @return the eventiUtente
@@ -252,6 +298,20 @@ public class Utente {
 	 */
 	public void setUtentiUtente(List<Utente> utentiUtente) {
 		this.utentiUtente = utentiUtente;
+	}
+	
+	/**
+	 * @return the dataEventoEliminatoUtente
+	 */
+	@DynamoDBAttribute(attributeName="dataEventoEliminatoUtente")
+	public long getDataEventoEliminatoUtente() {
+		return dataEventoEliminatoUtente;
+	}
+	/**
+	 * @param dataEventoEliminatoUtente the dataEventoEliminatoUtente to set
+	 */
+	public void setDataEventoEliminatoUtente(long dataEventoEliminatoUtente) {
+		this.dataEventoEliminatoUtente = dataEventoEliminatoUtente;
 	}
 	/**
 	 * @return the numTotaleBadge
@@ -339,6 +399,20 @@ public class Utente {
 	public void setEventiUtenteInt(List<EventoUtente> eventiUtenteInt) {
 		this.eventiUtenteInt = eventiUtenteInt;
 	}
+	@DynamoDBAttribute(attributeName="preferitiEventiUtenteInt")
+	public List<EventoUtente> getPreferitiEventiUtenteInt() {
+		return preferitiEventiUtenteInt;
+	}
+	public void setPreferitiEventiUtenteInt(List<EventoUtente> preferitiEventiUtenteInt) {
+		this.preferitiEventiUtenteInt = preferitiEventiUtenteInt;
+	}
+	@DynamoDBAttribute(attributeName="acquistatiEventiUtenteInt")
+	public List<EventoUtente> getAcquistatiEventiUtenteInt() {
+		return acquistatiEventiUtenteInt;
+	}
+	public void setAcquistatiEventiUtenteInt(List<EventoUtente> acquistatiEventiUtenteInt) {
+		this.acquistatiEventiUtenteInt = acquistatiEventiUtenteInt;
+	}
 	@DynamoDBAttribute(attributeName="aziendeUtente")
 	public List<AziendaUtente> getAziendeUtenteInt() {
 		return aziendeUtenteInt;
@@ -346,7 +420,7 @@ public class Utente {
 	public void setAziendeUtenteInt(List<AziendaUtente> aziendeUtenteInt) {
 		this.aziendeUtenteInt = aziendeUtenteInt;
 	}
-	@DynamoDBAttribute(attributeName="badgeUtente")
+	@DynamoDBAttribute(attributeName="badgeUtenteInt")
 	public List<BadgeUtente> getBadgeUtenteInt() {
 		return badgeUtenteInt;
 	}
@@ -449,6 +523,9 @@ public class Utente {
 	public static class BadgeUtente{
 		private String idBadge;
 		private String tuoBadge;
+		private String nomeBadge;
+ 		private String infoBadge;
+		private String urlLogoBadge;
 
 		@DynamoDBAttribute(attributeName="idBadge")
 		public String getIdBadge() {
@@ -458,7 +535,48 @@ public class Utente {
 		public void setIdBadge(String idBadge) {
 			this.idBadge = idBadge;
 		}
+		/**
+		 * @return the NomeBadge
+		 */
+		@DynamoDBAttribute(attributeName="nomeBadge")
+		public String getNomeBadge() {
+			return nomeBadge;
+		}
 
+		/**
+		 * @param nomeBadge the nomeBadge to set
+		 */
+		public void setNomeBadge(String nomeBadge) {
+			this.nomeBadge = nomeBadge;
+		}
+		/**
+		 * @return the infoBadge
+		 */
+		@DynamoDBAttribute(attributeName="infoBadge")
+		public String getInfoBadge() {
+			return infoBadge;
+		}
+
+		/**
+		 * @param infoBadge the infoBadge to set
+		 */
+		public void setInfoBadge(String infoBadge) {
+			this.infoBadge = infoBadge;
+		}
+		/**
+		 * @return the urlLogoBadge
+		 */
+		@DynamoDBAttribute(attributeName="urlLogoBadge")
+		public String getUrlLogoBadge() {
+			return urlLogoBadge;
+		}
+
+		/**
+		 * @param urlLogoBadge the urlLogoBadge to set
+		 */
+		public void setUrlLogoBadge(String urlLogoBadge) {
+			this.urlLogoBadge = urlLogoBadge;
+		}
 		/**
 		 * @return the tuoBadge
 		 */

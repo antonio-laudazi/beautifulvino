@@ -38,6 +38,8 @@ public class Feed {
 	private AziendaFeed aziendaFeedInt;
 	private String testoFeed;
 	private String visualizzaButtonFeed;
+	private int puntiEsperienza;
+	private boolean pubblicato;
 	
 	/**
 	 * @return the idFeed
@@ -54,6 +56,19 @@ public class Feed {
 	}
 	
 	/**
+	 * @return the pubblicato
+	 */
+	@DynamoDBAttribute(attributeName="pubblicato")
+	public boolean getPubblicato() {
+		return pubblicato;
+	}
+	/**
+	 * @param pubblicato the pubblicato to set
+	 */
+	public void setPubblicato(boolean pubblicato) {
+		this.pubblicato = pubblicato;
+	}
+	/**
 	 * @return the idEntitaFeed
 	 */
 	@DynamoDBAttribute(attributeName="idEntitaFeed")
@@ -66,7 +81,19 @@ public class Feed {
 	public void setIdEntitaFeed(String idEntitaFeed) {
 		this.idEntitaFeed = idEntitaFeed;
 	}
-	
+	/**
+	 * @return the puntiEsperienza
+	 */
+	@DynamoDBAttribute(attributeName="puntiEsperienza")
+	public int getPuntiEsperienza() {
+		return puntiEsperienza;
+	}
+	/**
+	 * @param puntiEsperienza the puntiEsperienza to set
+	 */
+	public void setPuntiEsperienza(int puntiEsperienza) {
+		this.puntiEsperienza = puntiEsperienza;
+	}
 	/**
 	 * @return the tipoFeed
 	 */

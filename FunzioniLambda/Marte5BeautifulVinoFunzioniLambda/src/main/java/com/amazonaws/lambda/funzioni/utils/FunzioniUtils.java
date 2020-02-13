@@ -16,9 +16,10 @@ import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.marte5.modello.Esito;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Azienda.VinoAzienda;
-import com.marte5.modello.Esito;
+import com.marte5.modello2.Evento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Provincia;
 import com.marte5.modello2.Utente;
@@ -36,6 +37,7 @@ public class FunzioniUtils {
 	public static final String EVENTO_STATO_ACQUISTATO = "A";
 	public static final String EVENTO_STATO_PREFERITO = "P";
 	public static final String EVENTO_STATO_CANCELLATO = "D";
+	public static final String EVENTO_STATO_PRENOTATO = "P";
 	
 	public static final String VINO_STATO_NEUTRO = "N";
 	public static final String VINO_STATO_ACQUISTATO = "A";
@@ -61,22 +63,48 @@ public class FunzioniUtils {
         return esito;
 	}
 	
-	public static String getStatoEvento(Utente utente, String idEvento, long dataEvento, DynamoDBMapper mapper) throws Exception {
+	public static String getStatoEvento(Utente utente, Evento evento, long dataEvento, DynamoDBMapper mapper) throws Exception {
 		String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
 		if(utente == null) {
 			throw new Exception("Utente null, non posso procedere");
 		}
-		List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+		
+		List<EventoUtente> eventiUtente = utente.getAcquistatiEventiUtenteInt();
+		//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
 		if(eventiUtente != null) {
 			for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
 				EventoUtente eventoUtente = iterator.next();
-				if(eventoUtente.getIdEvento().equals(idEvento)) {
+				if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
 					//l'evento in questione è tra quelli associati all'utente
-					statoEvento = eventoUtente.getStatoEvento();
+					if (evento.getAcquistabileEvento() == 1) {
+						statoEvento = EVENTO_STATO_ACQUISTATO;
+					}else {
+						statoEvento = EVENTO_STATO_PRENOTATO;
+					}
+					
 				}
 			}
 		}
 		
+		return statoEvento;
+	}
+	
+	public static String getStatoEventoPreferito(Utente utente, Evento evento, long dataEvento, DynamoDBMapper mapper) throws Exception {
+		String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
+		if(utente == null) {
+			throw new Exception("Utente null, non posso procedere");
+		}
+			List<EventoUtente> eventiUtente = utente.getPreferitiEventiUtenteInt();
+			//List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
+			if(eventiUtente != null) {
+				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
+					EventoUtente eventoUtente = iterator.next();
+					if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
+						//l'evento in questione è tra quelli associati all'utente
+						statoEvento = FunzioniUtils.EVENTO_STATO_PREFERITO;
+					}
+				}
+			}
 		return statoEvento;
 	}
 	
@@ -154,14 +182,38 @@ public class FunzioniUtils {
 		List<Azienda> aziende1 = new ArrayList<>();
 		List<Azienda> aziende2 = new ArrayList<>();
 		
+//		for (Iterator<Vino> iterator = vini.iterator(); iterator.hasNext();) {
+//			Vino vino = iterator.next();
+//			AziendaVino aziendaVino = vino.getAziendaVinoInt();
+//			if (aziendaVino != null) {
+//				if (aziendaVino.getIdAzienda() != null) {
+//				Azienda nuovaAzienda = new Azienda();
+//				nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
+//				nuovaAzienda.setNomeAzienda(aziendaVino.getNomeAzienda());
+//				aziende1.add(nuovaAzienda);
+//				}
+//			}
+//		}
+		
 		for (Iterator<Vino> iterator = vini.iterator(); iterator.hasNext();) {
 			Vino vino = iterator.next();
 			AziendaVino aziendaVino = vino.getAziendaVinoInt();
-			
-			Azienda nuovaAzienda = new Azienda();
-			nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
-			nuovaAzienda.setNomeAzienda(aziendaVino.getNomeAzienda());
-			aziende1.add(nuovaAzienda);
+			if (aziendaVino != null) {
+				if (aziendaVino.getIdAzienda() != null) {
+					boolean flag = false;
+					for (Iterator<Azienda> iterator2 = aziende1.iterator() ; iterator2.hasNext();) {
+						if (aziendaVino.getIdAzienda().equals(iterator2.next().getIdAzienda())) {
+							flag = true;
+						}
+					}
+					if (flag == false) {
+						Azienda nuovaAzienda = new Azienda();
+						nuovaAzienda.setIdAzienda(aziendaVino.getIdAzienda());
+						nuovaAzienda.setNomeAzienda(aziendaVino.getNomeAzienda());
+						aziende1.add(nuovaAzienda);
+					}
+				}
+			}
 		}
 		
 		for (Iterator<Azienda> iterator = aziende1.iterator(); iterator.hasNext();) {
@@ -169,8 +221,10 @@ public class FunzioniUtils {
 			List<Vino> viniAziendaNuova = new ArrayList<>();
 			for (Iterator<Vino> iterator2 = vini.iterator(); iterator2.hasNext();) {
 				Vino vino = iterator2.next();
-				if(vino.getAziendaVinoInt().getIdAzienda().equals(azienda.getIdAzienda())) {
-					viniAziendaNuova.add(vino);
+				if (vino.getAziendaVinoInt() != null) {
+					if(vino.getAziendaVinoInt().getIdAzienda().equals(azienda.getIdAzienda())) {
+						viniAziendaNuova.add(vino);
+					}
 				}
 			}
 			azienda.setViniAzienda(viniAziendaNuova);
@@ -187,9 +241,11 @@ public class FunzioniUtils {
 			VinoEvento vino = iterator.next();
 			
 			Azienda nuovaAzienda = new Azienda();
-			nuovaAzienda.setIdAzienda(vino.getIdAziendaVino());
-			nuovaAzienda.setNomeAzienda(vino.getNomeAziendaVino());
-			aziende1.add(nuovaAzienda);
+			if (vino.getIdAziendaVino()!= null && vino.getNomeAziendaVino() != null) {
+				nuovaAzienda.setIdAzienda(vino.getIdAziendaVino());
+				nuovaAzienda.setNomeAzienda(vino.getNomeAziendaVino());
+				aziende1.add(nuovaAzienda);
+			}
 		}
 		
 		for (Iterator<Azienda> iterator = aziende1.iterator(); iterator.hasNext();) {
@@ -220,14 +276,17 @@ public class FunzioniUtils {
 		
 		for (Iterator<VinoUtente> iterator = vini.iterator(); iterator.hasNext();) {
 			VinoUtente vinoUtente = iterator.next();
-			
-			Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
-			
-			if(vino != null) {
-				Azienda nuovaAzienda = new Azienda();
-				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				aziende1.add(nuovaAzienda);
+			if (vinoUtente.getIdVino()!= null){
+				Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
+				
+				if(vino != null) {
+					if (vino.getAziendaVinoInt() != null) {
+						Azienda nuovaAzienda = new Azienda();
+						nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+						nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+						if (!contains(aziende1, nuovaAzienda))aziende1.add(nuovaAzienda);
+					}
+				}
 			}
 			
 		}
@@ -241,12 +300,13 @@ public class FunzioniUtils {
 				if(!idAzienda.equals("")) {
 					Vino vinoNuovo = new Vino();
 					if(idAzienda.equals(azienda.getIdAzienda())) {
-						vinoNuovo.setIdVino(vino.getIdVino());
-						vinoNuovo.setNomeVino(vino.getNomeVino());
-						vinoNuovo.setStatoVino(vino.getStatoVino());
-						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
-						vinoNuovo.setInBreveVino(vino.getInBreveVino());
-						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
+						vinoNuovo = mapper.load(Vino.class, vino.getIdVino());
+//						vinoNuovo.setIdVino(vino.getIdVino());
+//						vinoNuovo.setNomeVino(vino.getNomeVino());
+//						vinoNuovo.setStatoVino(vino.getStatoVino());
+//						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
+//						vinoNuovo.setInBreveVino(vino.getInBreveVino());
+//						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
 						viniAziendaNuova.add(vinoNuovo);
 					}
 				}
@@ -268,10 +328,12 @@ public class FunzioniUtils {
 			Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
 			
 			if(vino != null) {
-				Azienda nuovaAzienda = new Azienda();
-				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				aziende1.add(nuovaAzienda);
+				if (vino.getAziendaVinoInt() != null) {
+					Azienda nuovaAzienda = new Azienda();
+					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+					if (!contains(aziende1, nuovaAzienda))aziende1.add(nuovaAzienda);
+				}
 			}
 			
 		}
@@ -285,12 +347,13 @@ public class FunzioniUtils {
 				if(!idAzienda.equals("")) {
 					Vino vinoNuovo = new Vino();
 					if(idAzienda.equals(azienda.getIdAzienda())) {
-						vinoNuovo.setIdVino(vino.getIdVino());
-						vinoNuovo.setNomeVino(vino.getNomeVino());
-						vinoNuovo.setStatoVino(vino.getStatoVino());
-						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
-						vinoNuovo.setInBreveVino(vino.getInBreveVino());
-						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
+						vinoNuovo = mapper.load(Vino.class, vino.getIdVino());
+//						vinoNuovo.setIdVino(vino.getIdVino());
+//						vinoNuovo.setNomeVino(vino.getNomeVino());
+//						vinoNuovo.setStatoVino(vino.getStatoVino());
+//						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
+//						vinoNuovo.setInBreveVino(vino.getInBreveVino());
+//						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
 						viniAziendaNuova.add(vinoNuovo);
 					}
 				}
@@ -312,11 +375,13 @@ public class FunzioniUtils {
 			Vino vino = mapper.load(Vino.class, vinoUtente.getIdVino());
 			
 			if(vino != null) {
-				Azienda nuovaAzienda = new Azienda();
-				nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
-				nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
-				if(!contains(aziende1, nuovaAzienda)) {
-					aziende1.add(nuovaAzienda);
+				if (vino.getAziendaVinoInt()!= null) {
+					Azienda nuovaAzienda = new Azienda();
+					nuovaAzienda.setIdAzienda(vino.getAziendaVinoInt().getIdAzienda());
+					nuovaAzienda.setNomeAzienda(vino.getAziendaVinoInt().getNomeAzienda());
+					if(!contains(aziende1, nuovaAzienda)) {
+						aziende1.add(nuovaAzienda);
+					}
 				}
 			}
 		}
@@ -330,12 +395,13 @@ public class FunzioniUtils {
 				if(!idAzienda.equals("")) {
 					Vino vinoNuovo = new Vino();
 					if(idAzienda.equals(azienda.getIdAzienda())) {
-						vinoNuovo.setIdVino(vino.getIdVino());
-						vinoNuovo.setNomeVino(vino.getNomeVino());
-						vinoNuovo.setStatoVino(vino.getStatoVino());
-						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
-						vinoNuovo.setInBreveVino(vino.getInBreveVino());
-						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
+						vinoNuovo = mapper.load(Vino.class, vino.getIdVino());
+//						vinoNuovo.setIdVino(vino.getIdVino());
+//						vinoNuovo.setNomeVino(vino.getNomeVino());
+//						vinoNuovo.setStatoVino(vino.getStatoVino());
+//						vinoNuovo.setUvaggioVino(vino.getUvaggioVino());
+//						vinoNuovo.setInBreveVino(vino.getInBreveVino());
+//						vinoNuovo.setUrlLogoVino(vino.getUrlLogoVino());
 						viniAziendaNuova.add(vinoNuovo);
 					}
 				}

@@ -18,6 +18,8 @@ import com.marte5.modello.risposte.get.RispostaGetGenerica;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
+import com.marte5.modello2.Evento.AziendaEvento;
+import com.marte5.modello2.Evento.UtenteEvento;
 import com.marte5.modello2.Evento.VinoEvento;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Vino;
@@ -80,7 +82,7 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			evento = mapper.load(Evento.class, idEvento, dataEvento);
 			if(evento == null) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " evento non trovato sul database, non posso procedere");
+		        esito.setMessage("Evento non trovato, riprova");
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
@@ -89,7 +91,7 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			//gestione dello stato evento da visualizzare
 			String statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
 			try {
-				statoEvento = FunzioniUtils.getStatoEvento(utente, idEvento, dataEvento, mapper);
+				statoEvento = FunzioniUtils.getStatoEvento(utente, evento, dataEvento, mapper);
 			} catch (Exception e) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
 				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEvento ");
@@ -98,24 +100,35 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				return risposta;
 			}
 			evento.setStatoEvento(statoEvento);
-			
+			statoEvento = FunzioniUtils.EVENTO_STATO_NEUTRO;
+			try {
+				statoEvento = FunzioniUtils.getStatoEventoPreferito(utente, evento, dataEvento, mapper);
+			} catch (Exception e) {
+				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
+				esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEvento ");
+				esito.setTrace(e.getMessage());
+				risposta.setEsito(esito);
+				return risposta;
+			}
+			evento.setStatoPreferitoEvento(statoEvento);
 			//gestione degli utenti da visualizzare
-			List<Utente> utentiEvento = evento.getIscrittiEvento();
+			List<UtenteEvento> utentiEvento = evento.getIscrittiEventoInt();
 			List<Utente> utentiEventoCompleti = new ArrayList<>();
 			if(utentiEvento != null) {
-				for (Iterator<Utente> iterator = utentiEvento.iterator(); iterator.hasNext();) {
-					Utente utenteEvento = iterator.next();
+				for (Iterator<UtenteEvento> iterator = utentiEvento.iterator(); iterator.hasNext();) {
+					UtenteEvento utenteEvento = iterator.next();
 					Utente utenteEventoDB = mapper.load(Utente.class, utenteEvento.getIdUtente());
-					Utente utenteEventoCompleto = new Utente();
-					
-					utenteEventoCompleto.setIdUtente(utenteEventoDB.getIdUtente());
-					utenteEventoCompleto.setNomeUtente(utenteEventoDB.getNomeUtente());
-					utenteEventoCompleto.setCognomeUtente(utenteEventoDB.getCognomeUtente());
-					utenteEventoCompleto.setEsperienzaUtente(utenteEventoDB.getEsperienzaUtente());
-					utenteEventoCompleto.setLivelloUtente(utente.getLivelloUtente());
-					utenteEventoCompleto.setUrlFotoUtente(utente.getUrlFotoUtente());
-					
-					utentiEventoCompleti.add(utenteEventoCompleto);
+					if (utenteEventoDB != null) {
+						Utente utenteEventoCompleto = new Utente();
+						
+						if (utenteEventoDB.getIdUtente() != null) utenteEventoCompleto.setIdUtente(utenteEventoDB.getIdUtente());
+						utenteEventoCompleto.setUsernameUtente(utenteEventoDB.getUsernameUtente());
+						utenteEventoCompleto.setEsperienzaUtente(utenteEventoDB.getEsperienzaUtente());
+						utenteEventoCompleto.setLivelloUtente(utenteEventoDB.getLivelloUtente());
+						utenteEventoCompleto.setUrlFotoUtente(utenteEventoDB.getUrlFotoUtente());
+						
+						utentiEventoCompleti.add(utenteEventoCompleto);
+					}
 				}
 			} 
 			
@@ -141,14 +154,16 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			evento.setAziendeViniEvento(ViniAzienda);
 			
 			//gestione aziende (fornitrice-ospitante)
-			String idAziendaOspitante = evento.getAziendaOspitanteEventoInt().getIdAzienda();
-			if(idAziendaOspitante != null && !idAziendaOspitante.equals("")) {
-				Azienda aziendaOspitante = mapper.load(Azienda.class, idAziendaOspitante);
-				if(aziendaOspitante != null) {
-					evento.setAziendaOspitanteEvento(aziendaOspitante);
+			AziendaEvento ae = evento.getAziendaOspitanteEventoInt();
+			if (ae != null) {
+				String idAziendaOspitante = evento.getAziendaOspitanteEventoInt().getIdAzienda();
+				if(idAziendaOspitante != null && !idAziendaOspitante.equals("")) {
+					Azienda aziendaOspitante = mapper.load(Azienda.class, idAziendaOspitante);
+					if(aziendaOspitante != null) {
+						evento.setAziendaOspitanteEvento(aziendaOspitante);
+					}
 				}
 			}
-			
 			//gestione Badge
 			com.marte5.modello2.Evento.BadgeEvento badgeEvento = evento.getBadgeEventoInt();
 			if(badgeEvento != null) {
@@ -162,12 +177,10 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 				}
 			}
 			
-		}
-    		
-    		risposta.setEsito(esito);
-    		risposta.setEvento(evento);
-    		
-    		return risposta;
+		}		
+		risposta.setEsito(esito);
+		risposta.setEvento(evento);	
+		return risposta;
     }
     
 }

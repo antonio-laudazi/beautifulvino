@@ -40,7 +40,7 @@ public class getProvinceGen implements RequestHandler<RichiestaGetGenerica, Risp
         //inizializzo con valore ALL
         Provincia all = new Provincia();
         all.setIdProvincia("X");
-        all.setNomeProvincia("TUTTE");
+        all.setNomeProvincia("TUTTI");
         all.setSiglaProvincia("00");
         provinceTotali.add(all);
        

@@ -22,6 +22,9 @@ public class RichiestaConnectGenerica extends Richiesta {
 	private List<Utente> utenti;
 	private String idAzienda;
 	List<Azienda> aziendeViniDaAssociare;
+	private int numeroPartecipanti;
+	private int statoPreferitoEvento;
+	private int statoAcquistatoEvento;
 	
 	/**
 	 * @return the badges
@@ -167,6 +170,40 @@ public class RichiestaConnectGenerica extends Richiesta {
 	public void setStatoVino(String statoVino) {
 		this.statoVino = statoVino;
 	}
-	
-	
+	/**
+	 * @return the statoPreferitoEvento
+	 */
+	public int getStatoPreferitoEvento() {
+		return statoPreferitoEvento;
+	}
+	/**
+	 * @param statoPreferitoEvento the statoPreferitoEvento to set
+	 */
+	public void setStatoPreferitoEvento(int statoPreferitoEvento) {
+		this.statoPreferitoEvento = statoPreferitoEvento;
+	}
+	/**
+	 * @return the statoAcquistatoEvento
+	 */
+	public int getStatoAcquistatoEvento() {
+		return statoAcquistatoEvento;
+	}
+	/**
+	 * @param statoAcquistatoEvento the statoAcquistatoEvento to set
+	 */
+	public void setStatoAcquistatoEvento(int statoAcquistatoEvento) {
+		this.statoAcquistatoEvento = statoAcquistatoEvento;
+	}
+	/**
+	 * @return the dataEvento
+	 */
+	public int getNumeroPartecipanti() {
+		return numeroPartecipanti;
+	}
+	/**
+	 * @param dataEvento the dataEvento to set
+	 */
+	public void setNumeroPartecipanti(int numeroPartecipanti) {
+		this.numeroPartecipanti = numeroPartecipanti;
+	}
 }

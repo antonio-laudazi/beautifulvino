@@ -19,6 +19,7 @@ public class BeautifulVinoConnect implements RequestHandler<RichiestaConnectGene
 	private final static String FUNCTION_NAME_CONNECT_VINI_A_AZIENDA = "connectViniAAziendaGen";
 	private final static String FUNCTION_NAME_CONNECT_VINI_A_UTENTE = "connectViniAUtenteGen";
 	private final static String FUNCTION_NAME_CONNECT_UTENTI_A_UTENTE = "connectUtentiAUtenteGen";
+	private final static String FUNCTION_NAME_CONNECT_EVENTO_A_UTENTE1 = "connectEventoAUtenteGen1";
 	
 	private static final String PACKAGE_NAME_CONNECT = "com.amazonaws.lambda.funzioni.connect.";
 	
@@ -61,7 +62,7 @@ public class BeautifulVinoConnect implements RequestHandler<RichiestaConnectGene
     		funzioni.add(FUNCTION_NAME_CONNECT_VINI_A_AZIENDA);
     		funzioni.add(FUNCTION_NAME_CONNECT_VINI_A_UTENTE);
     		funzioni.add(FUNCTION_NAME_CONNECT_UTENTI_A_UTENTE);
-    		
+    		funzioni.add(FUNCTION_NAME_CONNECT_EVENTO_A_UTENTE1);
     		return funzioni.contains(nomeFunzione);
     		
     }
