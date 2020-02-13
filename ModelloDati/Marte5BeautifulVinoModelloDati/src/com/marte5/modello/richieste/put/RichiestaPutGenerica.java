@@ -23,6 +23,7 @@ public class RichiestaPutGenerica extends Richiesta {
 	private Utente utente;
 	private Vino vino;
 	private String idUtente;
+	private String idProfiloAzienda;
 	
 	
 	/**
@@ -156,5 +157,17 @@ public class RichiestaPutGenerica extends Richiesta {
 	 */
 	public void setIdUtente(String idUtente) {
 		this.idUtente = idUtente;
+	}
+	/**
+	 * @return the idProfiloAzienda
+	 */
+	public String getIdProfiloAzienda() {
+		return idProfiloAzienda;
+	}
+	/**
+	 * @param idProfiloAzienda the idProfiloAzienda to set
+	 */
+	public void setIdProfiloAzienda(String idProfiloAzienda) {
+		this.idProfiloAzienda = idProfiloAzienda;
 	}
 }

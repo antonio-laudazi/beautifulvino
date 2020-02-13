@@ -32,13 +32,13 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/Marte5BeautifulVinoModelloDati"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/dynamodb-transactions"/>
-	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JAVA_MAIL/javamail1_4_5.zip"/>
-	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-annotations-2.8.0.jar"/>
-	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-core-2.8.2.jar"/>
-	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-databind-2.8.2.jar"/>
-	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jjwt-0.7.0.jar"/>
-	<classpathentry kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/PNGTASTIC/pngtastic-1.2.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Marte5BeautifulVinoModelloDati"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/dynamodb-transactions"/>
+	<classpathentry exported="true" kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JAVA_MAIL/javamail1_4_5.zip"/>
+	<classpathentry exported="true" kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-annotations-2.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-core-2.8.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jackson-databind-2.8.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/JJWT/jjwt-0.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/paolosalvadori/Documents/Librerie_java/PNGTASTIC/pngtastic-1.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

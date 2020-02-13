@@ -1,5 +1,6 @@
 package com.amazonaws.lambda.funzioni.put;
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
 import com.amazonaws.lambda.funzioni.utils.FunzioniUtils;
 import com.amazonaws.regions.Regions;
@@ -24,7 +25,8 @@ public class putAziendaGen implements RequestHandler<RichiestaPutGenerica, Rispo
         
         AmazonDynamoDB client = null;
 		try {
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			//client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_WEST_1).withCredentials(new ProfileCredentialsProvider("BeautifulVino")).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putAzienda ");

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.lambda.funzioni.utils.EsitoHelper;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -41,7 +43,8 @@ public class getAziendaGen implements RequestHandler<RichiestaGetGenerica, Rispo
         
         AmazonDynamoDB client = null;
         try {
-			client = AmazonDynamoDBClientBuilder.standard().build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			//client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).withCredentials(new ProfileCredentialsProvider("BeautifulVino")).build();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

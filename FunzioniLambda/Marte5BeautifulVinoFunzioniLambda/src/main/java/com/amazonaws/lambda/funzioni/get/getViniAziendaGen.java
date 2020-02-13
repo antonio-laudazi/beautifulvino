@@ -13,13 +13,13 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
-import com.marte5.modello2.Evento;
-import com.marte5.modello2.Utente;
-import com.marte5.modello2.Utente.EventoUtente;
+import com.marte5.modello2.Azienda;
+import com.marte5.modello2.Azienda.VinoAzienda;
+import com.marte5.modello2.Vino;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
-public class getEventiUtenteGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
+public class getViniAziendaGen implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
     @Override
     public RispostaGetGenerica handleRequest(RichiestaGetGenerica input, Context context) {
@@ -33,7 +33,7 @@ public class getEventiUtenteGen implements RequestHandler<RichiestaGetGenerica, 
     	
     		//controllo del token
     		RispostaGetGenerica risposta = new RispostaGetGenerica();
-    		String idUtente = input.getIdUtente();
+    		String idAzienda = input.getIdAzienda();
     		
     		Esito esito = FunzioniUtils.getEsitoPositivo();
     		esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
@@ -44,7 +44,7 @@ public class getEventiUtenteGen implements RequestHandler<RichiestaGetGenerica, 
 			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getEventi ");
+			esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " getViniAzienda ");
 			esito.setTrace(e1.getMessage());
 			esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());
 			risposta.setEsito(esito);
@@ -53,36 +53,35 @@ public class getEventiUtenteGen implements RequestHandler<RichiestaGetGenerica, 
 		if(client != null) {
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 
-			if(idUtente == null || idUtente.equals("")) {
+			if(idAzienda == null || idAzienda.equals("")) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idUtente nullo, non posso procedere");
+		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " idAzienda nullo, non posso procedere");
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
-			Utente utente = mapper.load(Utente.class, idUtente);
-			if(utente == null) {
+			Azienda azienda = mapper.load(Azienda.class, idAzienda);
+			if(azienda == null) {
 				esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_GET);
-		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " utente non trovato su DB, non posso procedere");
+		        esito.setMessage(this.getClass().getName() + " - " + EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_GET + " azienda non trovata su DB, non posso procedere");
 		        risposta.setEsito(esito);
 		        return risposta;
 			}
 			
 			//gestione e recupero eventi associati all'utente
-			List<EventoUtente> eventiUtente = utente.getEventiUtenteInt();
-			List<Evento> eventiCompletiUtente = new ArrayList<>();
-			if(eventiUtente != null) {
-				for (Iterator<EventoUtente> iterator = eventiUtente.iterator(); iterator.hasNext();) {
-					EventoUtente evento = iterator.next();
-					Evento eventoCompleto = mapper.load(Evento.class, evento.getIdEvento(), evento.getDataEvento());
-					if(eventoCompleto != null) {
-						eventoCompleto.setStatoEvento(evento.getStatoEvento());
-						eventiCompletiUtente.add(eventoCompleto);
+			List<VinoAzienda> viniAzienda = azienda.getViniAziendaInt();
+			List<Vino> viniCompletiAzienda = new ArrayList<>();
+			if(viniAzienda != null) {
+				for (Iterator<VinoAzienda> iterator = viniAzienda.iterator(); iterator.hasNext();) {
+					VinoAzienda vino = iterator.next();
+					Vino vinoCompleto = mapper.load(Vino.class, vino.getIdVino());
+					if(vinoCompleto != null) {
+						vinoCompleto.setStatoVino(vino.getStatoVino());
+						viniCompletiAzienda.add(vinoCompleto);
 					}
 				}
 			}
 			
-			risposta.setEventi(eventiCompletiUtente);
-			risposta.setNumTotEventi(eventiCompletiUtente.size());
+			risposta.setVini(viniCompletiAzienda);
 		}	
 		
 		esito.setMessage(this.getClass().getName() + " - " + esito.getMessage());

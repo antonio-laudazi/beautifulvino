@@ -10,6 +10,7 @@ import com.marte5.modello2.Provincia;
 import com.marte5.modello.Token;
 import com.marte5.modello2.Utente;
 import com.marte5.modello2.Vino;
+import com.marte5.modello2.ProfiloAzienda;
 import com.marte5.modello.risposte.Risposta;
 
 public class RispostaGetGenerica extends Risposta {
@@ -48,6 +49,8 @@ public class RispostaGetGenerica extends Risposta {
 	private Token token;
 	
 	private int utentePresente;
+	
+	private ProfiloAzienda profiloAzienda;
 
 	/**
 	 * @return the azienda
@@ -326,5 +329,19 @@ public class RispostaGetGenerica extends Risposta {
 	 */
 	public void setUtentePresente(int utentePresente) {
 		this.utentePresente = utentePresente;
+	}
+
+	/**
+	 * @return the profiloAzienda
+	 */
+	public ProfiloAzienda getProfiloAzienda() {
+		return profiloAzienda;
+	}
+
+	/**
+	 * @param profiloAzienda the profiloAzienda to set
+	 */
+	public void setProfiloAzienda(ProfiloAzienda profiloAzienda) {
+		this.profiloAzienda = profiloAzienda;
 	}
 }

@@ -32,7 +32,7 @@ public class RichiestaGetGenerica extends Richiesta {
 	private String longitudineUtente;
 	
 	private String elencoCompleto;
-	
+	private String idProfiloAzienda;
 	
 	/**
 	 * @return the idAzienda
@@ -273,5 +273,17 @@ public class RichiestaGetGenerica extends Richiesta {
 	 */
 	public void setIdUtentePadre(String idUtentePadre) {
 		this.idUtentePadre = idUtentePadre;
+	}
+	/**
+	 * @return the idProfiloAzienda
+	 */
+	public String getIdProfiloAzienda() {
+		return idProfiloAzienda;
+	}
+	/**
+	 * @param idProfiloAzienda the idProfiloAzienda to set
+	 */
+	public void setIdProfiloAzienda(String idProfiloAzienda) {
+		this.idProfiloAzienda = idProfiloAzienda;
 	}
 }
