@@ -133,6 +133,7 @@ public class getEventoGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			} 
 			
 			evento.setIscrittiEvento(utentiEventoCompleti);
+			evento.setDettagliIscrittiEvento(utentiEvento);
 			
 			//gestione dei vini da visualizzare
 			List<VinoEvento> viniEvento = evento.getViniEventoInt();

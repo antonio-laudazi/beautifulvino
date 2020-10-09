@@ -46,8 +46,7 @@ public class BeautifulVinoNotification implements RequestHandler<RichiestaNotifi
 			
 			DynamoDBMapper mapper = new DynamoDBMapper(client);
 
-	        String msg = input.getMessaggio();
-	        
+	        String msg = input.getMessaggio();	        
 	        
 	        if(msg == null) {
 	        	esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_PROCEDURA_LAMBDA);
@@ -74,11 +73,11 @@ public class BeautifulVinoNotification implements RequestHandler<RichiestaNotifi
     			//publish to an SNS topic
     			System.out.println(msg);
     	        PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:test", msg);
-    	        //PublishRequest publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:testIos", msg);
+    	        //PublishRequest publishRequestAndroid = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:testIos", msg);
     	        publishRequest.setMessageStructure("json");
-    	        PublishResult publishResult = null;
+    	        PublishResult publishResultIos = null;
     	        try {
-    	        	publishResult = snsClient.publish(publishRequest);
+    	        	publishResultIos = snsClient.publish(publishRequest);
     	        }catch(Exception e) {
     	        	System.out.println(e.getMessage());
     	        	System.out.println(e.getStackTrace());
@@ -88,14 +87,14 @@ public class BeautifulVinoNotification implements RequestHandler<RichiestaNotifi
     	        	return risposta;
     	        }
     	        //print MessageId of message published to SNS topic
-    	        System.out.println("MessageId - " + publishResult.getMessageId());
+    	        System.out.println("MessageId - " + publishResultIos.getMessageId());
     	        
     	        
-//    	        publishRequest = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:android", msg);
-//    	        publishRequest.setMessageStructure("json");
-//    	        publishResult = null;
+//    	        PublishRequest publishRequestAndroid = new PublishRequest("arn:aws:sns:eu-central-1:801532940274:app/GCM/BeautifulVinoAndroid", msg);
+//    	        publishRequestAndroid.setMessageStructure("json");
+//    	        PublishResult publishResultAndroid = null;
 //    	        try {
-//    	        	publishResult = snsClient.publish(publishRequest);
+//    	        	publishResultAndroid = snsClient.publish(publishRequestAndroid);
 //    	        }catch(Exception e) {
 //    	        	System.out.println(e.getMessage());
 //    	        	System.out.println(e.getStackTrace());
@@ -105,7 +104,7 @@ public class BeautifulVinoNotification implements RequestHandler<RichiestaNotifi
 //    	        	return risposta;
 //    	        }
 //    	        //print MessageId of message published to SNS topic
-//    	        System.out.println("MessageId - " + publishResult.getMessageId());
+//    	        System.out.println("MessageId - " + publishResultAndroid.getMessageId());
 	        }
 		}	
         risposta.setEsito(esito);

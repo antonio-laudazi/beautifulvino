@@ -60,7 +60,7 @@ public class putProvinciaGen implements RequestHandler<RichiestaPutGenerica, Ris
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getAzienda().getIdAzienda());
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Provincia " + input.getProvincia().getIdProvincia());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;

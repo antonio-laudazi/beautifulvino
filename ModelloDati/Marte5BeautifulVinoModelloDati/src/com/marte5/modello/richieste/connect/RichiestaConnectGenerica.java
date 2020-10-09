@@ -15,6 +15,7 @@ public class RichiestaConnectGenerica extends Richiesta {
 	private String idEvento;
 	private String idVino;
 	private long dataEvento;
+	private long dataPrenotazioneEvento;
 	private String statoEvento;
 	private String statoVino;
 	private String statoUtente;
@@ -205,5 +206,11 @@ public class RichiestaConnectGenerica extends Richiesta {
 	 */
 	public void setNumeroPartecipanti(int numeroPartecipanti) {
 		this.numeroPartecipanti = numeroPartecipanti;
+	}
+	public long getDataPrenotazioneEvento() {
+		return dataPrenotazioneEvento;
+	}
+	public void setDataPrenotazioneEvento(long dataPrenotazioneEvento) {
+		this.dataPrenotazioneEvento = dataPrenotazioneEvento;
 	}
 }

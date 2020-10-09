@@ -139,6 +139,8 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 			c.set(Calendar.HOUR_OF_DAY, 8);
 			long time = c.getTimeInMillis();
 			
+			long timeMetaAprile = 1586901600L;
+			
 			//long time = Calendar.getInstance().getTimeInMillis();
 			
 			//elimino eventi vecchi, quelli non nella provincia e quelli non pubblicati
@@ -152,7 +154,7 @@ public class getEventiGen implements RequestHandler<RichiestaGetGenerica, Rispos
 						s1 = e.getProvinciaEventoInt().getIdProvincia();
 					}
 					if (s1 == null) s1 = "";
-					if (e.getDataEvento() >= time && (s.equals("X") || s1.equals(s)) && e.getPubblicatoEvento()) {
+					if ((e.getDataEvento() >= time || e.getDataEvento() >= timeMetaAprile) && (s.equals("X") || s1.equals(s)) && e.getPubblicatoEvento()) {
 						eventi.add(e);
 					}
 				}

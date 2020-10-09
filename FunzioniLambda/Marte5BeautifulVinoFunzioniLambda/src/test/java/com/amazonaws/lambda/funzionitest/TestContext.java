@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import com.amazonaws.services.lambda.runtime.ClientContext;
 import com.amazonaws.services.lambda.runtime.CognitoIdentity;

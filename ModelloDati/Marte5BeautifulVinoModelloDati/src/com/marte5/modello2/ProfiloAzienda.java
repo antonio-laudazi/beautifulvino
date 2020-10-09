@@ -21,6 +21,7 @@ public class ProfiloAzienda {
 	private String splashScreen;
 	private String paypalCode;
 	private String idAzienda;
+	private String nomeAzienda;
 	
 	
 	//@DynamoDBAttribute(attributeName="")
@@ -107,6 +108,7 @@ public class ProfiloAzienda {
 	/**
 	 * @return the azienda
 	 */
+	@DynamoDBAttribute(attributeName="idAzienda")
 	public String getIdAzienda() {
 		return idAzienda;
 	}
@@ -115,6 +117,19 @@ public class ProfiloAzienda {
 	 */
 	public void setIdAzienda(String idAzienda) {
 		this.idAzienda = idAzienda;
+	}
+	/**
+	 * @return the nomeAzienda
+	 */
+	@DynamoDBAttribute(attributeName="nomeAzienda")
+	public String getNomeAzienda() {
+		return nomeAzienda;
+	}
+	/**
+	 * @param nomeAzienda the nomeAzienda to set
+	 */
+	public void setNomeAzienda(String nomeAzienda) {
+		this.nomeAzienda = nomeAzienda;
 	}
 
 	

@@ -25,8 +25,8 @@ public class putAziendaGen implements RequestHandler<RichiestaPutGenerica, Rispo
         
         AmazonDynamoDB client = null;
 		try {
-			//client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
-			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_WEST_1).withCredentials(new ProfileCredentialsProvider("BeautifulVino")).build();
+			client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).build();
+			// client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_WEST_1).withCredentials(new ProfileCredentialsProvider("BeautifulVino")).build();
 		} catch (Exception e1) {
 			esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
 			esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_PROCEDURA_LAMBDA + " putAzienda ");
@@ -61,7 +61,7 @@ public class putAziendaGen implements RequestHandler<RichiestaPutGenerica, Rispo
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					esito.setCodice(EsitoHelper.ESITO_KO_CODICE_ERRORE_SALVATAGGIO);
-					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + "Vino " + input.getAzienda().getIdAzienda());
+					esito.setMessage(EsitoHelper.ESITO_KO_MESSAGGIO_ERRORE_SALVATAGGIO + " Azienda " + input.getAzienda().getIdAzienda());
 					esito.setTrace(e.getMessage());
 					risposta.setEsito(esito);
 					return risposta;

@@ -12,8 +12,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.transactions.Transaction;
-import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
+//import com.amazonaws.services.dynamodbv2.transactions.Transaction;
+//import com.amazonaws.services.dynamodbv2.transactions.TransactionManager;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.marte5.modello.Esito;
@@ -298,10 +298,8 @@ public class putEventoGen implements RequestHandler<RichiestaPutGenerica, Rispos
     			r.setFunctionName("putBadgeGen");
     			b.setNomeBadge(badge.getNomeBadge());
     			b.setDataBadge(evento.getDataEvento());
-    			b.setNomeBadge(badge.getNomeBadge());
     			b.setInfoBadge(badge.getInfoBadge());
     			b.setUrlLogoBadge(badge.getUrlLogoBadge());
-    			b.setIdBadge(evento.getIdEvento());
     			b.setIdBadge(badge.getIdBadge());
     			
     			EventoBadge eb = new EventoBadge();

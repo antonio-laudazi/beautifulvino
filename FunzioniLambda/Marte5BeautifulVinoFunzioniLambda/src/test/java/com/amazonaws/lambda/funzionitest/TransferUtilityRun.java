@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import java.io.IOException;
 
@@ -6,20 +6,22 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.get.login;
+import com.amazonaws.lambda.funzioni.test.TransferUtility;
 import com.amazonaws.services.lambda.runtime.Context;
+import com.marte5.modello.richieste.get.RichiestaGetGenerica;
+import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class loginTest {
+public class TransferUtilityRun {
 
-    private static Object input;
+    private static RichiestaGetGenerica input;
 
     @BeforeClass
     public static void createInput() throws IOException {
         // TODO: set up your sample input object here.
-        input = null;
+        input = new RichiestaGetGenerica();
     }
 
     private Context createContext() {
@@ -32,11 +34,11 @@ public class loginTest {
     }
 
     @Test
-    public void testlogin() {
-        login handler = new login();
+    public void testgetEvento() {
+    		TransferUtility handler = new TransferUtility();
         Context ctx = createContext();
 
-        String output = handler.handleRequest(input, ctx);
+        RispostaGetGenerica output = handler.handleRequest(input, ctx);
 
         // TODO: validate output here if needed.
         Assert.assertEquals("Hello from Lambda!", output);

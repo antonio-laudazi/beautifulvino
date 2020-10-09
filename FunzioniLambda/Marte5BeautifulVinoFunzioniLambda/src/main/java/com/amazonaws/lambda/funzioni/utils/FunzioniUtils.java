@@ -12,7 +12,6 @@ import java.util.Locale;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.transactions.Transaction;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
@@ -27,6 +26,7 @@ import com.marte5.modello2.Utente.EventoUtente;
 import com.marte5.modello2.Utente.VinoUtente;
 import com.marte5.modello2.Vino;
 import com.marte5.modello2.Vino.AziendaVino;
+
 
 public class FunzioniUtils {
 	
@@ -164,7 +164,7 @@ public class FunzioniUtils {
 		return idProvincia;
 	}
 	
-	public static String aggiungiProvincia(Provincia provincia, Transaction transaction) {
+	/*public static String aggiungiProvincia(Provincia provincia, Transaction transaction) {
 		
 		String idProvincia = provincia.getIdProvincia();
 		if(idProvincia == null || idProvincia.equals("")) {
@@ -175,7 +175,7 @@ public class FunzioniUtils {
 		}
 		transaction.save(provincia);
 		return idProvincia;
-	}
+	}*/
 	
 	//da testare
 	public static List<Azienda> riordinaViniAzienda(List<Vino> vini){

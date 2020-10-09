@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni.common;
+package com.amazonaws.lambda.funzionitest.common;
 
 import java.io.IOException;
 import java.io.InputStream;

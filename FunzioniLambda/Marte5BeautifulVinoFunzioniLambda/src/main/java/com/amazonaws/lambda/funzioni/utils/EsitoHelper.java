@@ -19,4 +19,5 @@ public class EsitoHelper {
 	public static final String ESITO_KO_MESSAGGIO_ERRORE_GET = "Errore nel recupero della risorsa: ";
 	public static final String ESITO_KO_MESSAGGIO_WARNING_CANCELLAZIONE = "Warning nell'operazione di cancellazione";
 	public static final String ESITO_KO_MESSAGGIO_PUNTI_ESP = "Hai già ricevuto i punti esperienza per la lettura di questo articolo!";
+	public static final String ESITO_KO_TEST = "Hai già ricevuto i punti esperienza per la lettura di questo articolo!";
 }

@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import java.io.IOException;
 
@@ -6,13 +6,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.put.backup.putUtente;
+import com.amazonaws.lambda.funzioni.delete.backup.deleteEvento;
 import com.amazonaws.services.lambda.runtime.Context;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class putUtenteTest {
+public class deleteEventoTest {
 
     private static Object input;
 
@@ -32,8 +32,8 @@ public class putUtenteTest {
     }
 
     @Test
-    public void testputUtente() {
-        putUtente handler = new putUtente();
+    public void testdeleteEvento() {
+        deleteEventoGen handler = new deleteEventoGen();
         Context ctx = createContext();
 
         String output = handler.handleRequest(input, ctx);

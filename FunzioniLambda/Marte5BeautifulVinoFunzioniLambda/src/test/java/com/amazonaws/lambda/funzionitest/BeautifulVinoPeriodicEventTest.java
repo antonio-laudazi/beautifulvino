@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import java.io.IOException;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.amazonaws.lambda.funzioni.common.BeautifulVinoPeriodicEvent;
-import com.amazonaws.lambda.funzioni.common.TestContext;
+import com.amazonaws.lambda.funzionitest.common.TestContext;
 import com.amazonaws.services.lambda.runtime.Context;
 
 public class BeautifulVinoPeriodicEventTest {

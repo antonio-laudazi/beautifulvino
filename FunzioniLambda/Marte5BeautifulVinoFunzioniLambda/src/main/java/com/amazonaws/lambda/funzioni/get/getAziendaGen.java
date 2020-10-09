@@ -114,6 +114,7 @@ public class getAziendaGen implements RequestHandler<RichiestaGetGenerica, Rispo
 					
 					if(vinoEstratto != null) {
 						vinoCompleto.setIdVino(vinoEstratto.getIdVino());
+						vinoCompleto.setAnnoVino(vinoEstratto.getAnnoVino());
 						vinoCompleto.setNomeVino(vinoEstratto.getNomeVino());
 						vinoCompleto.setInfoVino(vinoEstratto.getInfoVino());
 						vinoCompleto.setUrlLogoVino(vinoEstratto.getUrlLogoVino());

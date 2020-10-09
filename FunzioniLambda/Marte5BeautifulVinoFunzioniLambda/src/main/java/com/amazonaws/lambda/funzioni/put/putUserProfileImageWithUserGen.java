@@ -83,7 +83,7 @@ public class putUserProfileImageWithUserGen implements RequestHandler<RichiestaP
             String filename =  idImmagine + ".jpg";
             
             //controlli sui dati ricevuti
-            String bucketName = "beautifulvino-bucket-immagini-profili";
+            String bucketName = "beautifulvino2020-bucket-immagini-profili";
             
             AmazonS3 client = null;
             

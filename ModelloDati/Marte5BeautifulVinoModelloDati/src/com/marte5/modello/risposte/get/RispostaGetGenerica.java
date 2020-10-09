@@ -2,6 +2,7 @@ package com.marte5.modello.risposte.get;
 
 import java.util.List;
 
+import com.marte5.modello2.AssociazioneAziendaUtente;
 import com.marte5.modello2.Azienda;
 import com.marte5.modello2.Badge;
 import com.marte5.modello2.Evento;
@@ -43,6 +44,8 @@ public class RispostaGetGenerica extends Risposta {
 	List<Vino> vini;
 	
 	List<Badge> badges;
+	
+	List<AssociazioneAziendaUtente> associazioni;
 	
 	private Vino vino;
 	
@@ -303,6 +306,20 @@ public class RispostaGetGenerica extends Risposta {
 		this.token = token;
 	}
 
+	/**
+	 * @return the associazioni
+	 */
+	public List<AssociazioneAziendaUtente> getAssociazioniAziendeUtenti() {
+		return associazioni;
+	}
+
+	/**
+	 * @param associazioni the associazioni to set
+	 */
+	public void setAssociazioniAziendeUtenti(List<AssociazioneAziendaUtente> associazioni) {
+		this.associazioni = associazioni;
+	}
+	
 	/**
 	 * @return the badges
 	 */

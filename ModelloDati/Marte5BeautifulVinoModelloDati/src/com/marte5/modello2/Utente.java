@@ -39,6 +39,8 @@ public class Utente {
 	private String condivisioneVini;
 	private String statoUtente;
 	private String eventoEliminatoUtente;
+	private String ruoloUtente;
+	private String idProfiloAziendaUtente;
 	private long dataEventoEliminatoUtente;
 	private List<Evento> eventiUtente; // Lista preferiti per la getUtenteGen
 	private List<Azienda> aziendeUtente;
@@ -448,7 +450,17 @@ public class Utente {
 		private String idEvento;
 		private long dataEvento;
 		private String statoEvento;
+		private int numeroPartecipanti;
 
+		@DynamoDBAttribute(attributeName="numeroPartecipanti")
+		public int getNumeroPartecipanti() {
+			return numeroPartecipanti;
+		}
+
+		public void setNumeroPartecipanti(int numeroPartecipanti) {
+			this.numeroPartecipanti = numeroPartecipanti;
+		}
+		
 		@DynamoDBAttribute(attributeName="idEvento")
 		public String getIdEvento() {
 			return idEvento;
@@ -713,5 +725,31 @@ public class Utente {
 	 */
 	public void setStatoUtente(String statoUtente) {
 		this.statoUtente = statoUtente;
+	}
+	/**
+	 * @return the ruoloUtente
+	 */
+	@DynamoDBAttribute(attributeName="ruoloUtente")
+	public String getRuoloUtente() {
+		return ruoloUtente;
+	}
+	/**
+	 * @param ruoloUtente the ruoloUtente to set
+	 */
+	public void setRuoloUtente(String ruoloUtente) {
+		this.ruoloUtente = ruoloUtente;
+	}
+	/**
+	 * @return the idProfiloAziendaUtente
+	 */
+	@DynamoDBAttribute(attributeName="idProfiloAziendaUtente")
+	public String getIdProfiloAziendaUtente() {
+		return idProfiloAziendaUtente;
+	}
+	/**
+	 * @param idProfiloAziendaUtente the idProfiloAziendaUtente to set
+	 */
+	public void setIdProfiloAziendaUtente(String idProfiloAziendaUtente) {
+		this.idProfiloAziendaUtente = idProfiloAziendaUtente;
 	}
 }

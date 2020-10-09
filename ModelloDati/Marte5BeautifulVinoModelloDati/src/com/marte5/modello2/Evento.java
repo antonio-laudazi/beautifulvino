@@ -43,7 +43,9 @@ public class Evento {
 	private Badge badgeEvento;
 	private Provincia provinciaEvento;
 	private Azienda aziendaOspitanteEvento;
+	private String idAziendaOspitanteEvento;
 	private List<Utente> iscrittiEvento;
+	private List<UtenteEvento> dettagliIscrittiEvento;
 	private List<Vino> viniEvento;
 	private BadgeEvento badgeEventoInt;
 	private ProvinciaEvento provinciaEventoInt;
@@ -61,6 +63,8 @@ public class Evento {
 	private int puntiEsperienza;
 	private List<VinoEvento> listaViniCancellati;
 	private boolean pubblicatoEvento;
+	private boolean eventoRicorrente;
+	private List<Long> dateRicorrenti;
 	
 	/**
 	 * @return the idEvento
@@ -486,6 +490,19 @@ public class Evento {
 	public void setDataEventoStringa(String dataEventoStringa) {
 		this.dataEventoStringa = dataEventoStringa;
 	}
+	/**
+	 * @return the aziendaOspitanteEventoInt
+	 */
+	@DynamoDBAttribute(attributeName="idAziendaOspitanteEvento")
+	public String getIdAziendaOspitanteEvento() { 
+		return idAziendaOspitanteEvento; 
+	}
+	/**
+	 * @param idAziendaOspitanteEvento the idAziendaOspitanteEvento to set
+	 */
+	public void setIdAziendaOspitanteEvento(String idAziendaOspitanteEvento) { 
+		this.idAziendaOspitanteEvento = idAziendaOspitanteEvento; 
+	}
 	
 	/**
 	 * @return the provinciaEvento
@@ -507,6 +524,8 @@ public class Evento {
 	@DynamoDBAttribute(attributeName="aziendaOspitanteEvento")
 	public AziendaEvento getAziendaOspitanteEventoInt() { return aziendaOspitanteEventoInt; }
 	public void setAziendaOspitanteEventoInt(AziendaEvento aziendaOspitanteEventoInt) { this.aziendaOspitanteEventoInt = aziendaOspitanteEventoInt; }
+	
+	
 	
 	/**
 	 * @return the aziendaFornitriceEventoInt
@@ -616,6 +635,7 @@ public class Evento {
 	public static class UtenteEvento{
 		private String idUtente;
 		private int postiAcquistati;
+		private long dataEvento;
 		/**
 		 * @return the idUtente
 		 */
@@ -637,10 +657,20 @@ public class Evento {
 			return postiAcquistati;
 		}
 		/**
-		 * @param postiAcquistati the postiAcquistati to set
+		 * @param dataEvento the dataEvento to set
 		 */
 		public void setPostiAcquistati(int postiAcquistati) {
 			this.postiAcquistati = postiAcquistati;
+		}
+		@DynamoDBAttribute(attributeName="dataEvento")
+		public long getDataEvento() {
+			return dataEvento;
+		}
+		/**
+		 * @param dataEvento the dataEvento to set
+		 */
+		public void setDataEvento(long dataEvento) {
+			this.dataEvento = dataEvento;
 		}
 	}
 	
@@ -897,6 +927,39 @@ public class Evento {
 		public void setUrlLogoBadge(String urlLogoBadge) {
 			this.urlLogoBadge = urlLogoBadge;
 		}
+	}
+
+	/**
+	 * @return the eventoRicorrente
+	 */
+	@DynamoDBAttribute(attributeName="eventoRicorrente")
+	public boolean isEventoRicorrente() {
+		return eventoRicorrente;
+	}
+	/**
+	 * @param eventoRicorrente the eventoRicorrente to set
+	 */
+	public void setEventoRicorrente(boolean eventoRicorrente) {
+		this.eventoRicorrente = eventoRicorrente;
+	}
+	/**
+	 * @return the dateRicorrenti
+	 */
+	@DynamoDBAttribute(attributeName="dateRicorrenti")
+	public List<Long> getDateRicorrenti() {
+		return dateRicorrenti;
+	}
+	/**
+	 * @param dateRicorrenti the dateRicorrenti to set
+	 */
+	public void setDateRicorrenti(List<Long> dateRicorrenti) {
+		this.dateRicorrenti = dateRicorrenti;
+	}
+	public List<UtenteEvento> getDettagliIscrittiEvento() {
+		return dettagliIscrittiEvento;
+	}
+	public void setDettagliIscrittiEvento(List<UtenteEvento> dettagliIscrittiEvento) {
+		this.dettagliIscrittiEvento = dettagliIscrittiEvento;
 	}
 
 	

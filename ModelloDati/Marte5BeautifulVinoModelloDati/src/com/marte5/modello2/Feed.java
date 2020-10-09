@@ -32,6 +32,7 @@ public class Feed {
 	private String headerFeed;
 	private String sottoHeaderFeed;
 	private Vino vinoFeed;
+	private String idAziendaFeed;
 	private VinoFeed vinoFeedInt;
 	private Evento eventoFeed;
 	private EventoFeed eventoFeedInt;
@@ -197,6 +198,19 @@ public class Feed {
 	 */
 	public void setSottoHeaderFeed(String sottoHeaderFeed) {
 		this.sottoHeaderFeed = sottoHeaderFeed;
+	}
+	/**
+	 * @return the idAziendaFeed
+	 */
+	@DynamoDBAttribute(attributeName="idAziendaFeed")
+	public String getIdAziendaFeed() {
+		return idAziendaFeed;
+	}
+	/**
+	 * @param sottoHeaderFeed the sottoHeaderFeed to set
+	 */
+	public void setIdAziendaFeed(String idAziendaFeed) {
+		this.idAziendaFeed = idAziendaFeed;
 	}
 	/**
 	 * @return the viniFeed

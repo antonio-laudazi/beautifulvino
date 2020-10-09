@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import java.io.IOException;
 
@@ -7,9 +7,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.amazonaws.lambda.funzioni.common.BeautifulVinoGet;
+import com.amazonaws.lambda.funzioni.common.BeautifulVinoGetSecure;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.Risposta;
+
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
@@ -25,11 +27,11 @@ public class getTest {
         
 //        input.setFunctionName("getUtenteGen");
 //        input.setIdUtentePadre("eu-central-1:9ed038f2-edbd-4d68-a2de-ede25efe2892");
-        input.setIdUtente("eu-central-1:9ed038f2-edbd-4d68-a2de-ede25efe2892");
+          input.setEmailUtente("oloap1981@gmail.com");
         
-          input.setFunctionName("getEventoGen");
-          input.setIdEvento("1536663137862");
-          input.setDataEvento(1538240400000l);
+          input.setFunctionName("getUtenteEmailGen");
+//          input.setIdEvento("1536663137862");
+//          input.setDataEvento(1538240400000l);
 //        input.setFunctionName("getViniEventoGen");
 //        input.setIdEvento(1513789129406L);
 //        input.setDataEvento(1513724400000L);
@@ -85,7 +87,7 @@ public class getTest {
 
     @Test
     public void testgetEventi() {
-        BeautifulVinoGet handler = new BeautifulVinoGet();
+        BeautifulVinoGetSecure handler = new BeautifulVinoGetSecure();
         Context ctx = createContext();
 
         Risposta output = handler.handleRequest(input, ctx);

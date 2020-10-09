@@ -12,7 +12,7 @@ import com.marte5.modello.richieste.get.RichiestaGetGenerica;
 import com.marte5.modello.risposte.get.RispostaGetGenerica;
 
 
-public class BeautifulVinoGet implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
+public class BeautifulVinoGetSecure implements RequestHandler<RichiestaGetGenerica, RispostaGetGenerica> {
 
 	private final static String FUNCTION_NAME_GET_AZIENDA = "getAziendaGen";
 	private final static String FUNCTION_NAME_GET_AZIENDE = "getAziendeGen";
@@ -96,7 +96,6 @@ public class BeautifulVinoGet implements RequestHandler<RichiestaGetGenerica, Ri
     		funzioni.add(FUNCTION_NAME_GET_EVENTIAZIENDA);
     		funzioni.add(FUNCTION_NAME_GET_FEEDAZIENDA);
     		funzioni.add(FUNCTION_NAME_GET_UTENTEMAIL);
-    		
     		
     		return funzioni.contains(nomeFunzione);
     		

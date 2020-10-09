@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import java.io.IOException;
 
@@ -6,25 +6,20 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.get.backup.getEventi;
+import com.amazonaws.lambda.funzioni.get.backup.getEvento;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.marte5.modello.richieste.get.RichiestaGetEventi;
-import com.marte5.modello.risposte.get.RispostaGetEventi;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class getEventiTest {
+public class getEventoTest {
 
-    private static RichiestaGetEventi input;
+    private static Object input;
 
     @BeforeClass
     public static void createInput() throws IOException {
         // TODO: set up your sample input object here.
-        input = new RichiestaGetEventi();
-        input.setIdProvincia(2211);
-        input.setNumEventiVisualizzati(10);
-        input.setIdUtente(1510937294371L);
+        input = null;
     }
 
     private Context createContext() {
@@ -37,13 +32,13 @@ public class getEventiTest {
     }
 
     @Test
-    public void testgetEventi() {
-        getEventi handler = new getEventi();
+    public void testgetEvento() {
+        getEvento handler = new getEvento();
         Context ctx = createContext();
 
-        RispostaGetEventi output = handler.handleRequest(input, ctx);
+        String output = handler.handleRequest(input, ctx);
 
         // TODO: validate output here if needed.
-        Assert.assertEquals("Hello from Lambda!", output.getEventi().size());
+        Assert.assertEquals("Hello from Lambda!", output);
     }
 }

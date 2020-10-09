@@ -1,4 +1,4 @@
-package com.amazonaws.lambda.funzioni;
+package com.amazonaws.lambda.funzionitest;
 
 import java.io.IOException;
 
@@ -6,13 +6,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.amazonaws.lambda.funzioni.update.updateEvento;
+import com.amazonaws.lambda.funzioni.get.login;
 import com.amazonaws.services.lambda.runtime.Context;
 
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
-public class updateEventoTest {
+public class loginTest {
 
     private static Object input;
 
@@ -32,8 +32,8 @@ public class updateEventoTest {
     }
 
     @Test
-    public void testupdateEvento() {
-        updateEvento handler = new updateEvento();
+    public void testlogin() {
+        login handler = new login();
         Context ctx = createContext();
 
         String output = handler.handleRequest(input, ctx);

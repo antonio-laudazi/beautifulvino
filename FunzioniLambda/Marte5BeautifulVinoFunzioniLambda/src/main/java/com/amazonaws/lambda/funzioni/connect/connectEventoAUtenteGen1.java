@@ -35,6 +35,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 		String idUtente = input.getIdUtente();
 		String idEvento = input.getIdEvento();
 		long dataEvento = input.getDataEvento();
+		long dataPrenotazioneEvento = input.getDataPrenotazioneEvento();
 		int pRicevuto = input.getStatoPreferitoEvento();
 		int aRicevuto = input.getStatoAcquistatoEvento();
 		int numeroP = input.getNumeroPartecipanti();
@@ -130,8 +131,8 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 					evento = addUtentePreferito(idEvento, dataEvento, idUtente, evento);
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
 					utente = aggiungiAllaListaPreferiti(utente, evento);
-					utente = aggiungiAllaListaAcquistati(utente, evento);
-					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
+					utente = aggiungiAllaListaAcquistati(utente, evento, numeroP);
+					evento = addUtenteIscritto(idEvento, dataPrenotazioneEvento, idUtente, evento, numeroP, evento.isEventoRicorrente());
 					evento = addUtentePreferito(idEvento, dataEvento, idUtente, evento);
 					sendMail(utente, evento, idEvento, evento.getTitoloEvento(), numeroP,evento.getAcquistabileEvento(), context);
 				}
@@ -150,8 +151,8 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
-					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
-					utente = aggiungiAllaListaAcquistati(utente, evento);
+					evento = addUtenteIscritto(idEvento, dataPrenotazioneEvento, idUtente, evento, numeroP, evento.isEventoRicorrente());
+					utente = aggiungiAllaListaAcquistati(utente, evento, numeroP);
 					sendMail(utente, evento, idEvento, evento.getTitoloEvento(), numeroP, evento.getAcquistabileEvento(), context);
 				}
 			}else if (pAttuale == 1 && aAttuale == 1) {
@@ -169,7 +170,8 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			        risposta.setEsito(esito);
 			        return risposta;
 				}else if (pRicevuto == 1 && aRicevuto == 1) {
-					evento = addUtenteIscritto(idEvento, dataEvento, idUtente, evento, numeroP);
+					// qui è già stato acquistato ed era già preferito, devo aggiungere partecipanti
+					evento = addUtenteIscritto(idEvento, dataPrenotazioneEvento, idUtente, evento, numeroP, evento.isEventoRicorrente());
 					sendMail(utente, evento, idEvento, evento.getTitoloEvento(), numeroP,evento.getAcquistabileEvento(), context);
 					risposta.setEsito(esito);			       
 				}
@@ -202,7 +204,7 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 	}
 	
 	//aggiungo utente dall'evento se è già iscritto aggiungo posti
-    private Evento addUtenteIscritto(String idEvento, long dataEvento, String idUtente,Evento evento,int numeroP) {
+    private Evento addUtenteIscritto(String idEvento, long dataEvento, String idUtente, Evento evento, int numeroP, boolean ricorrente) {
     	UtenteEvento ue = new UtenteEvento();
 		if(evento != null) {
 			List<UtenteEvento> utentiIscritti = evento.getIscrittiEventoInt();
@@ -219,12 +221,15 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
 			if(!presente) {
 				ue.setIdUtente(idUtente);
 				ue.setPostiAcquistati(numeroP);
+				ue.setDataEvento(dataEvento);
 				utentiIscritti.add(ue);
 			}else {
 				ue.setPostiAcquistati(ue.getPostiAcquistati() + numeroP);
 			}
 			evento.setIscrittiEventoInt(utentiIscritti);
-			evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
+			if(!ricorrente) {
+				evento.setNumPostiDisponibiliEvento(evento.getNumPostiDisponibiliEvento() - numeroP);
+			}
 		}
 		return evento;
     }
@@ -313,16 +318,33 @@ public class connectEventoAUtenteGen1 implements RequestHandler<RichiestaConnect
     	return utente;
     }
     //aggiungo l'evento alla lista degli acquistati
-    private Utente aggiungiAllaListaAcquistati(Utente utente, Evento evento) {
-    	List<EventoUtente> leu = utente.getAcquistatiEventiUtenteInt();
-    	if (leu == null) {
-    		leu = new ArrayList<>();
-    	}
+    private Utente aggiungiAllaListaAcquistati(Utente utente, Evento evento, int numeroPartecipanti) {
+    	
     	EventoUtente eu = new EventoUtente();
-    	eu.setDataEvento(evento.getDataEvento());
-    	eu.setIdEvento(evento.getIdEvento());
-    	leu.add(eu);
-    	utente.setAcquistatiEventiUtenteInt(leu);
+    	
+    	// controllo se tra gli eventi acquistati dall'utente c'è già questo evento. Se c'è aumento solo il numero dei posti acquistati.
+    	List<EventoUtente> eventiAcquistati = utente.getAcquistatiEventiUtenteInt();
+		if(eventiAcquistati == null) {
+			eventiAcquistati = new ArrayList<EventoUtente>();
+		}
+		boolean presente = false;
+		for (EventoUtente eventoUtente : eventiAcquistati) {
+			if(eventoUtente.getIdEvento().equals(evento.getIdEvento())) {
+				presente = true;
+				eu = eventoUtente;
+			}
+		}		
+		if(!presente) {
+			eu.setIdEvento(evento.getIdEvento());
+			eu.setDataEvento(evento.getDataEvento());
+			eu.setNumeroPartecipanti(numeroPartecipanti);
+			
+			eventiAcquistati.add(eu);
+		}else {
+			eu.setNumeroPartecipanti(eu.getNumeroPartecipanti() + numeroPartecipanti);
+		}
+    	
+    	utente.setAcquistatiEventiUtenteInt(eventiAcquistati);
     	return utente;
     }
     //rimuovo l'evento dalla lista dei preferiti
